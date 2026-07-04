@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { usePortfolio } from "../PortfolioProvider";
+import { EmptyState } from "../EmptyState";
 import { projects, projectDesc } from "@/lib/content";
 import { PAGE } from "@/site.config";
 
@@ -19,6 +20,9 @@ export function Projects() {
       <div className="section__label">{"// "}{t.projects.label}</div>
       <p className="section__note">{t.projects.note}</p>
 
+      {projects.length === 0 && <EmptyState />}
+
+      {projects.length > 0 && (
       <div className="projects__list">
         {shown.map((p) => (
           <a
@@ -44,6 +48,7 @@ export function Projects() {
           </a>
         ))}
       </div>
+      )}
 
       {(hasMore || canCollapse) && (
         <div className="controls">

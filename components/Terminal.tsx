@@ -192,6 +192,10 @@ export function Terminal() {
         break;
       case "projects":
         out.push(mk("# selected work", acc));
+        if (projects.length === 0) {
+          out.push(mk("  " + L.common.wip, dim));
+          break;
+        }
         projects.forEach((p) => {
           out.push(
             mk("  ▸ " + p.name, COLOR.fg),
@@ -212,6 +216,10 @@ export function Terminal() {
       case "certs":
       case "certifications":
         out.push(mk("# certifications", acc));
+        if (certs.length === 0) {
+          out.push(mk("  " + L.common.wip, dim));
+          break;
+        }
         certs.forEach((c) =>
           out.push(mk("  ✓ " + c.name, COLOR.fg), mk("    " + c.issuer + " · " + c.year, mut)),
         );

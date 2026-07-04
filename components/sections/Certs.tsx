@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { usePortfolio } from "../PortfolioProvider";
+import { EmptyState } from "../EmptyState";
 import { certs } from "@/lib/content";
 import { PAGE } from "@/site.config";
 
@@ -19,6 +20,9 @@ export function Certs() {
       <div className="section__label">{"// "}{t.certs.label}</div>
       <p className="section__note">{t.certs.note}</p>
 
+      {certs.length === 0 && <EmptyState />}
+
+      {certs.length > 0 && (
       <div className="certs__grid">
         {shown.map((cert) => (
           <a
@@ -41,6 +45,7 @@ export function Certs() {
           </a>
         ))}
       </div>
+      )}
 
       {(hasMore || canCollapse) && (
         <div className="controls">

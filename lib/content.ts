@@ -146,13 +146,10 @@ export const experiences: Experience[] = [
   },
 ];
 
-export const certs: Cert[] = [
-  { name: "AWS Certified Solutions Architect – Associate", issuer: "Amazon Web Services", year: "2024", link: "#" },
-  { name: "Certified Kubernetes Administrator (CKA)", issuer: "CNCF · Linux Foundation", year: "2023", link: "#" },
-  { name: "HashiCorp Certified: Terraform Associate", issuer: "HashiCorp", year: "2022", link: "#" },
-  { name: "Docker Certified Associate", issuer: "Docker", year: "2022", link: "#" },
-  { name: "MongoDB Associate Developer", issuer: "MongoDB", year: "2021", link: "#" },
-];
+// No certifications yet — the Certs section renders an <EmptyState/> fallback
+// while this list is empty. Add entries with the shape below to populate it:
+//   { name: "AWS Certified Solutions Architect – Associate", issuer: "Amazon Web Services", year: "2024", link: "https://…" }
+export const certs: Cert[] = [];
 
 export const languages: Language[] = [
   { name_en: "Portuguese", name_pt: "Português", level_en: "Native", level_pt: "Nativo", score: 5 },

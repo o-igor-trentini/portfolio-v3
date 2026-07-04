@@ -26,7 +26,7 @@ export interface Dict {
   certs: { label: string; note: string; verify: string };
   contact: { label: string; note: string };
   footer: { built: string; terminalBtn: string };
-  common: { more: string; less: string; stackMore: string; stackLess: string };
+  common: { more: string; less: string; stackMore: string; stackLess: string; wip: string };
 }
 
 export const i18n: Record<Lang, Dict> = {
@@ -53,7 +53,7 @@ export const i18n: Record<Lang, Dict> = {
     certs: { label: "certifications", note: "credentials & continued learning", verify: "view credential" },
     contact: { label: "contact", note: "open to backend & platform engineering roles" },
     footer: { built: "built with care · no frameworks were harmed", terminalBtn: "terminal" },
-    common: { more: "show more", less: "show less", stackMore: "show all", stackLess: "show less" },
+    common: { more: "show more", less: "show less", stackMore: "show all", stackLess: "show less", wip: "working on it…" },
   },
   pt: {
     nav: { about: "sobre", experience: "experiência", langs: "idiomas", stack: "stack", projects: "projetos", certs: "certs", contact: "contato" },
@@ -78,7 +78,7 @@ export const i18n: Record<Lang, Dict> = {
     certs: { label: "certificações", note: "credenciais & aprendizado contínuo", verify: "ver credencial" },
     contact: { label: "contato", note: "aberto a vagas de backend & plataforma" },
     footer: { built: "feito com cuidado · nenhum framework foi ferido", terminalBtn: "terminal" },
-    common: { more: "mostrar mais", less: "mostrar menos", stackMore: "mostrar tudo", stackLess: "mostrar menos" },
+    common: { more: "mostrar mais", less: "mostrar menos", stackMore: "mostrar tudo", stackLess: "mostrar menos", wip: "trabalhando nisso…" },
   },
 };
 
