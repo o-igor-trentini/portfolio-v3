@@ -6,6 +6,7 @@ import { Footer } from "./Footer";
 import { Terminal } from "./Terminal";
 import { Hero } from "./sections/Hero";
 import { About } from "./sections/About";
+import { Experience } from "./sections/Experience";
 import { Languages } from "./sections/Languages";
 import { Stack } from "./sections/Stack";
 import { Projects } from "./sections/Projects";
@@ -21,6 +22,7 @@ export function Portfolio() {
         <main id="top" className="main">
           <Hero />
           <About />
+          <Experience />
           <Languages />
           <Stack />
           {siteConfig.showProjects && <Projects />}

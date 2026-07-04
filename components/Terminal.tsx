@@ -3,7 +3,19 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { usePortfolio } from "./PortfolioProvider";
 import { i18n } from "@/lib/i18n";
-import { certs, contacts, languages, projects, stackGroups } from "@/lib/content";
+import {
+  certs,
+  contacts,
+  experiences,
+  expIndustry,
+  expMode,
+  expRole,
+  expTags,
+  languages,
+  projects,
+  stackGroups,
+} from "@/lib/content";
+import { formatDuration, formatMonthYear, monthsInclusive, parseYM } from "@/lib/date";
 import { PROMPT } from "@/site.config";
 
 interface Line {
@@ -124,6 +136,7 @@ export function Terminal() {
           mk("  help        this list", mut),
           mk("  about       who I am", mut),
           mk("  whoami      print identity", mut),
+          mk("  experience  work history", mut),
           mk("  skills      tech stack", mut),
           mk("  languages   spoken languages", mut),
           mk("  projects    selected work", mut),
@@ -146,6 +159,30 @@ export function Terminal() {
           mk(L.about.body, COLOR.soft),
         );
         break;
+      case "experience":
+      case "work": {
+        out.push(mk("# work history", acc));
+        const d = new Date();
+        const nowYM = { y: d.getFullYear(), m: d.getMonth() + 1 };
+        experiences.forEach((e) => {
+          const present = e.end === null;
+          const endYM = present ? nowYM : parseYM(e.end as string);
+          const period = `${formatMonthYear(e.start, lang)} — ${
+            present ? L.experience.present : formatMonthYear(e.end as string, lang)
+          }`;
+          const duration = formatDuration(monthsInclusive(e.start, endYM), lang);
+          const tags = expTags(e, lang);
+          out.push(
+            mk("  ▸ " + e.company + "  —  " + expRole(e, lang), COLOR.fg),
+            mk("    " + period + " · " + duration, mut),
+            mk(
+              "    " + expMode(e, lang) + " · " + expIndustry(e, lang) + (tags.length ? "  [" + tags.join(", ") + "]" : ""),
+              dim,
+            ),
+          );
+        });
+        break;
+      }
       case "skills":
         out.push(mk("# stack", acc));
         stackGroups.forEach((g) => {

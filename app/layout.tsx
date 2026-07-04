@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { accentMap, siteConfig } from "@/site.config";
-import { contacts } from "@/lib/content";
+import { contacts, experiences } from "@/lib/content";
 
 const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono",
@@ -103,6 +103,12 @@ const jsonLd = {
     { "@type": "Language", name: "Portuguese" },
     { "@type": "Language", name: "English" },
   ],
+  worksFor: experiences
+    .filter((e) => e.end === null)
+    .map((e) => ({ "@type": "Organization", name: e.company })),
+  alumniOf: experiences
+    .filter((e) => e.end !== null)
+    .map((e) => ({ "@type": "Organization", name: e.company })),
   sameAs: contacts.filter((c) => c.href.startsWith("http")).map((c) => c.href),
 };
 

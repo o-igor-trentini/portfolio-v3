@@ -60,9 +60,6 @@ Edit `site.config.ts`:
 
 These came from the design and are **not real values yet**:
 
-- **`lib/content.ts` → `contacts`**: `hello@example.com`, `github.com/your-handle`,
-  `linkedin.com/in/your-handle` — replace with your real email / profiles.
-  (These also feed the `sameAs` field of the JSON-LD.)
 - **`lib/content.ts` → `projects`**: every `link` is `"#"` — point them at real repos/demos.
 - **`lib/content.ts` → `certs`**: every `link` is `"#"` — point them at real credential URLs.
 - **`site.config.ts` → `url`**: `https://igortrentini.dev` is a placeholder domain.

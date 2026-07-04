@@ -110,6 +110,25 @@ kbd{border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family
 /* ---------- about ---------- */
 .about__body{max-width:62ch;font-size:clamp(15px,2.4vw,17px);line-height:1.85;margin:0;color:var(--fg);opacity:.9}
 
+/* ---------- experience (timeline) ---------- */
+.exp-list{display:flex;flex-direction:column}
+.exp{position:relative;padding:0 0 28px 24px;border-left:1px solid var(--border)}
+.exp:last-child{padding-bottom:0}
+.exp__dot{position:absolute;left:-5px;top:5px;width:9px;height:9px;border-radius:50%;background:var(--border);box-shadow:0 0 0 4px var(--bg)}
+.exp--present .exp__dot{background:var(--accent);animation:pulse 2.4s ease-out infinite}
+.exp__head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.exp__company{font-weight:700;font-size:15.5px}
+.exp__role{color:var(--accent);font-size:13.5px}
+.exp__period{color:var(--muted);font-size:12.5px;margin-top:5px}
+.exp__dur{color:var(--fg);opacity:.7}
+.exp__meta{color:var(--muted);font-size:12.5px;margin-top:3px;opacity:.85}
+.exp__tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}
+.exp__tag{font-size:11px;color:var(--accent);border:1px solid var(--border);border-radius:5px;padding:2px 9px}
+@keyframes pulse{
+  0%{box-shadow:0 0 0 4px var(--bg),0 0 0 4px color-mix(in srgb,var(--accent) 45%,transparent)}
+  70%,100%{box-shadow:0 0 0 4px var(--bg),0 0 0 11px transparent}
+}
+
 /* ---------- languages ---------- */
 .langs__grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px}
 .langcard{padding:18px;border:1px solid var(--border);border-radius:10px;background:var(--card)}

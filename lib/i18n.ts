@@ -3,12 +3,14 @@ export type Lang = "en" | "pt";
 export interface Dict {
   nav: {
     about: string;
+    experience: string;
     langs: string;
     stack: string;
     projects: string;
     certs: string;
     contact: string;
   };
+  experience: { label: string; note: string; present: string };
   langs: { label: string; note: string };
   hero: {
     cmd: string;
@@ -29,7 +31,8 @@ export interface Dict {
 
 export const i18n: Record<Lang, Dict> = {
   en: {
-    nav: { about: "about", langs: "languages", stack: "stack", projects: "projects", certs: "certs", contact: "contact" },
+    nav: { about: "about", experience: "experience", langs: "languages", stack: "stack", projects: "projects", certs: "certs", contact: "contact" },
+    experience: { label: "experience", note: "where I've worked", present: "present" },
     langs: { label: "languages", note: "spoken & written proficiency" },
     hero: {
       cmd: "whoami",
@@ -53,7 +56,8 @@ export const i18n: Record<Lang, Dict> = {
     common: { more: "show more", less: "show less", stackMore: "show all", stackLess: "show less" },
   },
   pt: {
-    nav: { about: "sobre", langs: "idiomas", stack: "stack", projects: "projetos", certs: "certs", contact: "contato" },
+    nav: { about: "sobre", experience: "experiência", langs: "idiomas", stack: "stack", projects: "projetos", certs: "certs", contact: "contato" },
+    experience: { label: "experiência", note: "onde já trabalhei", present: "presente" },
     langs: { label: "idiomas", note: "proficiência falada e escrita" },
     hero: {
       cmd: "whoami",

@@ -12,6 +12,7 @@ export function Header() {
   const links = (
     <>
       <a href="#about" className="navlink" onClick={closeMenu}>{t.nav.about}</a>
+      <a href="#experience" className="navlink" onClick={closeMenu}>{t.nav.experience}</a>
       <a href="#langs" className="navlink" onClick={closeMenu}>{t.nav.langs}</a>
       <a href="#stack" className="navlink" onClick={closeMenu}>{t.nav.stack}</a>
       {showProjects && <a href="#projects" className="navlink" onClick={closeMenu}>{t.nav.projects}</a>}

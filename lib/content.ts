@@ -14,6 +14,21 @@ export interface Project {
   desc_pt: string;
 }
 
+export interface Experience {
+  company: string;
+  role_en: string;
+  role_pt: string;
+  mode_en: string;
+  mode_pt: string;
+  industry_en: string;
+  industry_pt: string;
+  start: string; // "YYYY-MM"
+  end: string | null; // "YYYY-MM" or null when current
+  link?: string;
+  tags_en?: string[];
+  tags_pt?: string[];
+}
+
 export interface Cert {
   name: string;
   issuer: string;
@@ -103,6 +118,34 @@ export const projects: Project[] = [
   },
 ];
 
+// Most recent first.
+export const experiences: Experience[] = [
+  {
+    company: "Frete.com",
+    role_en: "Backend Developer",
+    role_pt: "Desenvolvedor Backend",
+    mode_en: "remote",
+    mode_pt: "remoto",
+    industry_en: "logistics tech",
+    industry_pt: "logtech",
+    start: "2026-05",
+    end: null,
+    tags_en: ["unicorn", "multinational"],
+    tags_pt: ["unicórnio", "multinacional"],
+  },
+  {
+    company: "Logae",
+    role_en: "Full Stack Developer",
+    role_pt: "Desenvolvedor Full Stack",
+    mode_en: "hybrid",
+    mode_pt: "híbrido",
+    industry_en: "logistics tech",
+    industry_pt: "logtech",
+    start: "2021-09",
+    end: "2026-05",
+  },
+];
+
 export const certs: Cert[] = [
   { name: "AWS Certified Solutions Architect – Associate", issuer: "Amazon Web Services", year: "2024", link: "#" },
   { name: "Certified Kubernetes Administrator (CKA)", issuer: "CNCF · Linux Foundation", year: "2023", link: "#" },
@@ -117,12 +160,16 @@ export const languages: Language[] = [
 ];
 
 export const contacts: Contact[] = [
-  { label: "email", value: "hello@example.com", href: "mailto:hello@example.com" },
-  { label: "github", value: "github.com/your-handle", href: "https://github.com/your-handle" },
-  { label: "linkedin", value: "linkedin.com/in/your-handle", href: "https://linkedin.com/in/your-handle" },
+  { label: "github", value: "github.com/o-igor-trentini", href: "https://github.com/o-igor-trentini" },
+  { label: "linkedin", value: "linkedin.com/in/igor-trentini", href: "https://www.linkedin.com/in/igor-trentini" },
 ];
 
 // ---- localization helpers -------------------------------------------------
+
+export const expRole = (e: Experience, lang: Lang) => (lang === "pt" ? e.role_pt : e.role_en);
+export const expMode = (e: Experience, lang: Lang) => (lang === "pt" ? e.mode_pt : e.mode_en);
+export const expIndustry = (e: Experience, lang: Lang) => (lang === "pt" ? e.industry_pt : e.industry_en);
+export const expTags = (e: Experience, lang: Lang) => (lang === "pt" ? e.tags_pt : e.tags_en) ?? [];
 
 export const stackLabel = (g: StackGroup, lang: Lang) => (lang === "pt" ? g.label_pt : g.label_en);
 export const projectDesc = (p: Project, lang: Lang) => (lang === "pt" ? p.desc_pt : p.desc_en);
