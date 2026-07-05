@@ -35,7 +35,7 @@ export function Header() {
           <div className="langtoggle" role="group" aria-label="Language">
             <button
               type="button"
-              className={`langtoggle__btn${lang === "en" ? " langtoggle__btn--active" : ""}`}
+              className={`btn langtoggle__btn${lang === "en" ? " langtoggle__btn--active" : ""}`}
               aria-pressed={lang === "en"}
               onClick={() => setLang("en")}
             >
@@ -43,7 +43,7 @@ export function Header() {
             </button>
             <button
               type="button"
-              className={`langtoggle__btn${lang === "pt" ? " langtoggle__btn--active" : ""}`}
+              className={`btn langtoggle__btn${lang === "pt" ? " langtoggle__btn--active" : ""}`}
               aria-pressed={lang === "pt"}
               onClick={() => setLang("pt")}
             >

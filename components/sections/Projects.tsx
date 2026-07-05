@@ -1,37 +1,27 @@
 "use client";
 
-import { useState } from "react";
 import { usePortfolio } from "../PortfolioProvider";
 import { EmptyState } from "../EmptyState";
+import { Section } from "../ui/Section";
+import { ExternalLink } from "../ui/ExternalLink";
+import { TagList } from "../ui/TagList";
+import { RevealControls } from "../ui/RevealControls";
+import { usePagination } from "@/hooks/usePagination";
 import { projects, projectDesc } from "@/lib/content";
 import { PAGE } from "@/site.config";
 
 export function Projects() {
   const { t, lang } = usePortfolio();
-  const [visible, setVisible] = useState(PAGE);
-
-  const shown = projects.slice(0, visible);
-  const hasMore = visible < projects.length;
-  const remaining = Math.max(0, projects.length - visible);
-  const canCollapse = visible > PAGE;
+  const { shown, hasMore, canCollapse, remaining, showMore, collapse } = usePagination(projects, PAGE);
 
   return (
-    <section id="projects" className="section">
-      <div className="section__label">{"// "}{t.projects.label}</div>
-      <p className="section__note">{t.projects.note}</p>
-
+    <Section id="projects" label={t.projects.label} note={t.projects.note}>
       {projects.length === 0 && <EmptyState />}
 
       {projects.length > 0 && (
       <div className="projects__list">
         {shown.map((p) => (
-          <a
-            key={p.name}
-            href={p.link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="project"
-          >
+          <ExternalLink key={p.name} href={p.link} className="project">
             <div className="project__head">
               <span className="accent">▸</span>
               <span className="project__name">{p.name}</span>
@@ -39,32 +29,22 @@ export function Projects() {
             </div>
             <p className="project__desc">{projectDesc(p, lang)}</p>
             <div className="project__tags">
-              {p.tags.map((tag) => (
-                <span key={tag} className="project__tag">
-                  {tag}
-                </span>
-              ))}
+              <TagList items={p.tags} className="project__tag" />
             </div>
-          </a>
+          </ExternalLink>
         ))}
       </div>
       )}
 
-      {(hasMore || canCollapse) && (
-        <div className="controls">
-          {hasMore && (
-            <button type="button" className="btn-ghost" onClick={() => setVisible((v) => v + PAGE)}>
-              <span className="accent">▾</span>
-              {t.common.more} <span className="muted">(+{remaining})</span>
-            </button>
-          )}
-          {canCollapse && (
-            <button type="button" className="btn-link" onClick={() => setVisible(PAGE)}>
-              {t.common.less}
-            </button>
-          )}
-        </div>
-      )}
-    </section>
+      <RevealControls
+        hasMore={hasMore}
+        canCollapse={canCollapse}
+        remaining={remaining}
+        moreLabel={t.common.more}
+        lessLabel={t.common.less}
+        onMore={showMore}
+        onCollapse={collapse}
+      />
+    </Section>
   );
 }

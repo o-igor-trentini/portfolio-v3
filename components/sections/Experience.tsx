@@ -1,36 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { usePortfolio } from "../PortfolioProvider";
-import { experiences, expIndustry, expMode, expRole, expTags } from "@/lib/content";
-import { formatDuration, formatMonthYear, monthsInclusive, parseYM, type YearMonth } from "@/lib/date";
+import { Section } from "../ui/Section";
+import { TagList } from "../ui/TagList";
+import { useNowYM } from "@/hooks/useNowYM";
+import { experiences, expIndustry, expMode, expRole, formatExperience } from "@/lib/content";
 
 export function Experience() {
   const { t, lang } = usePortfolio();
-
-  // "Now" is client-only so the duration of the current role stays fresh and
-  // never mismatches the statically-rendered HTML.
-  const [now, setNow] = useState<YearMonth | null>(null);
-  useEffect(() => {
-    const d = new Date();
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- client-only "now", avoids SSR staleness
-    setNow({ y: d.getFullYear(), m: d.getMonth() + 1 });
-  }, []);
+  const now = useNowYM();
 
   return (
-    <section id="experience" className="section">
-      <div className="section__label">{"// "}{t.experience.label}</div>
-      <p className="section__note">{t.experience.note}</p>
-
+    <Section id="experience" label={t.experience.label} note={t.experience.note}>
       <div className="exp-list">
         {experiences.map((e) => {
-          const present = e.end === null;
-          const endYM = present ? now : parseYM(e.end as string);
-          const period = `${formatMonthYear(e.start, lang)} — ${
-            present ? t.experience.present : formatMonthYear(e.end as string, lang)
-          }`;
-          const duration = endYM ? formatDuration(monthsInclusive(e.start, endYM), lang) : null;
-          const tags = expTags(e, lang);
+          const { present, period, duration, tags } = formatExperience(e, lang, now);
 
           return (
             <div key={e.company} className={`exp${present ? " exp--present" : ""}`}>
@@ -48,17 +32,13 @@ export function Experience() {
               </div>
               {tags.length > 0 && (
                 <div className="exp__tags">
-                  {tags.map((tag) => (
-                    <span key={tag} className="exp__tag">
-                      {tag}
-                    </span>
-                  ))}
+                  <TagList items={tags} className="exp__tag" />
                 </div>
               )}
             </div>
           );
         })}
       </div>
-    </section>
+    </Section>
   );
 }

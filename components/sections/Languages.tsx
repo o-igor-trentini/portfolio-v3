@@ -1,18 +1,17 @@
 "use client";
 
 import { usePortfolio } from "../PortfolioProvider";
+import { Section } from "../ui/Section";
 import { languages, langLevel, langName } from "@/lib/content";
 
 export function Languages() {
   const { t, lang } = usePortfolio();
 
   return (
-    <section id="langs" className="section">
-      <div className="section__label">{"// "}{t.langs.label}</div>
-      <p className="section__note">{t.langs.note}</p>
+    <Section id="langs" label={t.langs.label} note={t.langs.note}>
       <div className="langs__grid">
         {languages.map((l) => (
-          <div key={l.name_en} className="langcard">
+          <div key={l.name_en} className="langcard card">
             <div className="langcard__head">
               <span className="langcard__name">{langName(l, lang)}</span>
               <span className="langcard__level">{langLevel(l, lang)}</span>
@@ -25,6 +24,6 @@ export function Languages() {
           </div>
         ))}
       </div>
-    </section>
+    </Section>
   );
 }

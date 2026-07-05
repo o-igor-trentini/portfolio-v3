@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { usePortfolio } from "../PortfolioProvider";
+import { Section } from "../ui/Section";
+import { TagList } from "../ui/TagList";
 import { stackGroups, stackLabel, type StackGroup } from "@/lib/content";
 import { ITEM_CAP } from "@/site.config";
 
@@ -24,15 +26,11 @@ function StackGroupCard({ group }: { group: StackGroup }) {
     <div>
       <div className="stackgroup__label">{stackLabel(group, lang)}</div>
       <div className="stackgroup__items">
-        {itemsShown.map((item) => (
-          <span key={item} className="chip">
-            {item}
-          </span>
-        ))}
+        <TagList items={itemsShown} className="chip" />
         {hidden > 0 && (
           <button
             type="button"
-            className="chip-btn"
+            className="btn chip-btn"
             aria-label={moreAria}
             onClick={() => setExpanded((e) => !e)}
           >
@@ -47,14 +45,12 @@ function StackGroupCard({ group }: { group: StackGroup }) {
 export function Stack() {
   const { t } = usePortfolio();
   return (
-    <section id="stack" className="section">
-      <div className="section__label">{"// "}{t.stack.label}</div>
-      <p className="section__note">{t.stack.note}</p>
+    <Section id="stack" label={t.stack.label} note={t.stack.note}>
       <div className="stack__grid">
         {stackGroups.map((group) => (
           <StackGroupCard key={group.label_en} group={group} />
         ))}
       </div>
-    </section>
+    </Section>
   );
 }

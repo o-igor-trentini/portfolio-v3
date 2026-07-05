@@ -1,13 +1,13 @@
 "use client";
 
 import { usePortfolio } from "../PortfolioProvider";
+import { Section } from "../ui/Section";
 
 export function About() {
   const { t } = usePortfolio();
   return (
-    <section id="about" className="section">
-      <div className="section__label section__label--solo">{"// "}{t.about.label}</div>
+    <Section id="about" label={t.about.label} solo>
       <p className="about__body">{t.about.body}</p>
-    </section>
+    </Section>
   );
 }

@@ -11,9 +11,13 @@ import {
   expMode,
   expRole,
   expTags,
+  langLevel,
+  langName,
   languages,
+  projectDesc,
   projects,
   stackGroups,
+  stackLabel,
 } from "@/lib/content";
 import { formatDuration, formatMonthYear, monthsInclusive, parseYM } from "@/lib/date";
 import { PROMPT } from "@/site.config";
@@ -186,7 +190,7 @@ export function Terminal() {
       case "skills":
         out.push(mk("# stack", acc));
         stackGroups.forEach((g) => {
-          const lbl = (lang === "pt" ? g.label_pt : g.label_en).padEnd(11, " ");
+          const lbl = stackLabel(g, lang).padEnd(11, " ");
           out.push(mk("  " + lbl + g.items.join("  ·  "), mut));
         });
         break;
@@ -199,7 +203,7 @@ export function Terminal() {
         projects.forEach((p) => {
           out.push(
             mk("  ▸ " + p.name, COLOR.fg),
-            mk("    " + (lang === "pt" ? p.desc_pt : p.desc_en), mut),
+            mk("    " + projectDesc(p, lang), mut),
             mk("    [" + p.tags.join(", ") + "]", dim),
           );
         });
@@ -208,8 +212,8 @@ export function Terminal() {
       case "idiomas":
         out.push(mk("# languages", acc));
         languages.forEach((l) => {
-          const nm = lang === "pt" ? l.name_pt : l.name_en;
-          const lv = lang === "pt" ? l.level_pt : l.level_en;
+          const nm = langName(l, lang);
+          const lv = langLevel(l, lang);
           out.push(mk("  " + nm.padEnd(12, " ") + lv, mut));
         });
         break;

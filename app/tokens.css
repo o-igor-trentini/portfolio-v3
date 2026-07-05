@@ -1,0 +1,37 @@
+/* ============================================================
+   Design tokens — single source of truth for the recurring
+   sizing / spacing / motion values used across globals.css.
+   Colors stay in globals.css (:root + [data-theme]) because they
+   are theme-dependent; the tokens below are theme-agnostic.
+   Every value here is identical to the literal it replaced —
+   this file only names values, it must not change any pixel.
+   ============================================================ */
+
+:root {
+  /* border radius */
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+
+  /* type scale — the four small font sizes that recur across the UI */
+  --text-xs: 12px;
+  --text-sm: 12.5px;
+  --text-md: 13px;
+  --text-lg: 13.5px;
+
+  /* spacing — the two recurring values (8px gap, 18px card inset) */
+  --space-xs: 8px;
+  --space-md: 18px;
+
+  /* motion — shared hover/state transition duration */
+  --transition: .2s;
+
+  /* layout */
+  --gutter: clamp(20px, 5vw, 40px);
+  --container: 860px;
+
+  /* 1px neutral rule reused on cards, inputs, dividers and borders.
+     var(--border) is resolved at the use site, so the rule still
+     follows the active theme even though it is defined once here. */
+  --hairline: 1px solid var(--border);
+}

@@ -1,4 +1,5 @@
-import type { Lang } from "./i18n";
+import { i18n, type Lang } from "./i18n";
+import { formatDuration, formatMonthYear, monthsInclusive, parseYM, type YearMonth } from "./date";
 
 export interface StackGroup {
   label_en: string;
@@ -172,3 +173,26 @@ export const stackLabel = (g: StackGroup, lang: Lang) => (lang === "pt" ? g.labe
 export const projectDesc = (p: Project, lang: Lang) => (lang === "pt" ? p.desc_pt : p.desc_en);
 export const langName = (l: Language, lang: Lang) => (lang === "pt" ? l.name_pt : l.name_en);
 export const langLevel = (l: Language, lang: Lang) => (lang === "pt" ? l.level_pt : l.level_en);
+
+// ---- experience formatting -------------------------------------------------
+
+export interface FormattedExperience {
+  present: boolean;
+  period: string;
+  duration: string | null;
+  tags: string[];
+}
+
+/**
+ * Localized period/duration/tags for one experience. `now` is the client-only
+ * current month (null before it's known): for the ongoing role, that means the
+ * period still reads "present" but the duration is omitted until `now` arrives.
+ */
+export function formatExperience(e: Experience, lang: Lang, now: YearMonth | null): FormattedExperience {
+  const present = e.end === null;
+  const endYM = present ? now : parseYM(e.end as string);
+  const endLabel = present ? i18n[lang].experience.present : formatMonthYear(e.end as string, lang);
+  const period = `${formatMonthYear(e.start, lang)} — ${endLabel}`;
+  const duration = endYM ? formatDuration(monthsInclusive(e.start, endYM), lang) : null;
+  return { present, period, duration, tags: expTags(e, lang) };
+}

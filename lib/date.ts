@@ -16,6 +16,12 @@ export function parseYM(s: string): YearMonth {
   return { y, m };
 }
 
+/** The current year/month (`m` is 1-12). */
+export function nowYM(): YearMonth {
+  const d = new Date();
+  return { y: d.getFullYear(), m: d.getMonth() + 1 };
+}
+
 /** "2021-09" → "Sep 2021" / "set 2021". */
 export function formatMonthYear(s: string, lang: Lang): string {
   const { y, m } = parseYM(s);
