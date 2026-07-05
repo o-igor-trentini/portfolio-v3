@@ -2,6 +2,7 @@
 
 import { usePortfolio } from "@/components/providers/PortfolioProvider";
 import { Section } from "../ui/Section";
+import { Button } from "../ui/Button";
 
 export function Hero() {
   const { name, t, openTerm } = usePortfolio();
@@ -18,10 +19,10 @@ export function Hero() {
       <div className="hero__role">{t.hero.role}</div>
       <p className="hero__tagline">{t.hero.tagline}</p>
       <div className="hero__actions">
-        <button type="button" className="btn btn-accent" onClick={openTerm}>
+        <Button variant="accent" onClick={openTerm}>
           <span style={{ fontSize: 14 }}>&gt;_</span>
           {t.hero.cta}
-        </button>
+        </Button>
         <span className="hero__hint">
           {t.hero.hint1} <kbd>`</kbd> {t.hero.hint2}
         </span>

@@ -3,6 +3,9 @@
 import { useState } from "react";
 import { usePortfolio } from "@/components/providers/PortfolioProvider";
 import { BurgerIcon, CloseIcon, MoonIcon, SunIcon } from "@/components/ui/Icons";
+import { Button } from "@/components/ui/Button";
+import { IconButton } from "@/components/ui/IconButton";
+import { cx } from "@/lib/cx";
 
 export function Header() {
   const { handle, t, lang, setLang, isDark, toggleTheme, showProjects, showCerts } = usePortfolio();
@@ -33,42 +36,37 @@ export function Header() {
           <div className="nav-links">{links}</div>
 
           <div className="langtoggle" role="group" aria-label="Language">
-            <button
-              type="button"
-              className={`btn langtoggle__btn${lang === "en" ? " langtoggle__btn--active" : ""}`}
+            <Button
+              className={cx("langtoggle__btn", lang === "en" && "langtoggle__btn--active")}
               aria-pressed={lang === "en"}
               onClick={() => setLang("en")}
             >
               en
-            </button>
-            <button
-              type="button"
-              className={`btn langtoggle__btn${lang === "pt" ? " langtoggle__btn--active" : ""}`}
+            </Button>
+            <Button
+              className={cx("langtoggle__btn", lang === "pt" && "langtoggle__btn--active")}
               aria-pressed={lang === "pt"}
               onClick={() => setLang("pt")}
             >
               pt
-            </button>
+            </Button>
           </div>
 
-          <button
-            type="button"
-            className="iconbtn"
+          <IconButton
             aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
             onClick={toggleTheme}
           >
             {isDark ? <MoonIcon /> : <SunIcon />}
-          </button>
+          </IconButton>
 
-          <button
-            type="button"
-            className="iconbtn nav-burger"
+          <IconButton
+            className="nav-burger"
             aria-label="Menu"
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((o) => !o)}
           >
             {menuOpen ? <CloseIcon /> : <BurgerIcon />}
-          </button>
+          </IconButton>
         </nav>
       </div>
 
