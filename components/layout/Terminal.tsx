@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
-import { usePortfolio } from "./PortfolioProvider";
+import { usePortfolio } from "@/components/providers/PortfolioProvider";
 import { COLOR, introLines, mk, runTerminalCommand, type Line } from "@/lib/terminal";
 import { PROMPT } from "@/site.config";
 

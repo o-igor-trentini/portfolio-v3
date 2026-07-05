@@ -1,6 +1,6 @@
 "use client";
 
-import { usePortfolio } from "../PortfolioProvider";
+import { usePortfolio } from "@/components/providers/PortfolioProvider";
 import { Section } from "../ui/Section";
 
 export function Hero() {

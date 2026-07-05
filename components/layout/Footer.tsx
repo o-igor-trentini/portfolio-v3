@@ -1,6 +1,6 @@
 "use client";
 
-import { usePortfolio } from "./PortfolioProvider";
+import { usePortfolio } from "@/components/providers/PortfolioProvider";
 
 export function Footer() {
   const { t, openTerm } = usePortfolio();

@@ -1,7 +1,7 @@
 "use client";
 
-import { usePortfolio } from "../PortfolioProvider";
-import { EmptyState } from "../EmptyState";
+import { usePortfolio } from "@/components/providers/PortfolioProvider";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { Section } from "../ui/Section";
 import { ExternalLink } from "../ui/ExternalLink";
 import { RevealControls } from "../ui/RevealControls";

@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { usePortfolio } from "./PortfolioProvider";
-import { BurgerIcon, CloseIcon, MoonIcon, SunIcon } from "./ui/Icons";
+import { usePortfolio } from "@/components/providers/PortfolioProvider";
+import { BurgerIcon, CloseIcon, MoonIcon, SunIcon } from "@/components/ui/Icons";
 
 export function Header() {
   const { handle, t, lang, setLang, isDark, toggleTheme, showProjects, showCerts } = usePortfolio();

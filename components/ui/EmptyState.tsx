@@ -1,6 +1,6 @@
 "use client";
 
-import { usePortfolio } from "./PortfolioProvider";
+import { usePortfolio } from "@/components/providers/PortfolioProvider";
 
 /**
  * On-brand "content pending" placeholder for sections that are visible but

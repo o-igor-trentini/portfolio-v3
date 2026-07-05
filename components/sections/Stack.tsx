@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { usePortfolio } from "../PortfolioProvider";
+import { usePortfolio } from "@/components/providers/PortfolioProvider";
 import { Section } from "../ui/Section";
 import { TagList } from "../ui/TagList";
 import { stackGroups, stackLabel, type StackGroup } from "@/lib/content";

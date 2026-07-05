@@ -1,6 +1,6 @@
 "use client";
 
-import { usePortfolio } from "../PortfolioProvider";
+import { usePortfolio } from "@/components/providers/PortfolioProvider";
 import { Section } from "../ui/Section";
 import { TagList } from "../ui/TagList";
 import { useNowYM } from "@/hooks/useNowYM";
