@@ -37,6 +37,7 @@ Regras **duráveis** que restringem mudanças futuras. Decisões pontuais de exe
 - `PortfolioProvider` **compõe** `useTheme` + `useLang` + `useTerminal` e expõe tudo por `usePortfolio()`. Mantenha a **API pública de `usePortfolio` estável** — há muitos consumidores.
 - Um **único listener de keydown** em `useTerminal` cuida de backtick/Esc/konami. Não separe o konami: backtick/Esc passariam a ser gravados no buffer, mudando o comportamento.
 - i18n: dicionários em `lib/i18n.ts`; seleção de campo via helpers em `lib/content.ts` (`stackLabel`, `projectDesc`, `langName`, `langLevel`, `formatExperience`). **Use os helpers** em vez de ternários `lang === "pt" ? … : …` inline.
+- **Seções são Client Components por causa do `lang`.** O `lang` é Context client-reativo (`useLang`: `useState`+`localStorage`), trocado em runtime **sem navegação**. Um Server Component renderiza uma vez no servidor e não reage a esse toggle — até `About` lê `t.about` = `i18n[lang]` reativo. Por isso **converter seções em Server Components está bloqueado**: extrair a parte interativa em ilha não basta (o bloqueio é a *fonte* do `lang`). Habilitar exigiria mover `lang` para roteamento por locale (`app/[lang]/…`), o que muda URLs e torna a troca de idioma uma navegação — grande e com mudança de comportamento observável. Os primitivos `ui/Section`, `ui/ExternalLink`, `ui/TagList` já são server-safe (sem `"use client"`); só o `lang` prende a árvore no client.
 
 ## 5. Disciplina de mudança & testes
 

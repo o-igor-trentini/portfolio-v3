@@ -137,5 +137,10 @@ Resolve: **L4**
 > (Section, RevealControls, ExternalLink, TagList).
 
 ## Fora de escopo (futuro)
-- Converter seções estáticas (About/Stack/Projects/Contact) em Server Components (reduz bundle client; tarefa dedicada).
-- Alinhar `Icons.tsx` com `"use client"` (inconsistência inócua hoje).
+- Converter seções (About/Stack/Projects/Contact) em Server Components: **bloqueado** enquanto o `lang`
+  for Context client-reativo (troca em runtime, sem navegação). Pré-requisito = roteamento por locale
+  (`app/[lang]/…`), que muda URLs e comportamento do toggle. Detalhes na regra durável em
+  [`../architecture.md`](../architecture.md) §4.
+- ~~Alinhar `Icons.tsx` com `"use client"`~~ · **resolvido (jul/2026):** não era diretiva a fazer — `Icons.tsx`
+  é SVG puro e adicionar `"use client"` o desalinharia dos primitivos puros (`ui/ExternalLink`, `ui/Section`,
+  `ui/TagList`). Movido para `components/ui/Icons.tsx` (alinhamento organizacional), permanecendo sem a diretiva.
