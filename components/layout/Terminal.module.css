@@ -1,0 +1,98 @@
+/* The terminal window is always dark in both themes, so the surface/border/text
+   colors here are intentional hex literals — not theme tokens (same rule as the
+   COLOR table in lib/terminal.ts). Only --accent (chosen to read on dark) is a token.
+   The `termin`/`fadein` keyframes stay global in globals.css. */
+.term-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(12px, 4vw, 40px);
+  animation: fadein 0.15s ease;
+}
+.term-window {
+  width: 100%;
+  max-width: 720px;
+  height: min(72vh, 540px);
+  display: flex;
+  flex-direction: column;
+  background: var(--termbg);
+  border: 1px solid #2a2a30;
+  border-radius: 11px;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.6);
+  overflow: hidden;
+  animation: termin 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.term-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 14px;
+  background: #16161a;
+  border-bottom: 1px solid #2a2a30;
+  flex-shrink: 0;
+}
+.term-dot {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+.term-title {
+  flex: 1;
+  text-align: center;
+  font-size: var(--text-xs);
+  color: #8a8a93;
+}
+.term-close {
+  background: transparent;
+  border: none;
+  color: #8a8a93;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1;
+  padding: 0 2px;
+}
+.term-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  font-size: var(--text-md);
+  line-height: 1.6;
+  color: #e4e4e7;
+  cursor: text;
+}
+.term-line {
+  white-space: pre-wrap;
+  word-break: break-word;
+  margin-bottom: 1px;
+}
+.term-prompt {
+  color: var(--accent);
+}
+.term-inputrow {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  margin-top: 2px;
+}
+.term-inputrow__prompt {
+  color: var(--accent);
+  white-space: nowrap;
+}
+.term-input {
+  flex: 1;
+  min-width: 0;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #e4e4e7;
+  font-family: inherit;
+  font-size: var(--text-md);
+  caret-color: var(--accent);
+  padding: 0;
+}

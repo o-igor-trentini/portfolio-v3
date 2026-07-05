@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
-import { usePortfolio } from "./PortfolioProvider";
+import { usePortfolio } from "@/components/providers/PortfolioProvider";
 import { COLOR, introLines, mk, runTerminalCommand, type Line } from "@/lib/terminal";
 import { PROMPT } from "@/site.config";
+import styles from "./Terminal.module.css";
 
 export function Terminal() {
   const { termOpen, closeTerm, bonusNonce, lang, theme, setLang, toggleTheme, name } = usePortfolio();
@@ -103,29 +104,29 @@ export function Terminal() {
   if (!termOpen) return null;
 
   return (
-    <div className="term-overlay" onClick={closeTerm}>
-      <div className="term-window" role="dialog" aria-modal="true" aria-label="Terminal" onClick={(e) => e.stopPropagation()}>
-        <div className="term-titlebar">
-          <span className="term-dot" style={{ background: "#ff5f57" }} />
-          <span className="term-dot" style={{ background: "#febc2e" }} />
-          <span className="term-dot" style={{ background: "#28c840" }} />
-          <span className="term-title">visitor@portfolio: ~/zsh</span>
-          <button type="button" className="term-close" aria-label="Close terminal" onClick={closeTerm}>
+    <div className={styles["term-overlay"]} onClick={closeTerm}>
+      <div className={styles["term-window"]} role="dialog" aria-modal="true" aria-label="Terminal" onClick={(e) => e.stopPropagation()}>
+        <div className={styles["term-titlebar"]}>
+          <span className={styles["term-dot"]} style={{ background: "#ff5f57" }} />
+          <span className={styles["term-dot"]} style={{ background: "#febc2e" }} />
+          <span className={styles["term-dot"]} style={{ background: "#28c840" }} />
+          <span className={styles["term-title"]}>visitor@portfolio: ~/zsh</span>
+          <button type="button" className={styles["term-close"]} aria-label="Close terminal" onClick={closeTerm}>
             ✕
           </button>
         </div>
-        <div className="term-body" ref={bodyRef} onClick={() => inputRef.current?.focus()}>
+        <div className={styles["term-body"]} ref={bodyRef} onClick={() => inputRef.current?.focus()}>
           {lines.map((l, i) => (
-            <div key={i} className="term-line">
-              {l.prompt && <span className="term-prompt">{l.prompt} </span>}
+            <div key={i} className={styles["term-line"]}>
+              {l.prompt && <span className={styles["term-prompt"]}>{l.prompt} </span>}
               <span style={{ color: l.color }}>{l.text}</span>
             </div>
           ))}
-          <div className="term-inputrow">
-            <span className="term-inputrow__prompt">{PROMPT}</span>
+          <div className={styles["term-inputrow"]}>
+            <span className={styles["term-inputrow__prompt"]}>{PROMPT}</span>
             <input
               ref={inputRef}
-              className="term-input"
+              className={styles["term-input"]}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={onInputKey}

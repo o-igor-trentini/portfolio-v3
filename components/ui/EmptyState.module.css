@@ -1,0 +1,15 @@
+.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  padding: 44px 24px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-md);
+  background: var(--card);
+  color: var(--muted);
+  font-size: var(--text-lg);
+}
+.empty__prompt {
+  color: var(--accent);
+}

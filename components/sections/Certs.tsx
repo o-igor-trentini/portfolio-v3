@@ -1,13 +1,14 @@
 "use client";
 
-import { usePortfolio } from "../PortfolioProvider";
-import { EmptyState } from "../EmptyState";
+import { usePortfolio } from "@/components/providers/PortfolioProvider";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { Section } from "../ui/Section";
 import { ExternalLink } from "../ui/ExternalLink";
 import { RevealControls } from "../ui/RevealControls";
 import { usePagination } from "@/hooks/usePagination";
 import { certs } from "@/lib/content";
 import { PAGE } from "@/site.config";
+import styles from "./Certs.module.css";
 
 export function Certs() {
   const { t } = usePortfolio();
@@ -18,19 +19,19 @@ export function Certs() {
       {certs.length === 0 && <EmptyState />}
 
       {certs.length > 0 && (
-      <div className="certs__grid">
+      <div className={styles.certs__grid}>
         {shown.map((cert) => (
-          <ExternalLink key={cert.name} href={cert.link} className="cert card">
-            <div className="cert__head">
-              <span className="cert__check" aria-hidden="true">✓</span>
-              <span className="cert__name">{cert.name}</span>
+          <ExternalLink key={cert.name} href={cert.link} className={styles.cert}>
+            <div className={styles.cert__head}>
+              <span className={styles.cert__check} aria-hidden="true">✓</span>
+              <span className={styles.cert__name}>{cert.name}</span>
             </div>
-            <div className="cert__meta">
+            <div className={styles.cert__meta}>
               <span>{cert.issuer}</span>
-              <span className="cert__dot">·</span>
+              <span className={styles.cert__dot}>·</span>
               <span>{cert.year}</span>
             </div>
-            <div className="cert__verify">{t.certs.verify} ↗</div>
+            <div className={styles.cert__verify}>{t.certs.verify} ↗</div>
           </ExternalLink>
         ))}
       </div>

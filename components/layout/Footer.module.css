@@ -1,0 +1,34 @@
+.site-footer {
+  border-top: var(--hairline);
+  margin-top: clamp(40px, 8vw, 72px);
+}
+.site-footer__inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 26px var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.site-footer__built {
+  font-size: var(--text-xs);
+  color: var(--muted);
+}
+/* Composed onto the shared .btn (Button) via className. */
+.term-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  border: var(--hairline);
+  border-radius: var(--radius-sm);
+  padding: 6px 12px;
+  font-size: var(--text-xs);
+  color: var(--muted);
+  transition: color var(--transition), border-color var(--transition);
+}
+.term-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
