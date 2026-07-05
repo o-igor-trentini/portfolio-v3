@@ -51,9 +51,7 @@ input::placeholder{color:#52525b}
 }
 
 /* ---------- base primitives ----------
-   Declared before every consumer so per-component and :hover/--active rules
-   win by source order (all share the same single-class specificity). */
-.btn{background:transparent;font-family:inherit;cursor:pointer}
+   .btn lives in components/ui/Button.module.css now. */
 /* Shared bordered card surface — used by .langcard and .cert.
    .project (borderless, hover-only bg) and .empty (dashed border, larger
    padding) intentionally do NOT compose this, to keep their look unchanged. */
@@ -109,13 +107,7 @@ input::placeholder{color:#52525b}
 .hero__hint{font-size:var(--text-xs);color:var(--muted)}
 kbd{border:var(--hairline);border-radius:var(--radius-xs);padding:1px 6px;font-family:inherit;color:var(--fg)}
 
-/* ---------- buttons ---------- */
-.btn-accent{display:inline-flex;align-items:center;gap:var(--space-xs);color:var(--accent);border:1px solid var(--accent);border-radius:7px;padding:9px 16px;font-size:var(--text-md);font-weight:500;transition:background var(--transition),color var(--transition)}
-.btn-accent:hover{background:var(--accent);color:var(--bg)}
-.btn-ghost{display:inline-flex;align-items:center;gap:var(--space-xs);color:var(--muted);border:var(--hairline);border-radius:7px;padding:8px 14px;font-size:var(--text-sm);transition:color var(--transition),border-color var(--transition)}
-.btn-ghost:hover{color:var(--accent);border-color:var(--accent)}
-.btn-link{color:var(--muted);border:none;font-size:var(--text-sm);transition:color var(--transition)}
-.btn-link:hover{color:var(--accent)}
+/* ---------- text utilities (used as bare spans across components) ---------- */
 .accent{color:var(--accent)}
 .muted{color:var(--muted)}
 

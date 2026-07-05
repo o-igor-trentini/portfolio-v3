@@ -1,0 +1,50 @@
+/* Button reset + shared variants. Base is declared before the variants so
+   :hover rules win by source order (all share single-class specificity). */
+.btn {
+  background: transparent;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.btn-accent {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  border-radius: 7px;
+  padding: 9px 16px;
+  font-size: var(--text-md);
+  font-weight: 500;
+  transition: background var(--transition), color var(--transition);
+}
+.btn-accent:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  color: var(--muted);
+  border: var(--hairline);
+  border-radius: 7px;
+  padding: 8px 14px;
+  font-size: var(--text-sm);
+  transition: color var(--transition), border-color var(--transition);
+}
+.btn-ghost:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.btn-link {
+  color: var(--muted);
+  border: none;
+  font-size: var(--text-sm);
+  transition: color var(--transition);
+}
+.btn-link:hover {
+  color: var(--accent);
+}

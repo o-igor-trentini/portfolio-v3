@@ -1,12 +1,13 @@
 import type { ComponentPropsWithoutRef } from "react";
 import { cx } from "@/lib/cx";
+import styles from "./Button.module.css";
 
 type ButtonVariant = "accent" | "ghost" | "link";
 
 const VARIANT_CLASS: Record<ButtonVariant, string> = {
-  accent: "btn-accent",
-  ghost: "btn-ghost",
-  link: "btn-link",
+  accent: styles["btn-accent"],
+  ghost: styles["btn-ghost"],
+  link: styles["btn-link"],
 };
 
 interface ButtonProps extends ComponentPropsWithoutRef<"button"> {
@@ -23,7 +24,7 @@ export function Button({ variant, className, type, children, ...rest }: ButtonPr
   return (
     <button
       type={type ?? "button"}
-      className={cx("btn", variant && VARIANT_CLASS[variant], className)}
+      className={cx(styles.btn, variant && VARIANT_CLASS[variant], className)}
       {...rest}
     >
       {children}
