@@ -26,13 +26,10 @@ export const siteConfig = {
   // Feature flags / theming
   accent: "blue" as Accent,
   defaultTheme: "dark" as ThemePref,
-  showProjects: true,
-  showCerts: true,
 
   /**
    * Canonical site URL — used for metadata, Open Graph, sitemap and canonical
    * links. Override with NEXT_PUBLIC_SITE_URL at build time, or edit here.
-   * TODO: replace the fallback with your real production domain.
    */
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://igortrentini.dev",
 };
