@@ -21,7 +21,10 @@ export function Languages() {
             </div>
             <div className={styles.langcard__bar}>
               {Array.from({ length: 5 }, (_, i) => (
-                <span key={i} className={cx(styles.seg, i < l.score ? styles["seg--on"] : styles["seg--off"])} />
+                <span
+                  key={i}
+                  className={cx(styles.seg, i < l.score ? styles["seg--on"] : styles["seg--off"])}
+                />
               ))}
             </div>
           </Card>

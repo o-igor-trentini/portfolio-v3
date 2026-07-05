@@ -62,7 +62,9 @@
   border-radius: var(--radius-xs);
   padding: 3px 9px;
   font-size: var(--text-xs);
-  transition: background var(--transition), color var(--transition);
+  transition:
+    background var(--transition),
+    color var(--transition);
 }
 .langtoggle__btn--active {
   background: var(--accent);

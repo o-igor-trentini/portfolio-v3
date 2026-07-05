@@ -23,12 +23,12 @@ Regras **duráveis** que restringem mudanças futuras. Decisões pontuais de exe
 ## 2. Estilo: CSS Modules co-locados + global layer
 
 - **Estilo de componente vive num `Component.module.css` co-locado**, importado como `styles` e referenciado por `styles.bloco__el` (acesso por ponto funciona com `__`; modificadores com hífen usam bracket: `styles["bloco--mod"]`). Classes condicionais/dinâmicas via `cx()` de `lib/cx.ts` — não concatene template strings.
-- **`app/globals.css` é só o *global layer*** — o que não pode ser escopado: tokens de cor theme-reativos (`:root` + `html[data-theme="light"]`), resets de elemento, `@keyframes`, e utilitários usados como spans/elementos avulsos em vários componentes (`.accent`, `.muted`, `.caret`, `kbd`, `.sr-only`). O tema é aplicado pré-hidratação por um script inline no `layout.tsx` (evita flash).
+- **`app/globals.css` é só o _global layer_** — o que não pode ser escopado: tokens de cor theme-reativos (`:root` + `html[data-theme="light"]`), resets de elemento, `@keyframes`, e utilitários usados como spans/elementos avulsos em vários componentes (`.accent`, `.muted`, `.caret`, `kbd`, `.sr-only`). O tema é aplicado pré-hidratação por um script inline no `layout.tsx` (evita flash).
 - **Sizing/spacing/motion são theme-agnósticos** em `app/tokens.css` (`--radius-*`, `--text-*`, `--space-*`, `--transition`, `--gutter`, `--container`, `--hairline`). Todos os módulos consomem via `var(--…)` (custom properties são globais por natureza).
 - Onde adicionar: **estilo de um componente → o `.module.css` dele**; cor nova theme-reativa → `globals.css` (nos dois temas); medida repetida → `tokens.css`; utilitário realmente transversal → `globals.css`.
 - `--hairline` guarda o shorthand `1px solid var(--border)`; o `var(--border)` resolve no ponto de uso, então **segue o tema** mesmo definido uma vez.
 - Superfícies compartilhadas usam **`composes`**: ex.: `.cert` em `Certs.module.css` faz `composes: card from "@/components/ui/Card.module.css"` (a superfície da `Card` num `<a>`, sem renderizar `<Card>`).
-- **`@keyframes` ficam globais** em `globals.css`. CSS Modules só escopam keyframes definidos *dentro* de um módulo; referenciar um keyframe por nome a partir de um módulo resolve no global. Assim não há duplicação nem risco de rename.
+- **`@keyframes` ficam globais** em `globals.css`. CSS Modules só escopam keyframes definidos _dentro_ de um módulo; referenciar um keyframe por nome a partir de um módulo resolve no global. Assim não há duplicação nem risco de rename.
 - Convenção de nomes: **BEM kebab-case** (`bloco__elemento--modificador`), agora escopado por módulo.
 - Testes de contrato de `ui/` afirmam sobre os nomes BEM literais — o Vitest usa `css.modules.classNameStrategy: "non-scoped"` (`vitest.config.ts`), então `styles.btn === "btn"` nos testes.
 - ⚠️ Comentários em `.css` fecham no primeiro `*/` — não escreva globs como `**/*.css` dentro de `/* … */` (o `*/` embutido corta o comentário).
@@ -44,7 +44,7 @@ Regras **duráveis** que restringem mudanças futuras. Decisões pontuais de exe
 - `PortfolioProvider` **compõe** `useTheme` + `useLang` + `useTerminal` e expõe tudo por `usePortfolio()`. Mantenha a **API pública de `usePortfolio` estável** — há muitos consumidores.
 - Um **único listener de keydown** em `useTerminal` cuida de backtick/Esc/konami. Não separe o konami: backtick/Esc passariam a ser gravados no buffer, mudando o comportamento.
 - i18n: dicionários em `lib/i18n.ts`; seleção de campo via helpers em `lib/content.ts` (`stackLabel`, `projectDesc`, `langName`, `langLevel`, `formatExperience`). **Use os helpers** em vez de ternários `lang === "pt" ? … : …` inline.
-- **Seções são Client Components por causa do `lang`.** O `lang` é Context client-reativo (`useLang`: `useState`+`localStorage`), trocado em runtime **sem navegação**. Um Server Component renderiza uma vez no servidor e não reage a esse toggle — até `About` lê `t.about` = `i18n[lang]` reativo. Por isso **converter seções em Server Components está bloqueado**: extrair a parte interativa em ilha não basta (o bloqueio é a *fonte* do `lang`). Habilitar exigiria mover `lang` para roteamento por locale (`app/[lang]/…`), o que muda URLs e torna a troca de idioma uma navegação — grande e com mudança de comportamento observável. Os primitivos `ui/Section`, `ui/ExternalLink`, `ui/TagList` já são server-safe (sem `"use client"`); só o `lang` prende a árvore no client.
+- **Seções são Client Components por causa do `lang`.** O `lang` é Context client-reativo (`useLang`: `useState`+`localStorage`), trocado em runtime **sem navegação**. Um Server Component renderiza uma vez no servidor e não reage a esse toggle — até `About` lê `t.about` = `i18n[lang]` reativo. Por isso **converter seções em Server Components está bloqueado**: extrair a parte interativa em ilha não basta (o bloqueio é a _fonte_ do `lang`). Habilitar exigiria mover `lang` para roteamento por locale (`app/[lang]/…`), o que muda URLs e torna a troca de idioma uma navegação — grande e com mudança de comportamento observável. Os primitivos `ui/Section`, `ui/ExternalLink`, `ui/TagList` já são server-safe (sem `"use client"`); só o `lang` prende a árvore no client.
 
 ## 5. Disciplina de mudança & testes
 
@@ -59,4 +59,4 @@ Regras **duráveis** que restringem mudanças futuras. Decisões pontuais de exe
 
 Decisões locais não-óbvias vivem como comentário **co-localizado** ao código (ex.: por que `--hairline`,
 por que `.card` não se aplica a `.project`/`.empty`, por que `clear`/`exit` ficam fora do registry). Prefira
-isso a documentar o óbvio aqui — comentário junto do código não sofre *drift*.
+isso a documentar o óbvio aqui — comentário junto do código não sofre _drift_.

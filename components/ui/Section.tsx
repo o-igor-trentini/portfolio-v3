@@ -19,7 +19,10 @@ export function Section({ id, label, note, solo, variant, children }: SectionPro
   return (
     <section id={id} className={cx(styles.section, variant === "hero" && styles["section--hero"])}>
       {label && (
-        <div className={cx(styles.section__label, solo && styles["section__label--solo"])}>{"// "}{label}</div>
+        <div className={cx(styles.section__label, solo && styles["section__label--solo"])}>
+          {"// "}
+          {label}
+        </div>
       )}
       {note && <p className={styles.section__note}>{note}</p>}
       {children}

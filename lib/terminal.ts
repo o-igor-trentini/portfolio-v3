@@ -36,7 +36,11 @@ export const COLOR = {
   faint: "#52525b",
 };
 
-export const mk = (text: string, color: string = COLOR.muted, prompt?: string): Line => ({ text, color, prompt });
+export const mk = (text: string, color: string = COLOR.muted, prompt?: string): Line => ({
+  text,
+  color,
+  prompt,
+});
 
 export function introLines(): Line[] {
   return [
@@ -91,7 +95,12 @@ const help: Handler = () => [
 
 const about: Handler = (ctx) => {
   const L = i18n[ctx.lang];
-  return [mk(ctx.name, COLOR.accent), mk(L.hero.role, COLOR.muted), mk(""), mk(L.about.body, COLOR.soft)];
+  return [
+    mk(ctx.name, COLOR.accent),
+    mk(L.hero.role, COLOR.muted),
+    mk(""),
+    mk(L.about.body, COLOR.soft),
+  ];
 };
 
 const experience: Handler = (ctx) => {
@@ -104,7 +113,11 @@ const experience: Handler = (ctx) => {
       // `now` is always set here, so duration is never null.
       mk(`    ${period} · ${duration}`, COLOR.muted),
       mk(
-        "    " + expMode(e, ctx.lang) + " · " + expIndustry(e, ctx.lang) + (tags.length ? "  [" + tags.join(", ") + "]" : ""),
+        "    " +
+          expMode(e, ctx.lang) +
+          " · " +
+          expIndustry(e, ctx.lang) +
+          (tags.length ? "  [" + tags.join(", ") + "]" : ""),
         COLOR.dim,
       ),
     );
@@ -190,7 +203,9 @@ const ls: Handler = () => [
 
 const cat: Handler = (ctx) => [
   mk(
-    ctx.args[0] === ".secrets" ? "nice try ;)" : "cat: " + (ctx.args[0] || "") + ": permission denied",
+    ctx.args[0] === ".secrets"
+      ? "nice try ;)"
+      : "cat: " + (ctx.args[0] || "") + ": permission denied",
     COLOR.dim,
   ),
 ];

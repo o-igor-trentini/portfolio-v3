@@ -2,7 +2,7 @@
 
 > **Registro de execução arquivado.** As convenções duráveis extraídas deste trabalho
 > vivem em [`../architecture.md`](../architecture.md) (§1 estrutura de pastas, §2 estilo).
-> Este arquivo é o histórico de *como* chegamos lá — não é um doc vivo.
+> Este arquivo é o histórico de _como_ chegamos lá — não é um doc vivo.
 >
 > Refactor **sem alterar comportamento observável** (UI, temas, i18n, rotas). Etapas
 > pequenas e independentes, uma por commit. Portão a cada passo: `lint` +
@@ -19,6 +19,7 @@ estilo num único `app/globals.css` (~221 linhas). O usuário pediu primitivos (
 pastas de layout e a saída do CSS global rumo a CSS Modules co-locados.
 
 ## Decisões de escopo
+
 - **CSS Modules co-locados** (Next 16 nativo, zero deps). `globals.css` vira global layer enxuto.
   Muda a regra antiga "sem CSS Modules" — migrada em `architecture.md` §2.
 - Pastas: **`components/layout/` + `components/providers/` + `components/ui/`**.
@@ -27,6 +28,7 @@ pastas de layout e a saída do CSS global rumo a CSS Modules co-locados.
 - Botão `term-close` do terminal **não** vira `IconButton` (visual diferente do `.iconbtn`).
 
 ## Passos executados
+
 1. **`lib/cx.ts`** — helper puro de junção de classes (+ teste). Base para modificadores com `styles[...]`.
 2. **Reorganização de pastas** — `Header`/`Footer`/`Portfolio`/`Terminal` → `layout/`,
    `PortfolioProvider` → `providers/`, `EmptyState` → `ui/`. Imports cross-layer no alias `@/`.
@@ -40,6 +42,7 @@ pastas de layout e a saída do CSS global rumo a CSS Modules co-locados.
    `Certs` reusa a superfície `Card` via `composes`. Terminal mantém hex literais.
 
 ## Estado final
+
 - Estrutura: `components/{ui,layout,providers,sections}/`, cada componente com seu `.module.css`.
 - `app/globals.css`: ~60 linhas (só global layer). Nenhum bloco de componente restante.
 - Testes: 53 verdes (inclui novos contratos de `Button`/`IconButton`/`Card` e `cx`).
@@ -47,5 +50,6 @@ pastas de layout e a saída do CSS global rumo a CSS Modules co-locados.
   paginação, expand do Stack, terminal, menu mobile).
 
 ## Fora de escopo (futuro)
+
 - Conversão de seções em Server Components — segue bloqueada pelo `lang` client-reativo (ver §4).
 - Possível `utils.module.css` para `.accent`/`.muted` caso o global layer cresça.

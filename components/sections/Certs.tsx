@@ -19,22 +19,24 @@ export function Certs() {
       {certs.length === 0 && <EmptyState />}
 
       {certs.length > 0 && (
-      <div className={styles.certs__grid}>
-        {shown.map((cert) => (
-          <ExternalLink key={cert.name} href={cert.link} className={styles.cert}>
-            <div className={styles.cert__head}>
-              <span className={styles.cert__check} aria-hidden="true">✓</span>
-              <span className={styles.cert__name}>{cert.name}</span>
-            </div>
-            <div className={styles.cert__meta}>
-              <span>{cert.issuer}</span>
-              <span className={styles.cert__dot}>·</span>
-              <span>{cert.year}</span>
-            </div>
-            <div className={styles.cert__verify}>{t.certs.verify} ↗</div>
-          </ExternalLink>
-        ))}
-      </div>
+        <div className={styles.certs__grid}>
+          {shown.map((cert) => (
+            <ExternalLink key={cert.name} href={cert.link} className={styles.cert}>
+              <div className={styles.cert__head}>
+                <span className={styles.cert__check} aria-hidden="true">
+                  ✓
+                </span>
+                <span className={styles.cert__name}>{cert.name}</span>
+              </div>
+              <div className={styles.cert__meta}>
+                <span>{cert.issuer}</span>
+                <span className={styles.cert__dot}>·</span>
+                <span>{cert.year}</span>
+              </div>
+              <div className={styles.cert__verify}>{t.certs.verify} ↗</div>
+            </ExternalLink>
+          ))}
+        </div>
       )}
 
       <RevealControls

@@ -79,43 +79,54 @@ export const projects: Project[] = [
     name: "core-api",
     link: "#",
     tags: ["Go", "gRPC", "PostgreSQL", "Redis"],
-    desc_en: "High-throughput API gateway exposing gRPC + REST, handling auth, rate limiting and request fan-out.",
-    desc_pt: "API gateway de alta vazão expondo gRPC + REST, com auth, rate limiting e fan-out de requisições.",
+    desc_en:
+      "High-throughput API gateway exposing gRPC + REST, handling auth, rate limiting and request fan-out.",
+    desc_pt:
+      "API gateway de alta vazão expondo gRPC + REST, com auth, rate limiting e fan-out de requisições.",
   },
   {
     name: "taskq",
     link: "#",
     tags: ["Go", "RabbitMQ", "Docker"],
-    desc_en: "Distributed job queue with at-least-once delivery, retries with backoff and a small dashboard.",
-    desc_pt: "Fila de jobs distribuída com entrega at-least-once, retries com backoff e um painel enxuto.",
+    desc_en:
+      "Distributed job queue with at-least-once delivery, retries with backoff and a small dashboard.",
+    desc_pt:
+      "Fila de jobs distribuída com entrega at-least-once, retries com backoff e um painel enxuto.",
   },
   {
     name: "obsd",
     link: "#",
     tags: ["Go", "Prometheus"],
-    desc_en: "Lightweight observability agent collecting runtime metrics and exporting them to Prometheus.",
-    desc_pt: "Agente leve de observabilidade que coleta métricas de runtime e exporta para o Prometheus.",
+    desc_en:
+      "Lightweight observability agent collecting runtime metrics and exporting them to Prometheus.",
+    desc_pt:
+      "Agente leve de observabilidade que coleta métricas de runtime e exporta para o Prometheus.",
   },
   {
     name: "authsvc",
     link: "#",
     tags: ["Go", "JWT", "PostgreSQL"],
-    desc_en: "Stateless authentication service with JWT issuance, refresh rotation and role-based access.",
-    desc_pt: "Serviço de autenticação stateless com emissão de JWT, rotação de refresh e acesso por papéis.",
+    desc_en:
+      "Stateless authentication service with JWT issuance, refresh rotation and role-based access.",
+    desc_pt:
+      "Serviço de autenticação stateless com emissão de JWT, rotação de refresh e acesso por papéis.",
   },
   {
     name: "streamd",
     link: "#",
     tags: ["Go", "Kafka", "gRPC"],
     desc_en: "Stream processor consuming Kafka topics and fanning enriched events out over gRPC.",
-    desc_pt: "Processador de streams que consome tópicos Kafka e distribui eventos enriquecidos via gRPC.",
+    desc_pt:
+      "Processador de streams que consome tópicos Kafka e distribui eventos enriquecidos via gRPC.",
   },
   {
     name: "ratelimit",
     link: "#",
     tags: ["Go", "Redis"],
-    desc_en: "Distributed rate limiter with sliding-window counters backed by Redis, deployable as middleware.",
-    desc_pt: "Rate limiter distribuído com contadores de janela deslizante em Redis, usável como middleware.",
+    desc_en:
+      "Distributed rate limiter with sliding-window counters backed by Redis, deployable as middleware.",
+    desc_pt:
+      "Rate limiter distribuído com contadores de janela deslizante em Redis, usável como middleware.",
   },
 ];
 
@@ -154,19 +165,34 @@ export const certs: Cert[] = [];
 
 export const languages: Language[] = [
   { name_en: "Portuguese", name_pt: "Português", level_en: "Native", level_pt: "Nativo", score: 5 },
-  { name_en: "English", name_pt: "Inglês", level_en: "Professional · C1", level_pt: "Profissional · C1", score: 4 },
+  {
+    name_en: "English",
+    name_pt: "Inglês",
+    level_en: "Professional · C1",
+    level_pt: "Profissional · C1",
+    score: 4,
+  },
 ];
 
 export const contacts: Contact[] = [
-  { label: "github", value: "github.com/o-igor-trentini", href: "https://github.com/o-igor-trentini" },
-  { label: "linkedin", value: "linkedin.com/in/igor-trentini", href: "https://www.linkedin.com/in/igor-trentini" },
+  {
+    label: "github",
+    value: "github.com/o-igor-trentini",
+    href: "https://github.com/o-igor-trentini",
+  },
+  {
+    label: "linkedin",
+    value: "linkedin.com/in/igor-trentini",
+    href: "https://www.linkedin.com/in/igor-trentini",
+  },
 ];
 
 // ---- localization helpers -------------------------------------------------
 
 export const expRole = (e: Experience, lang: Lang) => (lang === "pt" ? e.role_pt : e.role_en);
 export const expMode = (e: Experience, lang: Lang) => (lang === "pt" ? e.mode_pt : e.mode_en);
-export const expIndustry = (e: Experience, lang: Lang) => (lang === "pt" ? e.industry_pt : e.industry_en);
+export const expIndustry = (e: Experience, lang: Lang) =>
+  lang === "pt" ? e.industry_pt : e.industry_en;
 export const expTags = (e: Experience, lang: Lang) => (lang === "pt" ? e.tags_pt : e.tags_en) ?? [];
 
 export const stackLabel = (g: StackGroup, lang: Lang) => (lang === "pt" ? g.label_pt : g.label_en);
@@ -188,7 +214,11 @@ export interface FormattedExperience {
  * current month (null before it's known): for the ongoing role, that means the
  * period still reads "present" but the duration is omitted until `now` arrives.
  */
-export function formatExperience(e: Experience, lang: Lang, now: YearMonth | null): FormattedExperience {
+export function formatExperience(
+  e: Experience,
+  lang: Lang,
+  now: YearMonth | null,
+): FormattedExperience {
   const present = e.end === null;
   const endYM = present ? now : parseYM(e.end as string);
   const endLabel = present ? i18n[lang].experience.present : formatMonthYear(e.end as string, lang);

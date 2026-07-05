@@ -7,7 +7,8 @@ import { PROMPT } from "@/site.config";
 import styles from "./Terminal.module.css";
 
 export function Terminal() {
-  const { termOpen, closeTerm, bonusNonce, lang, theme, setLang, toggleTheme, name } = usePortfolio();
+  const { termOpen, closeTerm, bonusNonce, lang, theme, setLang, toggleTheme, name } =
+    usePortfolio();
 
   const [lines, setLines] = useState<Line[]>([]);
   const [input, setInput] = useState("");
@@ -105,17 +106,32 @@ export function Terminal() {
 
   return (
     <div className={styles["term-overlay"]} onClick={closeTerm}>
-      <div className={styles["term-window"]} role="dialog" aria-modal="true" aria-label="Terminal" onClick={(e) => e.stopPropagation()}>
+      <div
+        className={styles["term-window"]}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Terminal"
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className={styles["term-titlebar"]}>
           <span className={styles["term-dot"]} style={{ background: "#ff5f57" }} />
           <span className={styles["term-dot"]} style={{ background: "#febc2e" }} />
           <span className={styles["term-dot"]} style={{ background: "#28c840" }} />
           <span className={styles["term-title"]}>visitor@portfolio: ~/zsh</span>
-          <button type="button" className={styles["term-close"]} aria-label="Close terminal" onClick={closeTerm}>
+          <button
+            type="button"
+            className={styles["term-close"]}
+            aria-label="Close terminal"
+            onClick={closeTerm}
+          >
             ✕
           </button>
         </div>
-        <div className={styles["term-body"]} ref={bodyRef} onClick={() => inputRef.current?.focus()}>
+        <div
+          className={styles["term-body"]}
+          ref={bodyRef}
+          onClick={() => inputRef.current?.focus()}
+        >
           {lines.map((l, i) => (
             <div key={i} className={styles["term-line"]}>
               {l.prompt && <span className={styles["term-prompt"]}>{l.prompt} </span>}

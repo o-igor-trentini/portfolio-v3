@@ -21,7 +21,10 @@ export function useLang(): UseLang {
     } catch {
       /* ignore */
     }
-    if (typeof navigator !== "undefined" && (navigator.language || "").toLowerCase().startsWith("pt")) {
+    if (
+      typeof navigator !== "undefined" &&
+      (navigator.language || "").toLowerCase().startsWith("pt")
+    ) {
       setLangState("pt");
     }
   }, []);

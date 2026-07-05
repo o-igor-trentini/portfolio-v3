@@ -114,11 +114,19 @@ const jsonLd = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" data-theme={fallback} suppressHydrationWarning className={jetbrainsMono.variable}>
+    <html
+      lang="en"
+      data-theme={fallback}
+      suppressHydrationWarning
+      className={jetbrainsMono.variable}
+    >
       <head>
         <style dangerouslySetInnerHTML={{ __html: accentCss }} />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
       </head>
       <body>{children}</body>
     </html>

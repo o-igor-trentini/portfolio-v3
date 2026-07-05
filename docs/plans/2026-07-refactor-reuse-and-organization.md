@@ -1,7 +1,7 @@
 # Plano — Refatoração para reutilização e organização (jul/2026) · ✅ concluído
 
 > **Registro de execução arquivado.** As convenções duráveis extraídas deste trabalho
-> vivem em [`../architecture.md`](../architecture.md). Este arquivo é o histórico de *como*
+> vivem em [`../architecture.md`](../architecture.md). Este arquivo é o histórico de _como_
 > chegamos lá — não é um doc vivo.
 >
 > Refactor **sem alterar comportamento observável** (UI, rotas, dados). Etapas
@@ -20,11 +20,13 @@ lógica (paginação, período de experiência, seleção de idioma) e CSS (valo
 mágicos, blocos de card/botão copiados).
 
 ## Decisões de escopo
+
 - CSS: arquivo global único + **tokens** + classes-base `.card`/`.btn` (sem CSS Modules).
 - Server Components: **fora de escopo** (recomendação futura).
 - `Terminal.tsx` / `PortfolioProvider.tsx`: refatorados **por último**, isolados.
 
 ## Estrutura de pastas alvo
+
 ```
 components/ui/     # NOVO — Section, RevealControls, ExternalLink, TagList
 components/sections/  # passa a consumir ui/ e hooks/
@@ -36,8 +38,10 @@ app/globals.css    # importa tokens.css; usa base .card/.btn
 
 ---
 
-## Etapa 1 — Tokens de CSS  · risco: baixo  ✅ CONCLUÍDA
+## Etapa 1 — Tokens de CSS · risco: baixo ✅ CONCLUÍDA
+
 Resolve: **C1**
+
 - [x] Criar `app/tokens.css` com `:root`: `--radius-xs/sm/md`, `--text-xs/sm/md/lg`,
       `--space-xs/md`, `--transition:.2s`, `--gutter:clamp(20px,5vw,40px)`,
       `--container:860px`, `--hairline` (cores existentes mantidas).
@@ -49,8 +53,10 @@ Resolve: **C1**
 - [x] Verificar: lint ✓, `tsc --noEmit` ✓, `build` ✓; computed styles no browser confirmam
       valores originais e `--hairline` seguindo o tema (claro: `1px solid #e7e5e4`).
 
-## Etapa 2 — Classes-base `.card` e `.btn`  · risco: baixo  ✅ CONCLUÍDA
+## Etapa 2 — Classes-base `.card` e `.btn` · risco: baixo ✅ CONCLUÍDA
+
 Resolve: **C2**
+
 - [x] Adicionar `.card` (surface) e `.btn` base em `globals.css` (bloco "base primitives"
       no topo, antes dos consumidores, para que regras `:hover`/`--active` vençam por ordem).
 - [x] `.card` aplicado a `.langcard` e `.cert` (superfície idêntica). `.project` (sem borda,
@@ -61,8 +67,10 @@ Resolve: **C2**
 - [x] Verificar: lint ✓, `tsc` ✓, `build` ✓. Teste de cascade isolado no browser confirma
       ativo=accent+bold, inativo=transparent+muted e card=18px/1px/10px/branco — idêntico ao original.
 
-## Etapa 3 — `usePagination` + `<RevealControls>`  · risco: baixo · ganho: alto  ✅ CONCLUÍDA
+## Etapa 3 — `usePagination` + `<RevealControls>` · risco: baixo · ganho: alto ✅ CONCLUÍDA
+
 Resolve: **L1 + J2**
+
 - [x] `hooks/usePagination.ts` genérico `<T>`: `{ shown, hasMore, canCollapse, remaining, showMore, collapse }`.
 - [x] `components/ui/RevealControls.tsx` (i18n-agnóstico: recebe `moreLabel`/`lessLabel`).
 - [x] Aplicado em `Projects.tsx` e `Certs.tsx` (removido o `useState` + JSX duplicado dos controles).
@@ -70,8 +78,10 @@ Resolve: **L1 + J2**
       scripts `test`/`test:watch`) + **9 testes** (`usePagination` 5 · `RevealControls` 4).
 - [x] Verificar: lint ✓, `tsc` ✓, `build` ✓, `test` 9/9 ✓; browser confirma 4→6→4 e more/less idênticos.
 
-## Etapa 4 — `<Section>` wrapper  · risco: baixo · ganho: alto  ✅ CONCLUÍDA
+## Etapa 4 — `<Section>` wrapper · risco: baixo · ganho: alto ✅ CONCLUÍDA
+
 Resolve: **J1**
+
 - [x] `components/ui/Section.tsx`: props `id?`, `label?`, `note?`, `solo?`, `variant?`("hero"), `children`.
       Renderiza o wrapper `section`, o header `// label` e o `note` opcionais.
 - [x] Aplicado nas 8 seções: Hero (`variant="hero"`, sem id/label), About (`solo`, sem note),
@@ -80,8 +90,10 @@ Resolve: **J1**
 - [x] Verificar: lint ✓, `tsc` ✓, `build` ✓, `test` 12/12 ✓; browser confirma 8 seções com ids
       corretos e todas as âncoras da nav resolvendo (`missingAnchors: []`).
 
-## Etapa 5 — `formatExperience()` + `useNowYM()`  · risco: médio  ✅ CONCLUÍDA
+## Etapa 5 — `formatExperience()` + `useNowYM()` · risco: médio ✅ CONCLUÍDA
+
 Resolve: **L2 + L3**
+
 - [x] `lib/date.ts`: `nowYM()` puro (`{y, m}` com m 1-12); `hooks/useNowYM.ts` (client, null no SSR → preenche no mount).
 - [x] `lib/content.ts`: `formatExperience(e, lang, now) => { present, period, duration, tags }`
       (usa `i18n[lang].experience.present` internamente, desacoplado do contexto).
@@ -89,8 +101,10 @@ Resolve: **L2 + L3**
 - [x] **+7 testes**: `nowYM` (2, com fake timers) · `formatExperience` (5: en/pt, now null, role finalizado, tags vazias).
 - [x] Verificar: browser confirma "mai 2026 — presente · 3 meses" (ao vivo) e "set 2021 — mai 2026 · 4 anos 9 meses".
 
-## Etapa 6 — `<ExternalLink>` + `<TagList>`  · risco: baixo  ✅ CONCLUÍDA
+## Etapa 6 — `<ExternalLink>` + `<TagList>` · risco: baixo ✅ CONCLUÍDA
+
 Resolve: **J3 + J4**
+
 - [x] `components/ui/ExternalLink.tsx` — encapsula `target="_blank"`/`rel="noopener noreferrer"`.
       O `↗` **ficou nos filhos** de cada seção (posições/classes diferentes: `project__ext`, `cert__verify`, `contact-row__ext`) — forçá-lo mudaria o markup.
 - [x] `components/ui/TagList.tsx` (`items`, `className`) — sem wrapper, para o Stack manter o botão irmão.
@@ -98,8 +112,10 @@ Resolve: **J3 + J4**
 - [x] **+3 testes**: `ExternalLink` (garante o `rel` de segurança) · `TagList` (spans por item; vazio → nada).
 - [x] Verificar: lint ✓, `tsc` ✓, `build` ✓, `test` 22/22 ✓; browser confirma links `_blank`+`noopener noreferrer` e pills idênticas.
 
-## Etapa 7 — Reuso dos helpers de i18n  · risco: baixo  ✅ CONCLUÍDA
+## Etapa 7 — Reuso dos helpers de i18n · risco: baixo ✅ CONCLUÍDA
+
 Resolve: **L4**
+
 - [x] `Terminal.tsx`: 4 ternárias de campo de conteúdo trocadas pelos helpers
       (`stackLabel`, `projectDesc`, `langName`, `langLevel`). Stack já usava `stackLabel`;
       suas outras ternárias são microcopy de UI (`"menos"`/`"mostrar mais N"`), sem helper — mantidas.
@@ -107,7 +123,8 @@ Resolve: **L4**
 - [x] **+3 testes**: `stackLabel`/`projectDesc`/`langName`+`langLevel` com objetos sintéticos (guardam a seleção en/pt).
 - [x] Verificar: lint ✓, `tsc` ✓, `build` ✓, `test` 25/25 ✓; terminal do app confirma `skills`/`projects`/`languages` idênticos (pt).
 
-## Etapa 8 — Refatorar `Terminal.tsx`  · risco: médio · por último  ✅ CONCLUÍDA
+## Etapa 8 — Refatorar `Terminal.tsx` · risco: médio · por último ✅ CONCLUÍDA
+
 - [x] Lógica de comandos extraída para `lib/terminal.ts` (sem React): `switch` → registry
       `Record<cmd, Handler>` + `runTerminalCommand`. `clear`/`exit` seguem no componente (controlam buffer/visibilidade).
 - [x] `experience` reusa `formatExperience` (elimina a duplicação de datas L2); componente ficou fino (~130 → estado + efeitos + wrapping do echo).
@@ -115,7 +132,8 @@ Resolve: **L4**
 - [x] **+9 testes** (`runTerminalCommand`): not-found, help, alias whoami→about, skills padEnd (pt), echo, lang (callback), theme, neofetch, experience (fake timers).
 - [x] Verificar: lint ✓, `tsc` ✓, `build` ✓, `test` 34/34 ✓; terminal do app confirma help/experience/neofetch/not-found/echo e `clear` zera o buffer.
 
-## Etapa 9 — Dividir `PortfolioProvider.tsx`  · risco: médio · por último  ✅ CONCLUÍDA
+## Etapa 9 — Dividir `PortfolioProvider.tsx` · risco: médio · por último ✅ CONCLUÍDA
+
 - [x] Extraídos `hooks/useTheme.ts`, `hooks/useLang.ts`, `hooks/useTerminal.ts`; provider só compõe os 3 + monta o `value`.
 - [x] Konami ficou dentro do `useTerminal` (um único listener de keydown) — separar mudaria o buffer (backtick/Esc passariam a ser gravados). Documentado.
 - [x] `usePortfolio()` com a **mesma API pública** (nenhum consumidor alterado).
@@ -125,6 +143,7 @@ Resolve: **L4**
 ---
 
 ## Checklist de verificação (repetir a cada etapa)
+
 - [x] `npm run lint` sem erros
 - [x] `npx tsc --noEmit` sem erros · zero `any`
 - [x] `npm run build` verde
@@ -137,6 +156,7 @@ Resolve: **L4**
 > (Section, RevealControls, ExternalLink, TagList).
 
 ## Fora de escopo (futuro)
+
 - Converter seções (About/Stack/Projects/Contact) em Server Components: **bloqueado** enquanto o `lang`
   for Context client-reativo (troca em runtime, sem navegação). Pré-requisito = roteamento por locale
   (`app/[lang]/…`), que muda URLs e comportamento do toggle. Detalhes na regra durável em

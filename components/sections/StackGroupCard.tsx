@@ -31,7 +31,11 @@ export function StackGroupCard({ group }: { group: StackGroup }) {
       <div className={styles.stackgroup__items}>
         <TagList items={itemsShown} className={styles.chip} />
         {hidden > 0 && (
-          <Button className={styles["chip-btn"]} aria-label={moreAria} onClick={() => setExpanded((e) => !e)}>
+          <Button
+            className={styles["chip-btn"]}
+            aria-label={moreAria}
+            onClick={() => setExpanded((e) => !e)}
+          >
             {moreLabel}
           </Button>
         )}

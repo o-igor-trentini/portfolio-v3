@@ -24,7 +24,7 @@
   --space-md: 18px;
 
   /* motion — shared hover/state transition duration */
-  --transition: .2s;
+  --transition: 0.2s;
 
   /* layout */
   --gutter: clamp(20px, 5vw, 40px);

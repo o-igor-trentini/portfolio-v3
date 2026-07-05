@@ -9,7 +9,9 @@
   background: transparent;
   color: var(--muted);
   cursor: pointer;
-  transition: color var(--transition), border-color var(--transition);
+  transition:
+    color var(--transition),
+    border-color var(--transition);
 }
 .iconbtn:hover {
   color: var(--accent);

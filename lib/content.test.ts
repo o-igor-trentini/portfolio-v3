@@ -56,7 +56,10 @@ describe("formatExperience", () => {
   });
 
   it("defaults to an empty tag list when the experience has none", () => {
-    const r = formatExperience({ ...base, tags_en: undefined, tags_pt: undefined }, "en", { y: 2026, m: 5 });
+    const r = formatExperience({ ...base, tags_en: undefined, tags_pt: undefined }, "en", {
+      y: 2026,
+      m: 5,
+    });
     expect(r.tags).toEqual([]);
   });
 });

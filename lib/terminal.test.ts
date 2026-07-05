@@ -42,7 +42,9 @@ describe("runTerminalCommand", () => {
   });
 
   it("echo joins its args", () => {
-    expect(runTerminalCommand("echo", ctx({ args: ["hello", "world"] }))[0].text).toBe("hello world");
+    expect(runTerminalCommand("echo", ctx({ args: ["hello", "world"] }))[0].text).toBe(
+      "hello world",
+    );
   });
 
   it("lang with a valid arg switches language via the callback", () => {
