@@ -16,8 +16,6 @@ interface PortfolioContextValue {
   theme: Theme;
   isDark: boolean;
   toggleTheme: () => void;
-  showProjects: boolean;
-  showCerts: boolean;
   // terminal
   termOpen: boolean;
   openTerm: () => void;
@@ -49,8 +47,6 @@ export function PortfolioProvider({ children }: { children: ReactNode }) {
       theme,
       isDark,
       toggleTheme,
-      showProjects: siteConfig.showProjects,
-      showCerts: siteConfig.showCerts,
       termOpen,
       openTerm,
       closeTerm,

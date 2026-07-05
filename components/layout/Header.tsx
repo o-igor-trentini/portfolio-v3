@@ -9,19 +9,33 @@ import { cx } from "@/lib/cx";
 import styles from "./Header.module.css";
 
 export function Header() {
-  const { handle, t, lang, setLang, isDark, toggleTheme, showProjects, showCerts } = usePortfolio();
+  const { handle, t, lang, setLang, isDark, toggleTheme } = usePortfolio();
   const [menuOpen, setMenuOpen] = useState(false);
   const closeMenu = () => setMenuOpen(false);
 
   const links = (
     <>
-      <a href="#about" className={styles.navlink} onClick={closeMenu}>{t.nav.about}</a>
-      <a href="#experience" className={styles.navlink} onClick={closeMenu}>{t.nav.experience}</a>
-      <a href="#langs" className={styles.navlink} onClick={closeMenu}>{t.nav.langs}</a>
-      <a href="#stack" className={styles.navlink} onClick={closeMenu}>{t.nav.stack}</a>
-      {showProjects && <a href="#projects" className={styles.navlink} onClick={closeMenu}>{t.nav.projects}</a>}
-      {showCerts && <a href="#certs" className={styles.navlink} onClick={closeMenu}>{t.nav.certs}</a>}
-      <a href="#contact" className={styles.navlink} onClick={closeMenu}>{t.nav.contact}</a>
+      <a href="#about" className={styles.navlink} onClick={closeMenu}>
+        {t.nav.about}
+      </a>
+      <a href="#experience" className={styles.navlink} onClick={closeMenu}>
+        {t.nav.experience}
+      </a>
+      <a href="#langs" className={styles.navlink} onClick={closeMenu}>
+        {t.nav.langs}
+      </a>
+      <a href="#stack" className={styles.navlink} onClick={closeMenu}>
+        {t.nav.stack}
+      </a>
+      <a href="#projects" className={styles.navlink} onClick={closeMenu}>
+        {t.nav.projects}
+      </a>
+      <a href="#certs" className={styles.navlink} onClick={closeMenu}>
+        {t.nav.certs}
+      </a>
+      <a href="#contact" className={styles.navlink} onClick={closeMenu}>
+        {t.nav.contact}
+      </a>
     </>
   );
 
@@ -38,14 +52,20 @@ export function Header() {
 
           <div className={styles.langtoggle} role="group" aria-label="Language">
             <Button
-              className={cx(styles.langtoggle__btn, lang === "en" && styles["langtoggle__btn--active"])}
+              className={cx(
+                styles.langtoggle__btn,
+                lang === "en" && styles["langtoggle__btn--active"],
+              )}
               aria-pressed={lang === "en"}
               onClick={() => setLang("en")}
             >
               en
             </Button>
             <Button
-              className={cx(styles.langtoggle__btn, lang === "pt" && styles["langtoggle__btn--active"])}
+              className={cx(
+                styles.langtoggle__btn,
+                lang === "pt" && styles["langtoggle__btn--active"],
+              )}
               aria-pressed={lang === "pt"}
               onClick={() => setLang("pt")}
             >

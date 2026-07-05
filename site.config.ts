@@ -1,7 +1,7 @@
 /**
  * Site-wide configuration. These were component props in the original
- * Claude Design source (`accent`, `defaultTheme`, `showProjects`, `showCerts`);
- * here they become build-time constants that are easy to edit.
+ * Claude Design source (`accent`, `defaultTheme`); here they become
+ * build-time constants that are easy to edit.
  */
 
 export type Accent = "green" | "blue" | "amber" | "violet" | "mono";
