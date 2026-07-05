@@ -1,0 +1,41 @@
+.contact__list {
+  display: flex;
+  flex-direction: column;
+  border: var(--hairline);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+.contact-row {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 15px var(--space-md);
+  border-bottom: var(--hairline);
+  transition: background 0.18s;
+}
+.contact-row:last-child {
+  border-bottom: none;
+}
+.contact-row:hover {
+  background: var(--card);
+}
+.contact-row__label {
+  width: 74px;
+  flex-shrink: 0;
+  color: var(--muted);
+  font-size: var(--text-sm);
+}
+.contact-row__value {
+  font-size: var(--text-lg);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.contact-row__ext {
+  color: var(--accent);
+  font-size: var(--text-md);
+}

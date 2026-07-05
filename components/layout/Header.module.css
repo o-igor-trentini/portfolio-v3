@@ -1,0 +1,111 @@
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  backdrop-filter: blur(10px);
+  background: color-mix(in srgb, var(--bg) 82%, transparent);
+  border-bottom: var(--hairline);
+}
+.site-header__inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 14px var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.brand {
+  text-decoration: none;
+  color: var(--fg);
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-xs);
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.brand__sigil {
+  color: var(--accent);
+}
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.nav-links {
+  display: flex;
+  gap: 14px;
+  font-size: var(--text-sm);
+}
+.navlink {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color var(--transition);
+}
+.navlink:hover {
+  color: var(--accent);
+}
+
+.langtoggle {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  border: var(--hairline);
+  border-radius: var(--radius-sm);
+  padding: 2px;
+}
+.langtoggle__btn {
+  color: var(--muted);
+  border: none;
+  border-radius: var(--radius-xs);
+  padding: 3px 9px;
+  font-size: var(--text-xs);
+  transition: background var(--transition), color var(--transition);
+}
+.langtoggle__btn--active {
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 700;
+}
+
+/* Composed onto the shared .iconbtn (IconButton) via className. */
+.nav-burger {
+  display: none;
+  color: var(--fg);
+}
+.nav-burger:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.mobile-menu {
+  display: none;
+  flex-direction: column;
+  border-top: var(--hairline);
+  background: var(--bg);
+  animation: menudrop 0.16s ease;
+}
+.mobile-menu a {
+  color: var(--fg);
+  text-decoration: none;
+  padding: 14px var(--gutter);
+  border-bottom: var(--hairline);
+  font-size: 14px;
+}
+.mobile-menu a:last-child {
+  border-bottom: none;
+}
+
+@media (max-width: 720px) {
+  .nav-links {
+    display: none !important;
+  }
+  .nav-burger {
+    display: inline-flex !important;
+  }
+  .mobile-menu {
+    display: flex !important;
+  }
+}

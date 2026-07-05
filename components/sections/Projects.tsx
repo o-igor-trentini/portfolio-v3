@@ -9,6 +9,7 @@ import { RevealControls } from "../ui/RevealControls";
 import { usePagination } from "@/hooks/usePagination";
 import { projects, projectDesc } from "@/lib/content";
 import { PAGE } from "@/site.config";
+import styles from "./Projects.module.css";
 
 export function Projects() {
   const { t, lang } = usePortfolio();
@@ -19,17 +20,17 @@ export function Projects() {
       {projects.length === 0 && <EmptyState />}
 
       {projects.length > 0 && (
-      <div className="projects__list">
+      <div className={styles.projects__list}>
         {shown.map((p) => (
-          <ExternalLink key={p.name} href={p.link} className="project">
-            <div className="project__head">
+          <ExternalLink key={p.name} href={p.link} className={styles.project}>
+            <div className={styles.project__head}>
               <span className="accent">▸</span>
-              <span className="project__name">{p.name}</span>
-              <span className="project__ext">↗</span>
+              <span className={styles.project__name}>{p.name}</span>
+              <span className={styles.project__ext}>↗</span>
             </div>
-            <p className="project__desc">{projectDesc(p, lang)}</p>
-            <div className="project__tags">
-              <TagList items={p.tags} className="project__tag" />
+            <p className={styles.project__desc}>{projectDesc(p, lang)}</p>
+            <div className={styles.project__tags}>
+              <TagList items={p.tags} className={styles.project__tag} />
             </div>
           </ExternalLink>
         ))}

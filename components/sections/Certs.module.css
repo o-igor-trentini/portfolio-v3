@@ -1,0 +1,57 @@
+.certs__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(258px, 1fr));
+  gap: 14px;
+}
+/* Reuses the shared card surface on an anchor, without rendering <Card>. */
+.cert {
+  composes: card from "@/components/ui/Card.module.css";
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  transition: border-color var(--transition);
+}
+.cert:hover {
+  border-color: var(--accent);
+}
+.cert__head {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+}
+.cert__check {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  color: var(--accent);
+  font-size: 11px;
+}
+.cert__name {
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 1.4;
+}
+.cert__meta {
+  margin-left: 33px;
+  color: var(--muted);
+  font-size: var(--text-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
+}
+.cert__dot {
+  opacity: 0.45;
+}
+.cert__verify {
+  margin-left: 33px;
+  font-size: 11.5px;
+  color: var(--accent);
+}

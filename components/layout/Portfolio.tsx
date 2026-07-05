@@ -13,13 +13,14 @@ import { Projects } from "@/components/sections/Projects";
 import { Certs } from "@/components/sections/Certs";
 import { Contact } from "@/components/sections/Contact";
 import { siteConfig } from "@/site.config";
+import styles from "./Portfolio.module.css";
 
 export function Portfolio() {
   return (
     <PortfolioProvider>
-      <div className="page">
+      <div className={styles.page}>
         <Header />
-        <main id="top" className="main">
+        <main id="top" className={styles.main}>
           <Hero />
           <About />
           <Experience />

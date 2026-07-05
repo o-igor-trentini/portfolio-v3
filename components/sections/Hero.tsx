@@ -3,27 +3,28 @@
 import { usePortfolio } from "@/components/providers/PortfolioProvider";
 import { Section } from "../ui/Section";
 import { Button } from "../ui/Button";
+import styles from "./Hero.module.css";
 
 export function Hero() {
   const { name, t, openTerm } = usePortfolio();
 
   return (
     <Section variant="hero">
-      <div className="hero__cmd">
+      <div className={styles.hero__cmd}>
         <b>visitor@portfolio</b>:~$ {t.hero.cmd}
       </div>
-      <h1 className="hero__title">
+      <h1 className={styles.hero__title}>
         {name}
         <span className="caret" aria-hidden="true" />
       </h1>
-      <div className="hero__role">{t.hero.role}</div>
-      <p className="hero__tagline">{t.hero.tagline}</p>
-      <div className="hero__actions">
+      <div className={styles.hero__role}>{t.hero.role}</div>
+      <p className={styles.hero__tagline}>{t.hero.tagline}</p>
+      <div className={styles.hero__actions}>
         <Button variant="accent" onClick={openTerm}>
           <span style={{ fontSize: 14 }}>&gt;_</span>
           {t.hero.cta}
         </Button>
-        <span className="hero__hint">
+        <span className={styles.hero__hint}>
           {t.hero.hint1} <kbd>`</kbd> {t.hero.hint2}
         </span>
       </div>

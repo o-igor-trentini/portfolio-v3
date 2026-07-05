@@ -1,0 +1,36 @@
+/* The card surface comes from the Card primitive (Card.module.css). */
+.langs__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+.langcard__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+}
+.langcard__name {
+  font-weight: 700;
+  font-size: 15px;
+}
+.langcard__level {
+  font-size: var(--text-xs);
+  color: var(--accent);
+}
+.langcard__bar {
+  display: flex;
+  gap: 5px;
+  margin-top: 15px;
+}
+.seg {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+}
+.seg--on {
+  background: var(--accent);
+}
+.seg--off {
+  background: var(--border);
+}

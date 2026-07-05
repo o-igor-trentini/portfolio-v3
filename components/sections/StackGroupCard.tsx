@@ -6,6 +6,7 @@ import { TagList } from "../ui/TagList";
 import { Button } from "../ui/Button";
 import { stackLabel, type StackGroup } from "@/lib/content";
 import { ITEM_CAP } from "@/site.config";
+import styles from "./Stack.module.css";
 
 /** One technology group in the Stack section: a capped chip list with a
  *  show-more/less toggle. Domain-specific, so it lives with the section. */
@@ -26,11 +27,11 @@ export function StackGroupCard({ group }: { group: StackGroup }) {
 
   return (
     <div>
-      <div className="stackgroup__label">{stackLabel(group, lang)}</div>
-      <div className="stackgroup__items">
-        <TagList items={itemsShown} className="chip" />
+      <div className={styles.stackgroup__label}>{stackLabel(group, lang)}</div>
+      <div className={styles.stackgroup__items}>
+        <TagList items={itemsShown} className={styles.chip} />
         {hidden > 0 && (
-          <Button className="chip-btn" aria-label={moreAria} onClick={() => setExpanded((e) => !e)}>
+          <Button className={styles["chip-btn"]} aria-label={moreAria} onClick={() => setExpanded((e) => !e)}>
             {moreLabel}
           </Button>
         )}

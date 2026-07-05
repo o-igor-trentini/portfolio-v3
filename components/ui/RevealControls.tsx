@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "./Button";
+import styles from "./RevealControls.module.css";
 
 interface RevealControlsProps {
   hasMore: boolean;
@@ -25,7 +26,7 @@ export function RevealControls({
   if (!hasMore && !canCollapse) return null;
 
   return (
-    <div className="controls">
+    <div className={styles.controls}>
       {hasMore && (
         <Button variant="ghost" onClick={onMore}>
           <span className="accent">▾</span>

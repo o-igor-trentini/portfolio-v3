@@ -1,6 +1,7 @@
 "use client";
 
 import { usePortfolio } from "@/components/providers/PortfolioProvider";
+import styles from "./EmptyState.module.css";
 
 /**
  * On-brand "content pending" placeholder for sections that are visible but
@@ -11,9 +12,9 @@ import { usePortfolio } from "@/components/providers/PortfolioProvider";
 export function EmptyState({ message }: { message?: string }) {
   const { t } = usePortfolio();
   return (
-    <div className="empty" role="status">
-      <span className="empty__prompt">$</span>
-      <span className="empty__text">{message ?? t.common.wip}</span>
+    <div className={styles.empty} role="status">
+      <span className={styles.empty__prompt}>$</span>
+      <span>{message ?? t.common.wip}</span>
       <span className="caret" aria-hidden="true" />
     </div>
   );

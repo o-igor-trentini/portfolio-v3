@@ -1,5 +1,6 @@
 import type { ComponentPropsWithoutRef } from "react";
 import { cx } from "@/lib/cx";
+import styles from "./Card.module.css";
 
 type CardProps = ComponentPropsWithoutRef<"div">;
 
@@ -10,7 +11,7 @@ type CardProps = ComponentPropsWithoutRef<"div">;
  */
 export function Card({ className, children, ...rest }: CardProps) {
   return (
-    <div className={cx("card", className)} {...rest}>
+    <div className={cx(styles.card, className)} {...rest}>
       {children}
     </div>
   );

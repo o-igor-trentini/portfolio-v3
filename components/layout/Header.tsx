@@ -6,6 +6,7 @@ import { BurgerIcon, CloseIcon, MoonIcon, SunIcon } from "@/components/ui/Icons"
 import { Button } from "@/components/ui/Button";
 import { IconButton } from "@/components/ui/IconButton";
 import { cx } from "@/lib/cx";
+import styles from "./Header.module.css";
 
 export function Header() {
   const { handle, t, lang, setLang, isDark, toggleTheme, showProjects, showCerts } = usePortfolio();
@@ -14,37 +15,37 @@ export function Header() {
 
   const links = (
     <>
-      <a href="#about" className="navlink" onClick={closeMenu}>{t.nav.about}</a>
-      <a href="#experience" className="navlink" onClick={closeMenu}>{t.nav.experience}</a>
-      <a href="#langs" className="navlink" onClick={closeMenu}>{t.nav.langs}</a>
-      <a href="#stack" className="navlink" onClick={closeMenu}>{t.nav.stack}</a>
-      {showProjects && <a href="#projects" className="navlink" onClick={closeMenu}>{t.nav.projects}</a>}
-      {showCerts && <a href="#certs" className="navlink" onClick={closeMenu}>{t.nav.certs}</a>}
-      <a href="#contact" className="navlink" onClick={closeMenu}>{t.nav.contact}</a>
+      <a href="#about" className={styles.navlink} onClick={closeMenu}>{t.nav.about}</a>
+      <a href="#experience" className={styles.navlink} onClick={closeMenu}>{t.nav.experience}</a>
+      <a href="#langs" className={styles.navlink} onClick={closeMenu}>{t.nav.langs}</a>
+      <a href="#stack" className={styles.navlink} onClick={closeMenu}>{t.nav.stack}</a>
+      {showProjects && <a href="#projects" className={styles.navlink} onClick={closeMenu}>{t.nav.projects}</a>}
+      {showCerts && <a href="#certs" className={styles.navlink} onClick={closeMenu}>{t.nav.certs}</a>}
+      <a href="#contact" className={styles.navlink} onClick={closeMenu}>{t.nav.contact}</a>
     </>
   );
 
   return (
-    <header className="site-header">
-      <div className="site-header__inner">
-        <a href="#top" className="brand">
-          <span className="brand__sigil">~/</span>
+    <header className={styles["site-header"]}>
+      <div className={styles["site-header__inner"]}>
+        <a href="#top" className={styles.brand}>
+          <span className={styles.brand__sigil}>~/</span>
           {handle}
         </a>
 
-        <nav className="nav">
-          <div className="nav-links">{links}</div>
+        <nav className={styles.nav}>
+          <div className={styles["nav-links"]}>{links}</div>
 
-          <div className="langtoggle" role="group" aria-label="Language">
+          <div className={styles.langtoggle} role="group" aria-label="Language">
             <Button
-              className={cx("langtoggle__btn", lang === "en" && "langtoggle__btn--active")}
+              className={cx(styles.langtoggle__btn, lang === "en" && styles["langtoggle__btn--active"])}
               aria-pressed={lang === "en"}
               onClick={() => setLang("en")}
             >
               en
             </Button>
             <Button
-              className={cx("langtoggle__btn", lang === "pt" && "langtoggle__btn--active")}
+              className={cx(styles.langtoggle__btn, lang === "pt" && styles["langtoggle__btn--active"])}
               aria-pressed={lang === "pt"}
               onClick={() => setLang("pt")}
             >
@@ -60,7 +61,7 @@ export function Header() {
           </IconButton>
 
           <IconButton
-            className="nav-burger"
+            className={styles["nav-burger"]}
             aria-label="Menu"
             aria-expanded={menuOpen}
             onClick={() => setMenuOpen((o) => !o)}
@@ -70,7 +71,7 @@ export function Header() {
         </nav>
       </div>
 
-      {menuOpen && <div className="mobile-menu">{links}</div>}
+      {menuOpen && <div className={styles["mobile-menu"]}>{links}</div>}
     </header>
   );
 }
