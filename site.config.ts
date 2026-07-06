@@ -34,6 +34,10 @@ export const siteConfig = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://igortrentini.dev",
 };
 
+// Start of professional experience ("YYYY-MM"). The bio's "N years" is derived
+// from this and rounded to the nearest year, so no fixed number goes stale.
+export const CAREER_START = "2021-09";
+
 // Behavior constants (ported from the original component)
 export const PAGE = 4; // projects/certs revealed per "show more"
 export const ITEM_CAP = 8; // stack items shown before a group collapses

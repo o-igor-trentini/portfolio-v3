@@ -34,6 +34,11 @@ export function monthsInclusive(start: string, end: YearMonth): number {
   return Math.max(1, (end.y - s.y) * 12 + (end.m - s.m) + 1);
 }
 
+/** Whole years between a start "YYYY-MM" and now, rounded to the nearest year. */
+export function yearsOfExperience(start: string, now: YearMonth): number {
+  return Math.round(monthsInclusive(start, now) / 12);
+}
+
 /** Human duration, e.g. "4 yrs 8 mos" / "4 anos 8 meses". */
 export function formatDuration(months: number, lang: Lang): string {
   const years = Math.floor(months / 12);
