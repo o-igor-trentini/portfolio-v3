@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 import type { Lang } from "@/lib/i18n";
 
 export interface UseLang {
@@ -6,37 +6,24 @@ export interface UseLang {
   setLang: (lang: Lang) => void;
 }
 
-export function useLang(): UseLang {
-  const [lang, setLangState] = useState<Lang>("en");
+/** Canonical path per locale — English at the root, Portuguese under `/pt/`. */
+const localePath: Record<Lang, string> = { en: "/", pt: "/pt/" };
 
-  // Resolve stored / preferred language after mount (client-only reconciliation).
-  useEffect(() => {
-    try {
-      const stored = localStorage.getItem("pf_lang");
-      if (stored === "en" || stored === "pt") {
-        // eslint-disable-next-line react-hooks/set-state-in-effect -- hydration reconciliation
-        setLangState(stored);
-        return;
-      }
-    } catch {
-      /* ignore */
-    }
-    if (
-      typeof navigator !== "undefined" &&
-      (navigator.language || "").toLowerCase().startsWith("pt")
-    ) {
-      setLangState("pt");
-    }
-  }, []);
+/**
+ * Locale is derived from the URL: each locale is its own statically-exported
+ * page, so `lang` is fixed for the page's lifetime (no localStorage, no
+ * post-hydration flip — the static HTML must match what crawlers index).
+ * `setLang` navigates to the other locale's URL, preserving the current section
+ * via the hash. It's a full reload across route groups, which is expected.
+ */
+export function useLang(initial: Lang): UseLang {
+  const setLang = useCallback(
+    (next: Lang) => {
+      if (next === initial || typeof window === "undefined") return;
+      window.location.assign(localePath[next] + window.location.hash);
+    },
+    [initial],
+  );
 
-  const setLang = useCallback((next: Lang) => {
-    try {
-      localStorage.setItem("pf_lang", next);
-    } catch {
-      /* ignore */
-    }
-    setLangState(next);
-  }, []);
-
-  return { lang, setLang };
+  return { lang: initial, setLang };
 }

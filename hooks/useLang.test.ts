@@ -1,22 +1,42 @@
-import { act, renderHook } from "@testing-library/react";
-import { afterEach, describe, expect, it } from "vitest";
+import { renderHook } from "@testing-library/react";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useLang } from "./useLang";
 
-afterEach(() => localStorage.clear());
+const assign = vi.fn();
+const originalLocation = window.location;
+
+beforeEach(() => {
+  assign.mockClear();
+  Object.defineProperty(window, "location", {
+    configurable: true,
+    value: { assign, hash: "" },
+  });
+});
+
+afterEach(() => {
+  Object.defineProperty(window, "location", { configurable: true, value: originalLocation });
+});
 
 describe("useLang", () => {
-  it("reads a stored language on mount", () => {
-    localStorage.setItem("pf_lang", "pt");
-    const { result } = renderHook(() => useLang());
-    expect(result.current.lang).toBe("pt");
+  it("returns the URL-derived locale unchanged", () => {
+    expect(renderHook(() => useLang("pt")).result.current.lang).toBe("pt");
+    expect(renderHook(() => useLang("en")).result.current.lang).toBe("en");
   });
 
-  it("setLang updates the language and persists it", () => {
-    const { result } = renderHook(() => useLang());
+  it("setLang navigates to the other locale, carrying the current hash", () => {
+    window.location.hash = "#projects";
+    const { result } = renderHook(() => useLang("en"));
 
-    act(() => result.current.setLang("pt"));
+    result.current.setLang("pt");
 
-    expect(result.current.lang).toBe("pt");
-    expect(localStorage.getItem("pf_lang")).toBe("pt");
+    expect(assign).toHaveBeenCalledWith("/pt/#projects");
+  });
+
+  it("setLang to the current locale is a no-op", () => {
+    const { result } = renderHook(() => useLang("en"));
+
+    result.current.setLang("en");
+
+    expect(assign).not.toHaveBeenCalled();
   });
 });

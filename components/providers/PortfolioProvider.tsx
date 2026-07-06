@@ -32,9 +32,15 @@ export function usePortfolio(): PortfolioContextValue {
   return ctx;
 }
 
-export function PortfolioProvider({ children }: { children: ReactNode }) {
+export function PortfolioProvider({
+  initialLang,
+  children,
+}: {
+  initialLang: Lang;
+  children: ReactNode;
+}) {
   const { theme, isDark, toggleTheme } = useTheme();
-  const { lang, setLang } = useLang();
+  const { lang, setLang } = useLang(initialLang);
   const { termOpen, openTerm, closeTerm, bonusNonce } = useTerminal();
 
   const value = useMemo<PortfolioContextValue>(

@@ -1,5 +1,6 @@
 "use client";
 
+import type { Lang } from "@/lib/i18n";
 import { PortfolioProvider } from "@/components/providers/PortfolioProvider";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
@@ -14,9 +15,9 @@ import { Certs } from "@/components/sections/Certs";
 import { Contact } from "@/components/sections/Contact";
 import styles from "./Portfolio.module.css";
 
-export function Portfolio() {
+export function Portfolio({ initialLang }: { initialLang: Lang }) {
   return (
-    <PortfolioProvider>
+    <PortfolioProvider initialLang={initialLang}>
       <div className={styles.page}>
         <Header />
         <main id="top" className={styles.main}>

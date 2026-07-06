@@ -10,6 +10,8 @@ export interface Dict {
     certs: string;
     contact: string;
   };
+  /** Per-locale <title> and meta description (see lib/seo.ts). */
+  seo: { title: string; description: string };
   experience: { label: string; note: string; present: string };
   langs: { label: string; note: string };
   hero: {
@@ -39,6 +41,11 @@ export const i18n: Record<Lang, Dict> = {
       projects: "projects",
       certs: "certs",
       contact: "contact",
+    },
+    seo: {
+      title: "Igor Trentini — Backend Developer (Go)",
+      description:
+        "Igor Trentini — Backend Developer specialized in Go. Reliable, high-throughput services, APIs and distributed systems with clean, observable, well-tested code.",
     },
     experience: { label: "experience", note: "where I've worked", present: "present" },
     langs: { label: "languages", note: "spoken & written proficiency" },
@@ -81,6 +88,11 @@ export const i18n: Record<Lang, Dict> = {
       projects: "projetos",
       certs: "certs",
       contact: "contato",
+    },
+    seo: {
+      title: "Igor Trentini — Desenvolvedor Backend (Go)",
+      description:
+        "Igor Trentini — Desenvolvedor Backend especializado em Go. Serviços confiáveis e de alta vazão, APIs e sistemas distribuídos com código limpo, observável e bem testado.",
     },
     experience: { label: "experiência", note: "onde já trabalhei", present: "presente" },
     langs: { label: "idiomas", note: "proficiência falada e escrita" },

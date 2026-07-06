@@ -16,13 +16,23 @@ interface SectionProps {
 
 /** Page section shell: shared `// label` + note header plus the section wrapper. */
 export function Section({ id, label, note, solo, variant, children }: SectionProps) {
+  // The label doubles as the section's accessible name (aria-labelledby), so it
+  // needs a stable id. The `// ` prefix is decorative and hidden from a11y tree.
+  const headingId = id && label ? `${id}-heading` : undefined;
   return (
-    <section id={id} className={cx(styles.section, variant === "hero" && styles["section--hero"])}>
+    <section
+      id={id}
+      aria-labelledby={headingId}
+      className={cx(styles.section, variant === "hero" && styles["section--hero"])}
+    >
       {label && (
-        <div className={cx(styles.section__label, solo && styles["section__label--solo"])}>
-          {"// "}
+        <h2
+          id={headingId}
+          className={cx(styles.section__label, solo && styles["section__label--solo"])}
+        >
+          <span aria-hidden="true">{"// "}</span>
           {label}
-        </div>
+        </h2>
       )}
       {note && <p className={styles.section__note}>{note}</p>}
       {children}

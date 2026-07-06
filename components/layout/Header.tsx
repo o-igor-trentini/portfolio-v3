@@ -1,15 +1,15 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { usePortfolio } from "@/components/providers/PortfolioProvider";
 import { BurgerIcon, CloseIcon, MoonIcon, SunIcon } from "@/components/ui/Icons";
-import { Button } from "@/components/ui/Button";
 import { IconButton } from "@/components/ui/IconButton";
 import { cx } from "@/lib/cx";
 import styles from "./Header.module.css";
 
 export function Header() {
-  const { handle, t, lang, setLang, isDark, toggleTheme } = usePortfolio();
+  const { handle, t, lang, isDark, toggleTheme } = usePortfolio();
   const [menuOpen, setMenuOpen] = useState(false);
   const closeMenu = () => setMenuOpen(false);
 
@@ -51,26 +51,28 @@ export function Header() {
           <div className={styles["nav-links"]}>{links}</div>
 
           <div className={styles.langtoggle} role="group" aria-label="Language">
-            <Button
+            <Link
+              href="/"
               className={cx(
                 styles.langtoggle__btn,
                 lang === "en" && styles["langtoggle__btn--active"],
               )}
-              aria-pressed={lang === "en"}
-              onClick={() => setLang("en")}
+              aria-current={lang === "en" ? "true" : undefined}
+              onClick={closeMenu}
             >
               en
-            </Button>
-            <Button
+            </Link>
+            <Link
+              href="/pt/"
               className={cx(
                 styles.langtoggle__btn,
                 lang === "pt" && styles["langtoggle__btn--active"],
               )}
-              aria-pressed={lang === "pt"}
-              onClick={() => setLang("pt")}
+              aria-current={lang === "pt" ? "true" : undefined}
+              onClick={closeMenu}
             >
               pt
-            </Button>
+            </Link>
           </div>
 
           <IconButton

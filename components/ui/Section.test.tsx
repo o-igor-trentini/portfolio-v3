@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { Section } from "./Section";
 
 describe("Section", () => {
-  it("renders id, prefixed label, note and children", () => {
+  it("renders id, prefixed label heading, note and children", () => {
     const { container } = render(
       <Section id="about" label="about" note="a note">
         <p>body</p>
@@ -15,9 +15,13 @@ describe("Section", () => {
     expect(section).toHaveClass("section");
     expect(section).not.toHaveClass("section--hero");
 
-    const label = screen.getByText("// about");
-    expect(label).toHaveClass("section__label");
-    expect(label).not.toHaveClass("section__label--solo");
+    // The label is an <h2> whose accessible name is the bare label (the `// `
+    // prefix is aria-hidden), and it names the section via aria-labelledby.
+    const heading = screen.getByRole("heading", { level: 2, name: "about" });
+    expect(heading).toHaveClass("section__label");
+    expect(heading).not.toHaveClass("section__label--solo");
+    expect(heading).toHaveTextContent("// about");
+    expect(section).toHaveAttribute("aria-labelledby", heading.id);
 
     expect(screen.getByText("a note")).toHaveClass("section__note");
     expect(screen.getByText("body")).toBeInTheDocument();
@@ -31,7 +35,8 @@ describe("Section", () => {
     );
 
     expect(container.querySelector(".section__note")).toBeNull();
-    expect(screen.getByText("// about")).toHaveClass("section__label", "section__label--solo");
+    const heading = screen.getByRole("heading", { level: 2, name: "about" });
+    expect(heading).toHaveClass("section__label", "section__label--solo");
   });
 
   it("renders the hero variant without id or label", () => {
@@ -44,6 +49,7 @@ describe("Section", () => {
     const section = container.querySelector("section");
     expect(section).toHaveClass("section", "section--hero");
     expect(section).not.toHaveAttribute("id");
+    expect(section).not.toHaveAttribute("aria-labelledby");
     expect(container.querySelector(".section__label")).toBeNull();
     expect(screen.getByText("Name")).toBeInTheDocument();
   });

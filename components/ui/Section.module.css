@@ -9,9 +9,10 @@
 }
 .section__label {
   font-size: var(--text-xs);
+  font-weight: 400;
   color: var(--accent);
   letter-spacing: 0.04em;
-  margin-bottom: 6px;
+  margin: 0 0 6px;
 }
 .section__label--solo {
   margin-bottom: var(--space-md);

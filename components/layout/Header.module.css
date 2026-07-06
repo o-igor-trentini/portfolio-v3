@@ -57,11 +57,14 @@
   padding: 2px;
 }
 .langtoggle__btn {
+  display: inline-block;
   color: var(--muted);
   border: none;
   border-radius: var(--radius-xs);
   padding: 3px 9px;
   font-size: var(--text-xs);
+  text-decoration: none;
+  cursor: pointer;
   transition:
     background var(--transition),
     color var(--transition);

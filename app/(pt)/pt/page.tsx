@@ -1,5 +1,5 @@
 import { Portfolio } from "@/components/layout/Portfolio";
 
 export default function Home() {
-  return <Portfolio />;
+  return <Portfolio initialLang="pt" />;
 }
