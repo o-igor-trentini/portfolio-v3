@@ -3,6 +3,7 @@
 import { usePortfolio } from "@/components/providers/PortfolioProvider";
 import { Section } from "../ui/Section";
 import { Button } from "../ui/Button";
+import { withYears } from "@/lib/content";
 import styles from "./Hero.module.css";
 
 export function Hero() {
@@ -18,7 +19,9 @@ export function Hero() {
         <span className="caret" aria-hidden="true" />
       </h1>
       <div className={styles.hero__role}>{t.hero.role}</div>
-      <p className={styles.hero__tagline}>{t.hero.tagline}</p>
+      <p className={styles.hero__tagline} suppressHydrationWarning>
+        {withYears(t.hero.tagline)}
+      </p>
       <div className={styles.hero__actions}>
         <Button variant="accent" onClick={openTerm}>
           <span style={{ fontSize: 14 }}>&gt;_</span>

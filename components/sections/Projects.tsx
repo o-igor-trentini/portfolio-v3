@@ -24,19 +24,32 @@ export function Projects() {
 
       {projects.length > 0 && (
         <div className={styles.projects__list}>
-          {shown.map((p) => (
-            <ExternalLink key={p.name} href={p.link} className={styles.project}>
-              <div className={styles.project__head}>
-                <span className="accent">▸</span>
-                <span className={styles.project__name}>{p.name}</span>
-                <span className={styles.project__ext}>↗</span>
-              </div>
-              <p className={styles.project__desc}>{projectDesc(p, lang)}</p>
-              <div className={styles.project__tags}>
-                <TagList items={p.tags} className={styles.project__tag} />
-              </div>
-            </ExternalLink>
-          ))}
+          {shown.map((p) => {
+            const body = (
+              <>
+                <div className={styles.project__head}>
+                  <span className="accent">▸</span>
+                  <span className={styles.project__name}>{p.name}</span>
+                  {p.link && <span className={styles.project__ext}>↗</span>}
+                </div>
+                <p className={styles.project__desc}>{projectDesc(p, lang)}</p>
+                <div className={styles.project__tags}>
+                  <TagList items={p.tags} className={styles.project__tag} />
+                </div>
+              </>
+            );
+            // Private-repo projects have no link, so they render as a static
+            // article rather than an external anchor.
+            return p.link ? (
+              <ExternalLink key={p.name} href={p.link} className={styles.project}>
+                {body}
+              </ExternalLink>
+            ) : (
+              <article key={p.name} className={styles.project}>
+                {body}
+              </article>
+            );
+          })}
         </div>
       )}
 
