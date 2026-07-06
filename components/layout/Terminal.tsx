@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type KeyboardEvent } from "react";
 import { usePortfolio } from "@/components/providers/PortfolioProvider";
 import { COLOR, introLines, mk, runTerminalCommand, type Line } from "@/lib/terminal";
+import { track } from "@/lib/analytics";
 import { PROMPT } from "@/site.config";
 import styles from "./Terminal.module.css";
 
@@ -73,6 +74,9 @@ export function Terminal() {
     const parts = cmd.split(/\s+/);
     const cname = parts[0].toLowerCase();
     const args = parts.slice(1);
+
+    // Track the base command name only — keeps event cardinality low (no args).
+    track({ name: "terminal_command", params: { command: cname } });
 
     // Control commands act on the buffer / visibility, so they stay in the component.
     if (cname === "clear") {

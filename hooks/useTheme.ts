@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { siteConfig } from "@/site.config";
+import { track } from "@/lib/analytics";
 
 export type Theme = "dark" | "light";
 
@@ -34,6 +35,7 @@ export function useTheme(): UseTheme {
     setTheme((prev) => {
       const next: Theme = prev === "light" ? "dark" : "light";
       applyTheme(next);
+      track({ name: "theme_toggle", params: { to: next } });
       return next;
     });
   }, [applyTheme]);

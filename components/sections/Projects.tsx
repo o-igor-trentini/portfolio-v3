@@ -8,6 +8,7 @@ import { TagList } from "../ui/TagList";
 import { RevealControls } from "../ui/RevealControls";
 import { usePagination } from "@/hooks/usePagination";
 import { projects, projectDesc } from "@/lib/content";
+import { track } from "@/lib/analytics";
 import { PAGE } from "@/site.config";
 import styles from "./Projects.module.css";
 
@@ -41,7 +42,12 @@ export function Projects() {
             // Private-repo projects have no link, so they render as a static
             // article rather than an external anchor.
             return p.link ? (
-              <ExternalLink key={p.name} href={p.link} className={styles.project}>
+              <ExternalLink
+                key={p.name}
+                href={p.link}
+                className={styles.project}
+                onClick={() => track({ name: "project_click", params: { name: p.name } })}
+              >
                 {body}
               </ExternalLink>
             ) : (
@@ -59,7 +65,10 @@ export function Projects() {
         remaining={remaining}
         moreLabel={t.common.more}
         lessLabel={t.common.less}
-        onMore={showMore}
+        onMore={() => {
+          track({ name: "show_more", params: { section: "projects" } });
+          showMore();
+        }}
         onCollapse={collapse}
       />
     </Section>

@@ -23,7 +23,7 @@ export function Hero() {
         {withYears(t.hero.tagline)}
       </p>
       <div className={styles.hero__actions}>
-        <Button variant="accent" onClick={openTerm}>
+        <Button variant="accent" onClick={() => openTerm("hero")}>
           <span style={{ fontSize: 14 }}>&gt;_</span>
           {t.hero.cta}
         </Button>

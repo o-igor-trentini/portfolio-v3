@@ -22,7 +22,7 @@ describe("useTerminal", () => {
     const { result } = renderHook(() => useTerminal());
     expect(result.current.termOpen).toBe(false);
 
-    act(() => result.current.openTerm());
+    act(() => result.current.openTerm("hero"));
     expect(result.current.termOpen).toBe(true);
 
     act(() => result.current.closeTerm());

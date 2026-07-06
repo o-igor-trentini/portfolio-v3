@@ -32,6 +32,14 @@ export const siteConfig = {
    * links. Override with NEXT_PUBLIC_SITE_URL at build time, or edit here.
    */
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://igortrentini.dev",
+
+  /**
+   * Google Analytics 4 measurement ID (e.g. "G-XXXXXXX"). Provided at build
+   * time via NEXT_PUBLIC_GA_ID. Intentionally has no fallback: when unset
+   * (dev / local / preview) analytics is not rendered at all, so those visits
+   * never pollute the data.
+   */
+  gaId: process.env.NEXT_PUBLIC_GA_ID,
 };
 
 // Start of professional experience ("YYYY-MM"). The bio's "N years" is derived
