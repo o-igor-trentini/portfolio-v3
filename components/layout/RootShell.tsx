@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { JetBrains_Mono } from "next/font/google";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "@/app/globals.css";
 import { accentMap, siteConfig } from "@/site.config";
 import { buildJsonLd } from "@/lib/seo";
@@ -22,6 +23,17 @@ const pref = siteConfig.defaultTheme;
 const fallback = pref === "light" ? "light" : "dark";
 const themeScript = `!function(){try{var d=document.documentElement,s=localStorage.getItem('pf_theme'),t;if(s==='light'||s==='dark'){t=s}else{var p='${pref}';if(p==='light'||p==='dark'){t=p}else if(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches){t='light'}else{t='dark'}}d.dataset.theme=t}catch(e){document.documentElement.dataset.theme='${fallback}'}}();`;
 
+// GA is only wired up when a measurement ID is present (prod builds).
+const gaId = siteConfig.gaId;
+
+// Consent Mode v2: default every storage to `denied` *before* the gtag config
+// command runs (config is injected afterInteractive by <GoogleAnalytics>). GA
+// therefore sends cookieless pings until the visitor accepts in ConsentBanner,
+// which flips the relevant grants to `granted`.
+const consentDefaultScript =
+  `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}` +
+  `gtag('consent','default',{ad_storage:'denied',analytics_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});`;
+
 /**
  * The single HTML shell shared by both per-locale root layouts. Each route group
  * ((en) → `/`, (pt) → `/pt/`) renders its own copy at build time, so `lang` and
@@ -42,12 +54,14 @@ export function RootShell({ lang, children }: { lang: Lang; children: ReactNode 
       <head>
         <style dangerouslySetInnerHTML={{ __html: accentCss }} />
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        {gaId && <script dangerouslySetInnerHTML={{ __html: consentDefaultScript }} />}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
       <body>{children}</body>
+      {gaId && <GoogleAnalytics gaId={gaId} />}
     </html>
   );
 }

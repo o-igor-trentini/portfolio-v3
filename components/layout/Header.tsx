@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePortfolio } from "@/components/providers/PortfolioProvider";
 import { BurgerIcon, CloseIcon, MoonIcon, SunIcon } from "@/components/ui/Icons";
 import { IconButton } from "@/components/ui/IconButton";
+import { track } from "@/lib/analytics";
 import { cx } from "@/lib/cx";
 import styles from "./Header.module.css";
 
@@ -12,6 +13,10 @@ export function Header() {
   const { handle, t, lang, isDark, toggleTheme } = usePortfolio();
   const [menuOpen, setMenuOpen] = useState(false);
   const closeMenu = () => setMenuOpen(false);
+  const switchLang = (to: typeof lang) => {
+    if (to !== lang) track({ name: "language_switch", params: { to } });
+    closeMenu();
+  };
 
   const links = (
     <>
@@ -58,7 +63,7 @@ export function Header() {
                 lang === "en" && styles["langtoggle__btn--active"],
               )}
               aria-current={lang === "en" ? "true" : undefined}
-              onClick={closeMenu}
+              onClick={() => switchLang("en")}
             >
               en
             </Link>
@@ -69,7 +74,7 @@ export function Header() {
                 lang === "pt" && styles["langtoggle__btn--active"],
               )}
               aria-current={lang === "pt" ? "true" : undefined}
-              onClick={closeMenu}
+              onClick={() => switchLang("pt")}
             >
               pt
             </Link>

@@ -7,6 +7,7 @@ import { ExternalLink } from "../ui/ExternalLink";
 import { RevealControls } from "../ui/RevealControls";
 import { usePagination } from "@/hooks/usePagination";
 import { certs } from "@/lib/content";
+import { track } from "@/lib/analytics";
 import { PAGE } from "@/site.config";
 import styles from "./Certs.module.css";
 
@@ -45,7 +46,10 @@ export function Certs() {
         remaining={remaining}
         moreLabel={t.common.more}
         lessLabel={t.common.less}
-        onMore={showMore}
+        onMore={() => {
+          track({ name: "show_more", params: { section: "certs" } });
+          showMore();
+        }}
         onCollapse={collapse}
       />
     </Section>

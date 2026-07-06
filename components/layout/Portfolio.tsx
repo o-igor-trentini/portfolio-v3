@@ -5,6 +5,7 @@ import { PortfolioProvider } from "@/components/providers/PortfolioProvider";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { Terminal } from "./Terminal";
+import { ConsentBanner } from "./ConsentBanner";
 import { Hero } from "@/components/sections/Hero";
 import { About } from "@/components/sections/About";
 import { Experience } from "@/components/sections/Experience";
@@ -32,6 +33,7 @@ export function Portfolio({ initialLang }: { initialLang: Lang }) {
         </main>
         <Footer />
         <Terminal />
+        <ConsentBanner />
       </div>
     </PortfolioProvider>
   );

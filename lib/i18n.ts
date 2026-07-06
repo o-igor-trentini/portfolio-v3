@@ -29,6 +29,7 @@ export interface Dict {
   contact: { label: string; note: string };
   footer: { built: string; terminalBtn: string };
   common: { more: string; less: string; stackMore: string; stackLess: string; wip: string };
+  consent: { message: string; accept: string; decline: string };
 }
 
 export const i18n: Record<Lang, Dict> = {
@@ -78,6 +79,12 @@ export const i18n: Record<Lang, Dict> = {
       stackLess: "show less",
       wip: "working on it…",
     },
+    consent: {
+      message:
+        "This site uses Google Analytics to understand traffic. No cookies are set until you accept.",
+      accept: "accept",
+      decline: "decline",
+    },
   },
   pt: {
     nav: {
@@ -124,6 +131,12 @@ export const i18n: Record<Lang, Dict> = {
       stackMore: "mostrar tudo",
       stackLess: "mostrar menos",
       wip: "trabalhando nisso…",
+    },
+    consent: {
+      message:
+        "Este site usa Google Analytics para entender o tráfego. Nenhum cookie é criado até você aceitar.",
+      accept: "aceitar",
+      decline: "recusar",
     },
   },
 };

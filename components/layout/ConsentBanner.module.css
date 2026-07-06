@@ -1,0 +1,62 @@
+.consent {
+  position: fixed;
+  left: var(--gutter);
+  right: var(--gutter);
+  bottom: var(--gutter);
+  z-index: 100;
+  margin: 0 auto;
+  max-width: var(--container);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: 14px var(--space-md);
+  background: var(--card);
+  border: var(--hairline);
+  border-radius: var(--radius-md);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  animation: menudrop 0.2s ease;
+}
+
+.consent__message {
+  flex: 1 1 260px;
+  margin: 0;
+  font-size: var(--text-md);
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.consent__actions {
+  display: flex;
+  flex-shrink: 0;
+  gap: var(--space-xs);
+}
+
+.consent__btn--accept,
+.consent__btn--decline {
+  font-family: inherit;
+  font-size: var(--text-sm);
+  padding: 7px 14px;
+  border: var(--hairline);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all var(--transition);
+}
+
+.consent__btn--decline {
+  background: transparent;
+  color: var(--muted);
+}
+.consent__btn--decline:hover {
+  color: var(--fg);
+}
+
+.consent__btn--accept {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+}
+.consent__btn--accept:hover {
+  opacity: 0.9;
+}

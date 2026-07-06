@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { track, type TerminalSource } from "@/lib/analytics";
 
 const KONAMI = [
   "ArrowUp",
@@ -15,7 +16,7 @@ const KONAMI = [
 
 export interface UseTerminal {
   termOpen: boolean;
-  openTerm: () => void;
+  openTerm: (source: TerminalSource) => void;
   closeTerm: () => void;
   /** Increments when the Konami code is entered — the terminal prints a bonus line. */
   bonusNonce: number;
@@ -26,7 +27,10 @@ export function useTerminal(): UseTerminal {
   const [bonusNonce, setBonusNonce] = useState(0);
   const konami = useRef<string[]>([]);
 
-  const openTerm = useCallback(() => setTermOpen(true), []);
+  const openTerm = useCallback((source: TerminalSource) => {
+    setTermOpen(true);
+    track({ name: "terminal_open", params: { source } });
+  }, []);
   const closeTerm = useCallback(() => setTermOpen(false), []);
 
   // Global shortcuts: backtick opens the terminal, Esc closes it, and the Konami
@@ -39,7 +43,7 @@ export function useTerminal(): UseTerminal {
 
       if ((e.key === "`" || e.key === "~") && !termOpen && !typing) {
         e.preventDefault();
-        setTermOpen(true);
+        openTerm("key");
         return;
       }
       if (e.key === "Escape" && termOpen) {
@@ -54,13 +58,14 @@ export function useTerminal(): UseTerminal {
         konami.current.every((k, i) => k === KONAMI[i])
       ) {
         konami.current = [];
-        setTermOpen(true);
+        openTerm("konami");
         setBonusNonce((n) => n + 1);
+        track({ name: "konami_unlocked" });
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [termOpen]);
+  }, [termOpen, openTerm]);
 
   return { termOpen, openTerm, closeTerm, bonusNonce };
 }

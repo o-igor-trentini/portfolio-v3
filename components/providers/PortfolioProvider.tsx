@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useMemo, type ReactNode } from "react";
 import { i18n, type Dict, type Lang } from "@/lib/i18n";
+import type { TerminalSource } from "@/lib/analytics";
 import { siteConfig } from "@/site.config";
 import { useTheme, type Theme } from "@/hooks/useTheme";
 import { useLang } from "@/hooks/useLang";
@@ -18,7 +19,7 @@ interface PortfolioContextValue {
   toggleTheme: () => void;
   // terminal
   termOpen: boolean;
-  openTerm: () => void;
+  openTerm: (source: TerminalSource) => void;
   closeTerm: () => void;
   /** Increments when the Konami code is entered — the terminal listens and prints a bonus line. */
   bonusNonce: number;
