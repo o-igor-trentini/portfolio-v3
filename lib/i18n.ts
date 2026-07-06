@@ -46,14 +46,14 @@ export const i18n: Record<Lang, Dict> = {
       cmd: "whoami",
       role: "Backend Developer · Go",
       tagline:
-        "I build backend systems that stay up. Reliable, high-throughput services with clean, well-tested code.",
+        "{years} years building mission-critical backend systems in Go for logistics & risk management. Reliable, high-throughput and well-tested.",
       cta: "open terminal",
       hint1: "or press",
       hint2: "anywhere",
     },
     about: {
       label: "about",
-      body: "I'm a backend developer specialized in Go, building reliable, high-throughput services. I started out full-stack, so I'm comfortable across the whole stack — but my focus is APIs, distributed systems, and code that's clean, observable, and well tested.",
+      body: "I'm a Go backend developer with {years} years building reliable, high-throughput systems. I care about clean architecture, well-tested code and services that stay observable and up under load. I've led projects from zero to production and spent 2+ years as the sole developer on mission-critical systems, so I'm comfortable owning a service end to end. I started full-stack with React and TypeScript and still move across the whole stack, but my focus is APIs, distributed systems and backend built to last.",
     },
     stack: { label: "stack", note: "core focus on Go and distributed backend systems" },
     projects: { label: "projects", note: "a few things I've built" },
@@ -88,14 +88,14 @@ export const i18n: Record<Lang, Dict> = {
       cmd: "whoami",
       role: "Desenvolvedor Backend · Go",
       tagline:
-        "Construo sistemas backend que não caem. Serviços confiáveis e de alta vazão, com código limpo e bem testado.",
+        "{years} anos construindo sistemas backend de missão crítica em Go para logística e gestão de risco. Confiáveis, de alta vazão e bem testados.",
       cta: "abrir terminal",
       hint1: "ou pressione",
       hint2: "em qualquer lugar",
     },
     about: {
       label: "sobre",
-      body: "Sou desenvolvedor backend especializado em Go, construindo serviços confiáveis e de alta vazão. Comecei como full-stack, então transito bem por toda a stack — mas meu foco são APIs, sistemas distribuídos e código limpo, observável e bem testado.",
+      body: "Sou desenvolvedor backend Go com {years} anos construindo sistemas confiáveis e de alta vazão. Me importo com arquitetura limpa, código bem testado e serviços observáveis que se mantêm de pé sob carga. Já conduzi projetos do zero à produção e atuei 2+ anos como único desenvolvedor em sistemas de missão crítica, então me sinto à vontade sendo dono de um serviço de ponta a ponta. Comecei full-stack com React e TypeScript e ainda transito por toda a stack, mas meu foco são APIs, sistemas distribuídos e backend feito para durar.",
     },
     stack: { label: "stack", note: "foco principal em Go e sistemas backend distribuídos" },
     projects: { label: "projetos", note: "algumas coisas que construí" },
