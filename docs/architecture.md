@@ -1,7 +1,9 @@
 # Arquitetura & Convenções — portfolio-v3
 
 Regras **duráveis** que restringem mudanças futuras. Decisões pontuais de execução
-(planos passo-a-passo) ficam arquivadas em [`plans/`](./plans/).
+(planos passo-a-passo) ficam arquivadas em [`plans/`](./plans/). **SEO, i18n,
+roteamento por idioma, metadata, hreflang, JSON-LD e social preview** têm doc
+dedicada em [`seo-i18n.md`](./seo-i18n.md).
 
 ---
 
@@ -23,7 +25,7 @@ Regras **duráveis** que restringem mudanças futuras. Decisões pontuais de exe
 ## 2. Estilo: CSS Modules co-locados + global layer
 
 - **Estilo de componente vive num `Component.module.css` co-locado**, importado como `styles` e referenciado por `styles.bloco__el` (acesso por ponto funciona com `__`; modificadores com hífen usam bracket: `styles["bloco--mod"]`). Classes condicionais/dinâmicas via `cx()` de `lib/cx.ts` — não concatene template strings.
-- **`app/globals.css` é só o _global layer_** — o que não pode ser escopado: tokens de cor theme-reativos (`:root` + `html[data-theme="light"]`), resets de elemento, `@keyframes`, e utilitários usados como spans/elementos avulsos em vários componentes (`.accent`, `.muted`, `.caret`, `kbd`, `.sr-only`). O tema é aplicado pré-hidratação por um script inline no `layout.tsx` (evita flash).
+- **`app/globals.css` é só o _global layer_** — o que não pode ser escopado: tokens de cor theme-reativos (`:root` + `html[data-theme="light"]`), resets de elemento, `@keyframes`, e utilitários usados como spans/elementos avulsos em vários componentes (`.accent`, `.muted`, `.caret`, `kbd`, `.sr-only`). O tema é aplicado pré-hidratação por um script inline no `components/layout/RootShell.tsx` (evita flash).
 - **Sizing/spacing/motion são theme-agnósticos** em `app/tokens.css` (`--radius-*`, `--text-*`, `--space-*`, `--transition`, `--gutter`, `--container`, `--hairline`). Todos os módulos consomem via `var(--…)` (custom properties são globais por natureza).
 - Onde adicionar: **estilo de um componente → o `.module.css` dele**; cor nova theme-reativa → `globals.css` (nos dois temas); medida repetida → `tokens.css`; utilitário realmente transversal → `globals.css`.
 - `--hairline` guarda o shorthand `1px solid var(--border)`; o `var(--border)` resolve no ponto de uso, então **segue o tema** mesmo definido uma vez.
@@ -43,8 +45,8 @@ Regras **duráveis** que restringem mudanças futuras. Decisões pontuais de exe
 
 - `PortfolioProvider` **compõe** `useTheme` + `useLang` + `useTerminal` e expõe tudo por `usePortfolio()`. Mantenha a **API pública de `usePortfolio` estável** — há muitos consumidores.
 - Um **único listener de keydown** em `useTerminal` cuida de backtick/Esc/konami. Não separe o konami: backtick/Esc passariam a ser gravados no buffer, mudando o comportamento.
-- i18n: dicionários em `lib/i18n.ts`; seleção de campo via helpers em `lib/content.ts` (`stackLabel`, `projectDesc`, `langName`, `langLevel`, `formatExperience`). **Use os helpers** em vez de ternários `lang === "pt" ? … : …` inline.
-- **Seções são Client Components por causa do `lang`.** O `lang` é Context client-reativo (`useLang`: `useState`+`localStorage`), trocado em runtime **sem navegação**. Um Server Component renderiza uma vez no servidor e não reage a esse toggle — até `About` lê `t.about` = `i18n[lang]` reativo. Por isso **converter seções em Server Components está bloqueado**: extrair a parte interativa em ilha não basta (o bloqueio é a _fonte_ do `lang`). Habilitar exigiria mover `lang` para roteamento por locale (`app/[lang]/…`), o que muda URLs e torna a troca de idioma uma navegação — grande e com mudança de comportamento observável. Os primitivos `ui/Section`, `ui/ExternalLink`, `ui/TagList` já são server-safe (sem `"use client"`); só o `lang` prende a árvore no client.
+- i18n: dicionários em `lib/i18n.ts` (inclui `seo.title`/`seo.description`); seleção de campo via helpers em `lib/content.ts` (`stackLabel`, `projectDesc`, `langName`, `langLevel`, `formatExperience`). **Use os helpers** em vez de ternários `lang === "pt" ? … : …` inline.
+- **O `lang` vem da URL, não de estado.** Cada idioma é uma rota estática própria (`/` en, `/pt/` pt) via route groups + múltiplos root layouts; `useLang(initial)` recebe o locale da rota e ele é **fixo pela vida da página**. Trocar idioma é **navegação** (full reload entre root layouts), não toggle de `useState`. `PortfolioProvider` segue compondo `useTheme` + `useLang` + `useTerminal` — **mantenha a API de `usePortfolio` estável**. As seções continuam Client Components porque vivem sob esse provider (theme/terminal reativos); a reatividade do `lang` deixou de ser o bloqueio, mas converter em Server Components segue fora de escopo. **Detalhes completos de roteamento/metadata/hreflang/OG em [`seo-i18n.md`](./seo-i18n.md).**
 
 ## 5. Disciplina de mudança & testes
 
