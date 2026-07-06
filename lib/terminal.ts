@@ -14,6 +14,7 @@ import {
   projects,
   stackGroups,
   stackLabel,
+  withYears,
 } from "./content";
 import { nowYM } from "./date";
 
@@ -67,7 +68,7 @@ function neofetch(ctx: CommandCtx): string {
     "        _ _           visitor@portfolio",
     "    ___| (_)         --------------------",
     "   / __| | |         role     " + role,
-    "  | (__| | |         stack    Go · gRPC · Postgres · k8s",
+    "  | (__| | |         stack    Go · Gin · Postgres · AWS",
     "   \\___|_|_|         theme    " + ctx.theme,
     "                     lang     " + ctx.lang,
     "                     uptime   always shipping",
@@ -99,7 +100,7 @@ const about: Handler = (ctx) => {
     mk(ctx.name, COLOR.accent),
     mk(L.hero.role, COLOR.muted),
     mk(""),
-    mk(L.about.body, COLOR.soft),
+    mk(withYears(L.about.body), COLOR.soft),
   ];
 };
 
