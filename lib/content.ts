@@ -1,5 +1,14 @@
 import { i18n, type Lang } from "./i18n";
-import { formatDuration, formatMonthYear, monthsInclusive, parseYM, type YearMonth } from "./date";
+import {
+  formatDuration,
+  formatMonthYear,
+  monthsInclusive,
+  nowYM,
+  parseYM,
+  yearsOfExperience,
+  type YearMonth,
+} from "./date";
+import { CAREER_START } from "@/site.config";
 
 export interface StackGroup {
   label_en: string;
@@ -9,7 +18,9 @@ export interface StackGroup {
 
 export interface Project {
   name: string;
-  link: string;
+  // Optional: work projects live in private repos, so most have no public link.
+  // When absent the card renders as plain text instead of an external anchor.
+  link?: string;
   tags: string[];
   desc_en: string;
   desc_pt: string;
@@ -57,76 +68,80 @@ export const stackGroups: StackGroup[] = [
     label_en: "backend",
     label_pt: "backend",
     items: [
-      "gRPC",
-      "REST",
-      "GraphQL",
+      "Gin",
+      "GORM",
+      "Google Wire",
+      "REST APIs",
       "Microservices",
-      "Event-driven",
-      "Message queues",
-      "WebSockets",
-      "Sagas",
-      "CQRS",
-      "Circuit breakers",
-      "Rate limiting",
+      "Clean Architecture",
+      "DDD",
+      "Concurrency",
     ],
   },
-  { label_en: "data", label_pt: "dados", items: ["PostgreSQL", "Redis"] },
-  { label_en: "infra", label_pt: "infra", items: ["Docker", "Kubernetes", "AWS", "CI/CD"] },
+  { label_en: "data", label_pt: "dados", items: ["PostgreSQL", "RabbitMQ", "MS SQL Server"] },
+  {
+    label_en: "testing",
+    label_pt: "testes",
+    items: ["Testify", "Testcontainers", "Vitest", "React Testing Library"],
+  },
+  {
+    label_en: "cloud & infra",
+    label_pt: "cloud & infra",
+    items: ["Docker", "AWS", "Google Cloud", "Keycloak", "Nginx", "Jenkins", "CI/CD", "Git"],
+  },
+  { label_en: "frontend", label_pt: "frontend", items: ["React", "TypeScript", "Ant Design", "Vite"] },
 ];
 
+// Real work projects, anonymized: internal system/client/vendor names are
+// intentionally omitted (private repos, so no `link`). Order is display order.
 export const projects: Project[] = [
   {
-    name: "core-api",
-    link: "#",
-    tags: ["Go", "gRPC", "PostgreSQL", "Redis"],
+    name: "document-validation",
+    tags: ["Go", "Gin", "PostgreSQL", "React", "RabbitMQ"],
     desc_en:
-      "High-throughput API gateway exposing gRPC + REST, handling auth, rate limiting and request fan-out.",
+      "Enterprise full-stack platform (Go + React monorepo, 5 integrated apps) validating people, companies and vehicles across dozens of internal and external integrations — OCR, computer-vision facial checks, real-time chat and async record sync over message queues. A large codebase serving thousands of companies at high, business-critical query volume.",
     desc_pt:
-      "API gateway de alta vazão expondo gRPC + REST, com auth, rate limiting e fan-out de requisições.",
+      "Plataforma full-stack enterprise (monorepo Go + React, 5 apps integradas) que valida pessoas, empresas e veículos por meio de dezenas de integrações internas e externas — OCR, validação facial por visão computacional, chat em tempo real e sync assíncrono de cadastros via mensageria. Base de código extensa, atendendo milhares de empresas em alto volume de consultas, crítico ao negócio.",
   },
   {
-    name: "taskq",
-    link: "#",
-    tags: ["Go", "RabbitMQ", "Docker"],
+    name: "live-verification",
+    tags: ["Go", "React", "WebRTC", "PostgreSQL", "AWS S3"],
     desc_en:
-      "Distributed job queue with at-least-once delivery, retries with backoff and a small dashboard.",
+      "Full-stack video-call platform with real-time checklists for live participant verification: recording, automatic PDF reports, webhooks, multi-tenant white-label, OAuth2 and S3 storage. Used in production for higher-risk cases, stable with zero urgent fixes since launch.",
     desc_pt:
-      "Fila de jobs distribuída com entrega at-least-once, retries com backoff e um painel enxuto.",
+      "Plataforma full-stack de videochamadas com checklist em tempo real para verificação ao vivo de participantes: gravação, relatórios PDF automáticos, webhooks, multi-tenant white-label, OAuth2 e armazenamento em S3. Usado em produção para casos de risco elevado, estável e sem correções urgentes desde o lançamento.",
   },
   {
-    name: "obsd",
-    link: "#",
-    tags: ["Go", "Prometheus"],
+    name: "integration-gateway",
+    tags: ["Go", "Gin", "PostgreSQL", "Docker", "Cache"],
     desc_en:
-      "Lightweight observability agent collecting runtime metrics and exporting them to Prometheus.",
+      "Go REST API acting as a smart broker for government and AI integrations to validate documents and personal data — intelligent caching, automatic fallback between providers and full audit trail. Handles high request volume, with caching that cut external-API cost by 70–80%.",
     desc_pt:
-      "Agente leve de observabilidade que coleta métricas de runtime e exporta para o Prometheus.",
+      "API REST em Go que atua como broker inteligente de integrações governamentais e de IA para validar documentos e dados pessoais — cache inteligente, fallback automático entre provedores e auditoria completa. Sustenta alto volume de requisições, com cache que reduziu o custo de APIs externas em 70–80%.",
   },
   {
-    name: "authsvc",
-    link: "#",
-    tags: ["Go", "JWT", "PostgreSQL"],
+    name: "risk-registry",
+    tags: ["Go", "PostgreSQL", "React", "Webhooks", "RBAC"],
     desc_en:
-      "Stateless authentication service with JWT issuance, refresh rotation and role-based access.",
+      "Enterprise registry for records and restrictions (Go + React) with a central REST API for identifier-based checks (CPF, CNPJ and plates across 6 Mercosur countries), granular multi-tenant RBAC, bidirectional webhooks and clean/DDD architecture. Tens of thousands of checks, 24/7.",
     desc_pt:
-      "Serviço de autenticação stateless com emissão de JWT, rotação de refresh e acesso por papéis.",
+      "Sistema enterprise de cadastro e consulta de registros e restrições (Go + React) com API REST central para verificações por identificadores (CPF, CNPJ e placas de 6 países do Mercosul), RBAC granular multi-tenant, webhooks bidirecionais e arquitetura limpa/DDD. Dezenas de milhares de verificações, 24/7.",
   },
   {
-    name: "streamd",
-    link: "#",
-    tags: ["Go", "Kafka", "gRPC"],
-    desc_en: "Stream processor consuming Kafka topics and fanning enriched events out over gRPC.",
+    name: "engineering-metrics",
+    tags: ["Go", "React", "AWS Athena", "ECharts", "Jira"],
+    desc_en:
+      "Full-stack monorepo for software-delivery metrics, releases and knowledge base: Jira sync, historical analysis via AWS Athena, interactive dashboards, granular permissions and multi-product white-label.",
     desc_pt:
-      "Processador de streams que consome tópicos Kafka e distribui eventos enriquecidos via gRPC.",
+      "Monorepo full-stack para métricas de entrega de software, releases e base de conhecimento: sync com Jira, análise histórica via AWS Athena, dashboards interativos, permissões granulares e white-label multi-produto.",
   },
   {
-    name: "ratelimit",
-    link: "#",
-    tags: ["Go", "Redis"],
+    name: "go-sdk-monorepo",
+    tags: ["Go", "OAuth2", "SDK", "OpenTelemetry"],
     desc_en:
-      "Distributed rate limiter with sliding-window counters backed by Redis, deployable as middleware.",
+      "Monorepo of independent Go libraries/SDKs for external-API integration — centralized auth, document processing, vehicle/person lookups, webhooks and reusable utilities. Adopted across other teams, with a strong focus on modularity and maintainability.",
     desc_pt:
-      "Rate limiter distribuído com contadores de janela deslizante em Redis, usável como middleware.",
+      "Monorepo com bibliotecas/SDKs Go independentes para integração com APIs externas — auth centralizada, processamento de documentos, consulta de veículos/pessoas, webhooks e utilitários reutilizáveis. Adotado por outros times, com forte foco em modularidade e manutenibilidade.",
   },
 ];
 
@@ -147,14 +162,24 @@ export const experiences: Experience[] = [
   },
   {
     company: "Logae",
-    role_en: "Full Stack Developer",
-    role_pt: "Desenvolvedor Full Stack",
+    role_en: "Backend Developer",
+    role_pt: "Desenvolvedor Backend",
     mode_en: "hybrid",
     mode_pt: "híbrido",
-    industry_en: "logistics tech",
-    industry_pt: "logtech",
+    industry_en: "logistics & risk management",
+    industry_pt: "logística & gestão de risco",
     start: "2021-09",
     end: "2026-05",
+    tags_en: [
+      "technical go-to · ~30 devs",
+      "4 projects zero-to-prod",
+      "thousands of companies · high-volume, business-critical",
+    ],
+    tags_pt: [
+      "ponto de apoio técnico · ~30 devs",
+      "4 projetos do zero à produção",
+      "milhares de empresas · alto volume, crítico ao negócio",
+    ],
   },
 ];
 
@@ -168,9 +193,9 @@ export const languages: Language[] = [
   {
     name_en: "English",
     name_pt: "Inglês",
-    level_en: "Professional · C1",
-    level_pt: "Profissional · C1",
-    score: 4,
+    level_en: "Fluent technical reading · intermediate conversation",
+    level_pt: "Leitura técnica fluente · conversação intermediária",
+    score: 3,
   },
 ];
 
@@ -184,7 +209,7 @@ export const contacts: Contact[] = [
     label: "linkedin",
     value: "linkedin.com/in/igor-trentini",
     href: "https://www.linkedin.com/in/igor-trentini",
-  },
+  }
 ];
 
 // ---- localization helpers -------------------------------------------------
@@ -199,6 +224,20 @@ export const stackLabel = (g: StackGroup, lang: Lang) => (lang === "pt" ? g.labe
 export const projectDesc = (p: Project, lang: Lang) => (lang === "pt" ? p.desc_pt : p.desc_en);
 export const langName = (l: Language, lang: Lang) => (lang === "pt" ? l.name_pt : l.name_en);
 export const langLevel = (l: Language, lang: Lang) => (lang === "pt" ? l.level_pt : l.level_en);
+
+// ---- years of experience --------------------------------------------------
+
+// Computed once at module load (build time for the static export) and rounded
+// to the nearest year. Bio copy carries a `{years}` token instead of a fixed
+// number, so it never silently goes stale — see `withYears`.
+export const yearsExperience = yearsOfExperience(CAREER_START, nowYM());
+
+/** Replace the `{years}` token in a string with a given years-of-experience value. */
+export const interpolateYears = (text: string, years: number) =>
+  text.replaceAll("{years}", String(years));
+
+/** Resolve `{years}` in bio copy using the build-time `yearsExperience`. */
+export const withYears = (text: string) => interpolateYears(text, yearsExperience);
 
 // ---- experience formatting -------------------------------------------------
 

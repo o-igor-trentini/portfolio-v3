@@ -1,15 +1,23 @@
 import { describe, expect, it } from "vitest";
 import {
+  contacts,
+  experiences,
   formatExperience,
+  interpolateYears,
   langLevel,
   langName,
+  languages,
   projectDesc,
+  projects,
+  stackGroups,
   stackLabel,
+  withYears,
   type Experience,
   type Language,
   type Project,
   type StackGroup,
 } from "./content";
+import { i18n } from "./i18n";
 
 const base: Experience = {
   company: "Acme",
@@ -85,5 +93,92 @@ describe("localization helpers", () => {
     expect(langName(l, "pt")).toBe("NP");
     expect(langLevel(l, "en")).toBe("LE");
     expect(langLevel(l, "pt")).toBe("LP");
+  });
+});
+
+// Guardrails over the real published content: a broken invariant here means the
+// live portfolio would render a half-translated card, a wrong employment state,
+// or an unsafe link — so these assert business/validation rules, not copy.
+describe("content integrity", () => {
+  it("every project is fully bilingual, tagged and free of placeholder links", () => {
+    expect(projects.length).toBeGreaterThan(0);
+    for (const p of projects) {
+      expect(p.name.trim()).not.toBe("");
+      expect(p.desc_en.trim()).not.toBe("");
+      expect(p.desc_pt.trim()).not.toBe("");
+      expect(p.tags.length).toBeGreaterThan(0);
+      // "#" was the old placeholder; real projects either omit the link or set a real URL.
+      expect(p.link ?? "").not.toBe("#");
+      if (p.link) expect(p.link).toMatch(/^https?:\/\//);
+    }
+  });
+
+  it("every stack group has both labels and at least one item", () => {
+    expect(stackGroups.length).toBeGreaterThan(0);
+    for (const g of stackGroups) {
+      expect(g.label_en.trim()).not.toBe("");
+      expect(g.label_pt.trim()).not.toBe("");
+      expect(g.items.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("has exactly one ongoing role, listed first, with entries most-recent-first", () => {
+    const ongoing = experiences.filter((e) => e.end === null);
+    expect(ongoing).toHaveLength(1);
+    expect(experiences[0].end).toBeNull();
+    // "YYYY-MM" strings sort lexicographically, so descending start = most recent first.
+    for (let i = 0; i < experiences.length - 1; i++) {
+      expect(experiences[i].start >= experiences[i + 1].start).toBe(true);
+    }
+  });
+
+  it("keeps every experience date in YYYY-MM form", () => {
+    for (const e of experiences) {
+      expect(e.start).toMatch(/^\d{4}-\d{2}$/);
+      if (e.end !== null) expect(e.end).toMatch(/^\d{4}-\d{2}$/);
+    }
+  });
+
+  it("scores every language on a 1–5 scale", () => {
+    expect(languages.length).toBeGreaterThan(0);
+    for (const l of languages) {
+      expect(l.score).toBeGreaterThanOrEqual(1);
+      expect(l.score).toBeLessThanOrEqual(5);
+    }
+  });
+
+  it("exposes only safe, absolute contact links", () => {
+    expect(contacts.length).toBeGreaterThan(0);
+    for (const c of contacts) {
+      expect(c.label.trim()).not.toBe("");
+      expect(c.href).toMatch(/^(https:\/\/|mailto:)/);
+    }
+  });
+});
+
+describe("years-of-experience interpolation", () => {
+  it("replaces every {years} token", () => {
+    expect(interpolateYears("{years} yrs · since {years}", 5)).toBe("5 yrs · since 5");
+  });
+
+  it("leaves copy without the token untouched", () => {
+    expect(interpolateYears("no token here", 5)).toBe("no token here");
+  });
+
+  it("keeps the {years} token in the raw bio copy (never hard-codes the number)", () => {
+    for (const lang of ["en", "pt"] as const) {
+      expect(i18n[lang].hero.tagline).toContain("{years}");
+      expect(i18n[lang].about.body).toContain("{years}");
+    }
+  });
+
+  it("resolves the bio copy to a concrete number with no leftover token", () => {
+    for (const lang of ["en", "pt"] as const) {
+      for (const raw of [i18n[lang].hero.tagline, i18n[lang].about.body]) {
+        const resolved = withYears(raw);
+        expect(resolved).not.toContain("{years}");
+        expect(resolved).toMatch(/\d+ (years|anos)/);
+      }
+    }
   });
 });
