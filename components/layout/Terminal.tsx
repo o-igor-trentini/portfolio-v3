@@ -56,6 +56,9 @@ export function Terminal() {
         <div
           className={styles["term-body"]}
           ref={bodyRef}
+          role="log"
+          aria-live="polite"
+          aria-label="terminal output"
           onClick={() => inputRef.current?.focus()}
         >
           {lines.map((l, i) => (

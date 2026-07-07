@@ -32,6 +32,7 @@
   flex-wrap: wrap;
 }
 .exp__company {
+  margin: 0;
   font-weight: 700;
   font-size: 15.5px;
 }

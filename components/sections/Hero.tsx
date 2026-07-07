@@ -24,7 +24,9 @@ export function Hero() {
       </p>
       <div className={styles.hero__actions}>
         <Button variant="accent" onClick={() => openTerm("hero")}>
-          <span style={{ fontSize: 14 }}>&gt;_</span>
+          <span style={{ fontSize: 14 }} aria-hidden="true">
+            &gt;_
+          </span>
           {t.hero.cta}
         </Button>
         <span className={styles.hero__hint}>

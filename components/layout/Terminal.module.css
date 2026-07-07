@@ -99,10 +99,15 @@
   min-width: 0;
   background: transparent;
   border: none;
-  outline: none;
   color: #e4e4e7;
   font-family: inherit;
   font-size: var(--text-md);
   caret-color: var(--accent);
   padding: 0;
+}
+/* The input is auto-focused whenever the terminal opens and the blinking caret
+   is the focus affordance, so a focus ring here would be redundant noise —
+   opt out of the global :focus-visible ring explicitly. */
+.term-input:focus-visible {
+  outline: none;
 }

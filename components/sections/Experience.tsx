@@ -22,7 +22,7 @@ export function Experience() {
             <div key={e.company} className={cx(styles.exp, present && styles["exp--present"])}>
               <span className={styles.exp__dot} aria-hidden="true" />
               <div className={styles.exp__head}>
-                <span className={styles.exp__company}>{e.company}</span>
+                <h3 className={styles.exp__company}>{e.company}</h3>
                 <span className={styles.exp__role}>{expRole(e, lang)}</span>
               </div>
               <div className={styles.exp__period}>
