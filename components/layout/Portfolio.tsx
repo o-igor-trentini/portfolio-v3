@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { i18n, type Lang } from "@/lib/i18n";
 import { PortfolioProvider } from "@/components/providers/PortfolioProvider";
+import { TerminalProvider } from "@/components/providers/TerminalProvider";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { ConsentBanner } from "./ConsentBanner";
@@ -23,25 +24,27 @@ import styles from "./Portfolio.module.css";
 export function Portfolio({ initialLang }: { initialLang: Lang }) {
   return (
     <PortfolioProvider initialLang={initialLang}>
-      <div className={styles.page}>
-        <a href="#top" className={styles["skip-link"]}>
-          {i18n[initialLang].a11y.skip}
-        </a>
-        <Header />
-        <main id="top" tabIndex={-1} className={styles.main}>
-          <Hero />
-          <About />
-          <Experience />
-          <Languages />
-          <Stack />
-          <Projects />
-          <Certs />
-          <Contact />
-        </main>
-        <Footer />
-        <Terminal />
-        <ConsentBanner />
-      </div>
+      <TerminalProvider>
+        <div className={styles.page}>
+          <a href="#top" className={styles["skip-link"]}>
+            {i18n[initialLang].a11y.skip}
+          </a>
+          <Header />
+          <main id="top" tabIndex={-1} className={styles.main}>
+            <Hero />
+            <About />
+            <Experience />
+            <Languages />
+            <Stack />
+            <Projects />
+            <Certs />
+            <Contact />
+          </main>
+          <Footer />
+          <Terminal />
+          <ConsentBanner />
+        </div>
+      </TerminalProvider>
     </PortfolioProvider>
   );
 }

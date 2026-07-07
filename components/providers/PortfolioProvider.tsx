@@ -2,11 +2,9 @@
 
 import { createContext, useContext, useMemo, type ReactNode } from "react";
 import { i18n, type Dict, type Lang } from "@/lib/i18n";
-import type { TerminalSource } from "@/lib/analytics";
 import { siteConfig } from "@/site.config";
 import { useTheme, type Theme } from "@/hooks/useTheme";
 import { useLang } from "@/hooks/useLang";
-import { useTerminal } from "@/hooks/useTerminal";
 
 interface PortfolioContextValue {
   name: string;
@@ -17,12 +15,6 @@ interface PortfolioContextValue {
   theme: Theme;
   isDark: boolean;
   toggleTheme: () => void;
-  // terminal
-  termOpen: boolean;
-  openTerm: (source: TerminalSource) => void;
-  closeTerm: () => void;
-  /** Increments when the Konami code is entered — the terminal listens and prints a bonus line. */
-  bonusNonce: number;
 }
 
 const PortfolioContext = createContext<PortfolioContextValue | null>(null);
@@ -42,7 +34,6 @@ export function PortfolioProvider({
 }) {
   const { theme, isDark, toggleTheme } = useTheme();
   const { lang, setLang } = useLang(initialLang);
-  const { termOpen, openTerm, closeTerm, bonusNonce } = useTerminal();
 
   const value = useMemo<PortfolioContextValue>(
     () => ({
@@ -54,12 +45,8 @@ export function PortfolioProvider({
       theme,
       isDark,
       toggleTheme,
-      termOpen,
-      openTerm,
-      closeTerm,
-      bonusNonce,
     }),
-    [lang, setLang, theme, isDark, toggleTheme, termOpen, openTerm, closeTerm, bonusNonce],
+    [lang, setLang, theme, isDark, toggleTheme],
   );
 
   return <PortfolioContext.Provider value={value}>{children}</PortfolioContext.Provider>;

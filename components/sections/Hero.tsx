@@ -1,13 +1,15 @@
 "use client";
 
 import { usePortfolio } from "@/components/providers/PortfolioProvider";
+import { useTerminalControls } from "@/components/providers/TerminalProvider";
 import { Section } from "../ui/Section";
 import { Button } from "../ui/Button";
 import { withYears } from "@/lib/content";
 import styles from "./Hero.module.css";
 
 export function Hero() {
-  const { name, t, openTerm } = usePortfolio();
+  const { name, t } = usePortfolio();
+  const { openTerm } = useTerminalControls();
 
   return (
     <Section variant="hero">

@@ -1,11 +1,13 @@
 "use client";
 
 import { usePortfolio } from "@/components/providers/PortfolioProvider";
+import { useTerminalControls } from "@/components/providers/TerminalProvider";
 import { Button } from "@/components/ui/Button";
 import styles from "./Footer.module.css";
 
 export function Footer() {
-  const { t, openTerm } = usePortfolio();
+  const { t } = usePortfolio();
+  const { openTerm } = useTerminalControls();
   return (
     <footer className={styles["site-footer"]}>
       <div className={styles["site-footer__inner"]}>

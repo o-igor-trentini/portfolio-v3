@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { usePortfolio } from "@/components/providers/PortfolioProvider";
+import { useTerminalControls } from "@/components/providers/TerminalProvider";
 import { useTerminalBuffer } from "@/hooks/useTerminalBuffer";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { cx } from "@/lib/cx";
@@ -9,20 +9,10 @@ import { PROMPT } from "@/site.config";
 import styles from "./Terminal.module.css";
 
 export function Terminal() {
-  const { termOpen, closeTerm, bonusNonce, lang, theme, setLang, toggleTheme, name } =
-    usePortfolio();
+  const { termOpen, closeTerm } = useTerminalControls();
 
   const windowRef = useRef<HTMLDivElement>(null);
-  const { lines, input, setInput, onInputKey, bodyRef, inputRef } = useTerminalBuffer({
-    termOpen,
-    bonusNonce,
-    lang,
-    theme,
-    name,
-    setLang,
-    toggleTheme,
-    closeTerm,
-  });
+  const { lines, input, setInput, onInputKey, bodyRef, inputRef } = useTerminalBuffer();
 
   // Keep focus inside the modal while open and restore it to the trigger on close.
   useFocusTrap(windowRef, termOpen);
