@@ -31,3 +31,12 @@ export function track(event: AnalyticsEvent): void {
   const params = "params" in event ? event.params : {};
   sendGAEvent("event", event.name, params);
 }
+
+/**
+ * Single source of truth for the language-switch event. Both entry points fire
+ * it — the header's `<a href>` locale links (kept as real anchors for hreflang
+ * crawlability) and the terminal's `lang` command (programmatic navigation) —
+ * so centralising the event name/params here keeps them from drifting apart.
+ */
+export const trackLanguageSwitch = (to: Lang): void =>
+  track({ name: "language_switch", params: { to } });
