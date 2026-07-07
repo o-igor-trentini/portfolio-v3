@@ -8,7 +8,7 @@ import styles from "./About.module.css";
 export function About() {
   const { t } = usePortfolio();
   return (
-    <Section id="about" label={t.about.label} solo>
+    <Section id="about" label={t.about.label}>
       <p className={styles.about__body} suppressHydrationWarning>
         {withYears(t.about.body)}
       </p>

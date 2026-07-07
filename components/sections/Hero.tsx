@@ -1,15 +1,13 @@
 "use client";
 
 import { usePortfolio } from "@/components/providers/PortfolioProvider";
-import { useTerminalControls } from "@/components/providers/TerminalProvider";
 import { Section } from "../ui/Section";
-import { Button } from "../ui/Button";
+import { OpenTerminalButton } from "../ui/OpenTerminalButton";
 import { withYears } from "@/lib/content";
 import styles from "./Hero.module.css";
 
 export function Hero() {
   const { name, t } = usePortfolio();
-  const { openTerm } = useTerminalControls();
 
   return (
     <Section variant="hero">
@@ -25,12 +23,12 @@ export function Hero() {
         {withYears(t.hero.tagline)}
       </p>
       <div className={styles.hero__actions}>
-        <Button variant="accent" onClick={() => openTerm("hero")}>
-          <span style={{ fontSize: 14 }} aria-hidden="true">
-            &gt;_
-          </span>
-          {t.hero.cta}
-        </Button>
+        <OpenTerminalButton
+          source="hero"
+          label={t.hero.cta}
+          variant="accent"
+          glyphClassName={styles.hero__glyph}
+        />
         <span className={styles.hero__hint}>
           {t.hero.hint1} <kbd>`</kbd> {t.hero.hint2}
         </span>

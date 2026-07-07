@@ -5,6 +5,7 @@ import { usePortfolio } from "@/components/providers/PortfolioProvider";
 import { TagList } from "../ui/TagList";
 import { Button } from "../ui/Button";
 import { stackLabel, type StackGroup } from "@/lib/content";
+import { format } from "@/lib/format";
 import { ITEM_CAP } from "@/site.config";
 import styles from "./Stack.module.css";
 
@@ -17,7 +18,7 @@ export function StackGroupCard({ group }: { group: StackGroup }) {
   const hidden = Math.max(0, group.items.length - ITEM_CAP);
   const itemsShown = expanded ? group.items : group.items.slice(0, ITEM_CAP);
   const moreLabel = expanded ? `− ${t.stack.chipLess}` : `+${hidden}`;
-  const moreAria = expanded ? t.stack.lessAria : t.stack.moreAria.replace("{n}", String(hidden));
+  const moreAria = expanded ? t.stack.lessAria : format(t.stack.moreAria, { n: hidden });
 
   return (
     <div>

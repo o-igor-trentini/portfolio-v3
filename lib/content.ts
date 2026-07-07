@@ -9,6 +9,7 @@ import {
   type YearMonth,
 } from "./date";
 import { CAREER_START } from "@/site.config";
+import { format } from "./format";
 
 export interface StackGroup {
   label_en: string;
@@ -269,8 +270,7 @@ export const lastUpdated = `${experiences[0].start}-01`;
 export const yearsExperience = yearsOfExperience(CAREER_START, nowYM());
 
 /** Replace the `{years}` token in a string with a given years-of-experience value. */
-export const interpolateYears = (text: string, years: number) =>
-  text.replaceAll("{years}", String(years));
+export const interpolateYears = (text: string, years: number) => format(text, { years });
 
 /** Resolve `{years}` in bio copy using the build-time `yearsExperience`. */
 export const withYears = (text: string) => interpolateYears(text, yearsExperience);
