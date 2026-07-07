@@ -1,8 +1,30 @@
 .page {
   min-height: 100vh;
 }
+/* Skip-to-content: off-screen until it receives keyboard focus, then pinned
+   top-left so a keyboard/SR user can jump past the header. */
+.skip-link {
+  position: absolute;
+  left: 8px;
+  top: -60px;
+  z-index: 1000;
+  padding: 8px 14px;
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  color: var(--fg);
+  border: 1px solid var(--accent);
+  font-size: var(--text-sm);
+  transition: top var(--transition);
+}
+.skip-link:focus {
+  top: 8px;
+}
 .main {
   max-width: var(--container);
   margin: 0 auto;
   padding: 0 var(--gutter);
+}
+/* The main is a focus target for the skip link; never show a focus ring on it. */
+.main:focus {
+  outline: none;
 }

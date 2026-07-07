@@ -1,11 +1,15 @@
 "use client";
 
-import type { Lang } from "@/lib/i18n";
+import dynamic from "next/dynamic";
+import { i18n, type Lang } from "@/lib/i18n";
 import { PortfolioProvider } from "@/components/providers/PortfolioProvider";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
-import { Terminal } from "./Terminal";
 import { ConsentBanner } from "./ConsentBanner";
+
+// The terminal is an interaction-only overlay (renders null until opened), so
+// its chunk is split out of the initial bundle and loaded on the client.
+const Terminal = dynamic(() => import("./Terminal").then((m) => m.Terminal));
 import { Hero } from "@/components/sections/Hero";
 import { About } from "@/components/sections/About";
 import { Experience } from "@/components/sections/Experience";
@@ -20,8 +24,11 @@ export function Portfolio({ initialLang }: { initialLang: Lang }) {
   return (
     <PortfolioProvider initialLang={initialLang}>
       <div className={styles.page}>
+        <a href="#top" className={styles["skip-link"]}>
+          {i18n[initialLang].a11y.skip}
+        </a>
         <Header />
-        <main id="top" className={styles.main}>
+        <main id="top" tabIndex={-1} className={styles.main}>
           <Hero />
           <About />
           <Experience />
