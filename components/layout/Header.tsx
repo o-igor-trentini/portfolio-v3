@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePortfolio } from "@/components/providers/PortfolioProvider";
 import { BurgerIcon, CloseIcon, MoonIcon, SunIcon } from "@/components/ui/Icons";
 import { IconButton } from "@/components/ui/IconButton";
-import { track } from "@/lib/analytics";
+import { trackLanguageSwitch } from "@/lib/analytics";
 import { cx } from "@/lib/cx";
 import styles from "./Header.module.css";
 
@@ -14,7 +14,7 @@ export function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const closeMenu = () => setMenuOpen(false);
   const switchLang = (to: typeof lang) => {
-    if (to !== lang) track({ name: "language_switch", params: { to } });
+    if (to !== lang) trackLanguageSwitch(to);
     closeMenu();
   };
 

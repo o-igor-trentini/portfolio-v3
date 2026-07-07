@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import type { Lang } from "@/lib/i18n";
-import { track } from "@/lib/analytics";
+import { trackLanguageSwitch } from "@/lib/analytics";
 
 export interface UseLang {
   lang: Lang;
@@ -21,7 +21,7 @@ export function useLang(initial: Lang): UseLang {
   const setLang = useCallback(
     (next: Lang) => {
       if (next === initial || typeof window === "undefined") return;
-      track({ name: "language_switch", params: { to: next } });
+      trackLanguageSwitch(next);
       window.location.assign(localePath[next] + window.location.hash);
     },
     [initial],
