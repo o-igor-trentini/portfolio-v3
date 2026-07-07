@@ -47,4 +47,19 @@ describe("useTerminal", () => {
     expect(result.current.termOpen).toBe(true);
     expect(result.current.bonusNonce).toBe(1);
   });
+
+  it("ignores keystrokes typed into a field, so history recall can't trigger Konami", () => {
+    const { result } = renderHook(() => useTerminal());
+    const input = document.createElement("input");
+    document.body.appendChild(input);
+    const pressIn = (key: string) =>
+      input.dispatchEvent(new KeyboardEvent("keydown", { key, bubbles: true }));
+
+    // The same sequence, but dispatched from an INPUT (as the terminal's
+    // ArrowUp/ArrowDown recall would bubble it) must NOT unlock the bonus.
+    act(() => KONAMI.forEach(pressIn));
+
+    expect(result.current.bonusNonce).toBe(0);
+    input.remove();
+  });
 });

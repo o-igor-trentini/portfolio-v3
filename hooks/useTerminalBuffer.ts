@@ -85,8 +85,7 @@ export function useTerminalBuffer({
     setInput(idx >= cmds.length ? "" : cmds[idx]);
   }
 
-  function runCommand(raw: string) {
-    const line = String(raw);
+  function runCommand(line: string) {
     const cmd = line.trim();
     const echo = mk(line, COLOR.fg, PROMPT);
     const nextCmds = cmd ? [...cmds, cmd] : cmds;

@@ -13,10 +13,14 @@ import {
   projectDesc,
   projects,
   stackGroups,
+  stackHighlight,
   stackLabel,
   withYears,
 } from "./content";
 import { nowYM } from "./date";
+
+// Compact stack line for neofetch, derived from the canonical stack (lib/content).
+const neofetchStack = stackHighlight.join(" · ");
 
 export interface Line {
   text: string;
@@ -35,9 +39,12 @@ export const COLOR = {
   soft: "#d4d4d8",
   red: "#f87171",
   faint: "#52525b",
-};
+} as const;
 
-export const mk = (text: string, color: string = COLOR.muted, prompt?: string): Line => ({
+/** Only the defined palette values are accepted — guards against typos. */
+export type Color = (typeof COLOR)[keyof typeof COLOR];
+
+export const mk = (text: string, color: Color = COLOR.muted, prompt?: string): Line => ({
   text,
   color,
   prompt,
@@ -62,36 +69,28 @@ export interface CommandCtx {
 
 type Handler = (ctx: CommandCtx) => Line[];
 
-function neofetch(ctx: CommandCtx): string {
+function neofetchLines(ctx: CommandCtx): string[] {
   const role = i18n[ctx.lang].hero.role;
   return [
     "        _ _           visitor@portfolio",
     "    ___| (_)         --------------------",
     "   / __| | |         role     " + role,
-    "  | (__| | |         stack    Go · Gin · Postgres · AWS",
+    "  | (__| | |         stack    " + neofetchStack,
     "   \\___|_|_|         theme    " + ctx.theme,
     "                     lang     " + ctx.lang,
     "                     uptime   always shipping",
-  ].join("\n");
+  ];
 }
 
+// Generated from the command registry (below) so it can never drift from the
+// handlers: every entry with a `description` is listed, aliases and hidden
+// easter eggs are not. Control commands (clear/exit) carry a description but no
+// handler — they're intercepted by the terminal buffer, yet still belong here.
 const help: Handler = () => [
   mk("available commands", COLOR.accent),
-  mk("  help        this list", COLOR.muted),
-  mk("  about       who I am", COLOR.muted),
-  mk("  whoami      print identity", COLOR.muted),
-  mk("  experience  work history", COLOR.muted),
-  mk("  skills      tech stack", COLOR.muted),
-  mk("  languages   spoken languages", COLOR.muted),
-  mk("  projects    selected work", COLOR.muted),
-  mk("  certs       certifications", COLOR.muted),
-  mk("  contact     how to reach me", COLOR.muted),
-  mk("  theme       toggle light / dark", COLOR.muted),
-  mk("  lang        switch language (lang en|pt)", COLOR.muted),
-  mk("  neofetch    system info", COLOR.muted),
-  mk("  ls          list files", COLOR.muted),
-  mk("  clear       clear the screen", COLOR.muted),
-  mk("  exit        close terminal", COLOR.muted),
+  ...registry
+    .filter((c) => c.description)
+    .map((c) => mk("  " + c.name.padEnd(12, " ") + c.description, COLOR.muted)),
 ];
 
 const about: Handler = (ctx) => {
@@ -196,7 +195,7 @@ const lang: Handler = (ctx) => {
   return [mk("language → " + nx, COLOR.muted)];
 };
 
-const neofetchCmd: Handler = (ctx) => [mk(neofetch(ctx), COLOR.accent)];
+const neofetchCmd: Handler = (ctx) => neofetchLines(ctx).map((l) => mk(l, COLOR.accent));
 
 const ls: Handler = () => [
   mk("about.md   skills.txt   projects/   certs.txt   contact.vcf   .secrets", COLOR.muted),
@@ -219,31 +218,50 @@ const echo: Handler = (ctx) => [mk(ctx.args.join(" "), COLOR.fg)];
 
 const pwd: Handler = () => [mk("/home/visitor/portfolio", COLOR.muted)];
 
-// Command registry (aliases point at the same handler). Control commands
-// (clear, exit) are intentionally absent — they act on the terminal buffer /
-// visibility and are handled by the Terminal component itself.
-const commands: Record<string, Handler> = {
-  help,
-  about,
-  whoami: about,
-  experience,
-  work: experience,
-  skills,
-  projects: projectsCmd,
-  languages: languagesCmd,
-  idiomas: languagesCmd,
-  certs: certsCmd,
-  certifications: certsCmd,
-  contact,
-  theme,
-  lang,
-  neofetch: neofetchCmd,
-  ls,
-  cat,
-  sudo,
-  echo,
-  pwd,
-};
+interface CommandSpec {
+  name: string;
+  /** Absent for control commands (clear/exit) handled by the terminal buffer. */
+  handler?: Handler;
+  /** Present → listed in `help`. Omitted for aliases and hidden easter eggs. */
+  description?: string;
+}
+
+/**
+ * Command registry — the single source for both dispatch and the `help` listing.
+ * Entries with a `description` appear in `help` (in this order); aliases and the
+ * hidden easter eggs (cat/sudo/echo/pwd) carry a handler but no description.
+ * Control commands (clear/exit) carry a description but no handler — they act on
+ * the terminal buffer / visibility and are intercepted before dispatch, yet are
+ * still documented here so `help` stays complete.
+ */
+const registry: CommandSpec[] = [
+  { name: "help", handler: help, description: "this list" },
+  { name: "about", handler: about, description: "who I am" },
+  { name: "whoami", handler: about, description: "print identity" },
+  { name: "experience", handler: experience, description: "work history" },
+  { name: "work", handler: experience },
+  { name: "skills", handler: skills, description: "tech stack" },
+  { name: "languages", handler: languagesCmd, description: "spoken languages" },
+  { name: "idiomas", handler: languagesCmd },
+  { name: "projects", handler: projectsCmd, description: "selected work" },
+  { name: "certs", handler: certsCmd, description: "certifications" },
+  { name: "certifications", handler: certsCmd },
+  { name: "contact", handler: contact, description: "how to reach me" },
+  { name: "theme", handler: theme, description: "toggle light / dark" },
+  { name: "lang", handler: lang, description: "switch language (lang en|pt)" },
+  { name: "neofetch", handler: neofetchCmd, description: "system info" },
+  { name: "ls", handler: ls, description: "list files" },
+  { name: "clear", description: "clear the screen" },
+  { name: "exit", description: "close terminal" },
+  { name: "cat", handler: cat },
+  { name: "sudo", handler: sudo },
+  { name: "echo", handler: echo },
+  { name: "pwd", handler: pwd },
+];
+
+const commands: Record<string, Handler> = Object.fromEntries(
+  registry.filter((c) => c.handler).map((c) => [c.name, c.handler as Handler]),
+);
 
 /** Runs an output-producing command, or a "not found" line for an unknown one. */
 export function runTerminalCommand(cname: string, ctx: CommandCtx): Line[] {

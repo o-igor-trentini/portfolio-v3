@@ -99,6 +99,23 @@ export const stackGroups: StackGroup[] = [
   },
 ];
 
+/**
+ * Every stack technology, flattened and de-duplicated (TypeScript spans two
+ * groups). The single source of truth for the tech list — the JSON-LD
+ * `knowsAbout` (lib/seo.ts) and the terminal's neofetch highlight derive from
+ * here so they can't drift from what the Stack section actually shows.
+ */
+export const stackItems: string[] = [...new Set(stackGroups.flatMap((g) => g.items))];
+
+/**
+ * A short highlight for compact surfaces (the terminal's neofetch box). Sourced
+ * from the canonical stack — the `.filter` drops any name that no longer exists
+ * in `stackItems`, so a rename in `stackGroups` can never leave stale text here.
+ */
+export const stackHighlight: string[] = ["Go", "Gin", "PostgreSQL", "AWS"].filter((s) =>
+  stackItems.includes(s),
+);
+
 // Real work projects, anonymized: internal system/client/vendor names are
 // intentionally omitted (private repos, so no `link`). Order is display order.
 export const projects: Project[] = [
