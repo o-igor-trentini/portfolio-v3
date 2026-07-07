@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { siteConfig } from "@/site.config";
 import { i18n, type Lang } from "@/lib/i18n";
-import { contacts, experiences, languages } from "@/lib/content";
+import { contacts, experiences, languages, lastUpdated } from "@/lib/content";
 
 /** Canonical path and hreflang code per locale. English lives at the root. */
 const localePath: Record<Lang, string> = { en: "/", pt: "/pt/" };
@@ -94,6 +94,7 @@ export function buildJsonLd(lang: Lang): Record<string, unknown> {
     "@id": personId,
     name: siteConfig.name,
     url: siteConfig.url,
+    image: new URL("/apple-icon", siteConfig.url).toString(),
     jobTitle: siteConfig.roleShort,
     description: t.seo.description,
     knowsAbout: [
@@ -134,6 +135,7 @@ export function buildJsonLd(lang: Lang): Record<string, unknown> {
     url: new URL(localePath[lang], siteConfig.url).toString(),
     name: t.seo.title,
     inLanguage,
+    dateModified: lastUpdated,
     isPartOf: { "@id": siteId },
     mainEntity: { "@id": personId },
   };

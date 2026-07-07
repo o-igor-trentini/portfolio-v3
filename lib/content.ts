@@ -239,6 +239,11 @@ export const projectDesc = (p: Project, lang: Lang) => byLang(p.desc_en, p.desc_
 export const langName = (l: Language, lang: Lang) => byLang(l.name_en, l.name_pt, lang);
 export const langLevel = (l: Language, lang: Lang) => byLang(l.level_en, l.level_pt, lang);
 
+// Freshest content date as "YYYY-MM-DD", derived from the most recent experience
+// start (entries are most-recent-first). Feeds the sitemap <lastmod> and the
+// JSON-LD `dateModified`, so a new role automatically freshens both.
+export const lastUpdated = `${experiences[0].start}-01`;
+
 // ---- years of experience --------------------------------------------------
 
 // Computed once at module load (build time for the static export) and rounded

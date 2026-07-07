@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { siteConfig } from "@/site.config";
+import { lastUpdated } from "@/lib/content";
 
 // Required by `output: export`: emit this route as a static file at build time.
 export const dynamic = "force-static";
@@ -13,7 +14,19 @@ const languages = { en, "pt-BR": pt, "x-default": en };
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
-    { url: en, changeFrequency: "monthly", priority: 1, alternates: { languages } },
-    { url: pt, changeFrequency: "monthly", priority: 0.9, alternates: { languages } },
+    {
+      url: en,
+      lastModified: lastUpdated,
+      changeFrequency: "monthly",
+      priority: 1,
+      alternates: { languages },
+    },
+    {
+      url: pt,
+      lastModified: lastUpdated,
+      changeFrequency: "monthly",
+      priority: 0.9,
+      alternates: { languages },
+    },
   ];
 }

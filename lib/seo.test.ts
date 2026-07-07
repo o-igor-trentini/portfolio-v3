@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { buildJsonLd, buildMetadata, viewport } from "./seo";
 import { i18n } from "./i18n";
-import { contacts, experiences, languages } from "./content";
+import { contacts, experiences, languages, lastUpdated } from "./content";
 import { siteConfig } from "@/site.config";
 
 describe("buildMetadata", () => {
@@ -83,6 +83,13 @@ describe("buildJsonLd", () => {
     expect(person.knowsLanguage).toEqual(
       languages.map((l) => ({ "@type": "Language", name: l.name_en })),
     );
+  });
+
+  it("gives the Person a representative image and stamps the profile's dateModified", () => {
+    const graph = buildJsonLd("en")["@graph"] as Array<Record<string, unknown>>;
+    const [person, , profilePage] = graph;
+    expect(person.image).toBe(new URL("/apple-icon", siteConfig.url).toString());
+    expect(profilePage.dateModified).toBe(lastUpdated);
   });
 
   it("stamps the correct inLanguage per locale", () => {
