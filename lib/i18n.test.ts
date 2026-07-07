@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { defaultLang, i18n, type Lang } from "./i18n";
+import { i18n, type Lang } from "./i18n";
 
 // Collect every leaf key path in an object as dotted strings ("nav.about",
 // "seo.title", …). The Dict is a fixed depth of nested string records, so a
@@ -40,11 +40,5 @@ describe("i18n dictionary parity", () => {
         expect((value as string).trim(), `${lang}.${path} should not be empty`).not.toBe("");
       }
     }
-  });
-});
-
-describe("defaultLang", () => {
-  it("resolves deterministically to en (SSR-safe)", () => {
-    expect(defaultLang()).toBe("en");
   });
 });

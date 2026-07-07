@@ -27,7 +27,8 @@ body {
 :root {
   --bg: #0c0c0e;
   --fg: #e4e4e7;
-  --muted: #71717a;
+  /* ~5:1 on --bg — meets WCAG AA (4.5:1) for the small muted text it's used on. */
+  --muted: #808089;
   --border: #232327;
   --card: #141417;
   --termbg: #0a0a0c;
@@ -35,7 +36,8 @@ body {
 html[data-theme="light"] {
   --bg: #fafaf9;
   --fg: #1c1917;
-  --muted: #79716b;
+  /* ~5:1 on the light --bg — meets WCAG AA. */
+  --muted: #736b64;
   --border: #e7e5e4;
   --card: #ffffff;
   /* terminal stays dark in both themes — termbg intentionally not overridden */
@@ -55,7 +57,13 @@ body {
   color: var(--bg);
 }
 input::placeholder {
-  color: #52525b;
+  color: var(--muted);
+}
+/* One keyboard-focus ring for every interactive element. :focus-visible keeps it
+   off mouse clicks; components can opt out with their own :focus-visible rule. */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 /* Keyframes stay global: CSS Modules only scope keyframes defined inside a

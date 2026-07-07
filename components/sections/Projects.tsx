@@ -16,7 +16,7 @@ export function Projects() {
       <>
         <div className={styles.project__head}>
           <span className="accent">▸</span>
-          <span className={styles.project__name}>{p.name}</span>
+          <h3 className={styles.project__name}>{p.name}</h3>
           {p.link && <span className={styles.project__ext}>↗</span>}
         </div>
         <p className={styles.project__desc}>{projectDesc(p, lang)}</p>
@@ -31,6 +31,7 @@ export function Projects() {
       <ExternalLink
         href={p.link}
         className={styles.project}
+        newTabLabel={t.a11y.newTab}
         onClick={() => track({ name: "project_click", params: { name: p.name } })}
       >
         {body}

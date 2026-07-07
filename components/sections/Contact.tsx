@@ -17,6 +17,7 @@ export function Contact() {
             key={c.label}
             href={c.href}
             className={styles["contact-row"]}
+            newTabLabel={t.a11y.newTab}
             onClick={() => track({ name: "contact_click", params: { label: c.label } })}
           >
             <span className={styles["contact-row__label"]}>{c.label}</span>

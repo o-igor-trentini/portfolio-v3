@@ -32,7 +32,7 @@ export interface Dict {
   footer: { built: string; terminalBtn: string };
   common: { more: string; less: string; stackMore: string; stackLess: string; wip: string };
   consent: { message: string; accept: string; decline: string };
-  a11y: { skip: string };
+  a11y: { skip: string; newTab: string };
 }
 
 export const i18n: Record<Lang, Dict> = {
@@ -94,7 +94,7 @@ export const i18n: Record<Lang, Dict> = {
       accept: "accept",
       decline: "decline",
     },
-    a11y: { skip: "skip to content" },
+    a11y: { skip: "skip to content", newTab: "opens in a new tab" },
   },
   pt: {
     nav: {
@@ -154,11 +154,6 @@ export const i18n: Record<Lang, Dict> = {
       accept: "aceitar",
       decline: "recusar",
     },
-    a11y: { skip: "pular para o conteúdo" },
+    a11y: { skip: "pular para o conteúdo", newTab: "abre em nova aba" },
   },
 };
-
-/** Resolve the initial language deterministically (SSR-safe). */
-export function defaultLang(): Lang {
-  return "en";
-}

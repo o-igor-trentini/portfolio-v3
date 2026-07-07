@@ -10,12 +10,12 @@ export function Certs() {
   const { t } = usePortfolio();
 
   const renderItem = (cert: Cert) => (
-    <ExternalLink href={cert.link} className={styles.cert}>
+    <ExternalLink href={cert.link} className={styles.cert} newTabLabel={t.a11y.newTab}>
       <div className={styles.cert__head}>
         <span className={styles.cert__check} aria-hidden="true">
           ✓
         </span>
-        <span className={styles.cert__name}>{cert.name}</span>
+        <h3 className={styles.cert__name}>{cert.name}</h3>
       </div>
       <div className={styles.cert__meta}>
         <span>{cert.issuer}</span>

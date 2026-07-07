@@ -18,4 +18,18 @@ describe("ExternalLink", () => {
     expect(a).toHaveClass("x");
     expect(a).toHaveTextContent("child");
   });
+
+  it("renders the localized new-tab cue only when provided", () => {
+    const { container: without } = render(
+      <ExternalLink href="https://example.com">child</ExternalLink>,
+    );
+    expect(without.querySelector(".sr-only")).toBeNull();
+
+    const { container: withCue } = render(
+      <ExternalLink href="https://example.com" newTabLabel="opens in a new tab">
+        child
+      </ExternalLink>,
+    );
+    expect(withCue.querySelector(".sr-only")).toHaveTextContent("opens in a new tab");
+  });
 });

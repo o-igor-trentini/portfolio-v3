@@ -11,7 +11,9 @@ export function Footer() {
       <div className={styles["site-footer__inner"]}>
         <span className={styles["site-footer__built"]}>{t.footer.built}</span>
         <Button className={styles["term-btn"]} onClick={() => openTerm("footer")}>
-          <span className="accent">&gt;_</span>
+          <span className="accent" aria-hidden="true">
+            &gt;_
+          </span>
           {t.footer.terminalBtn}
         </Button>
       </div>

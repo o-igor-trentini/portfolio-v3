@@ -1,5 +1,17 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { nowYM, yearsOfExperience } from "./date";
+import { nowYM, parseYM, yearsOfExperience } from "./date";
+
+describe("parseYM", () => {
+  it("parses a well-formed YYYY-MM string", () => {
+    expect(parseYM("2021-09")).toEqual({ y: 2021, m: 9 });
+  });
+
+  it("throws on a malformed string instead of yielding NaN", () => {
+    for (const bad of ["2021", "2021-13", "2021-00", "abc", "2021-9", ""]) {
+      expect(() => parseYM(bad), `should reject "${bad}"`).toThrow();
+    }
+  });
+});
 
 describe("nowYM", () => {
   afterEach(() => vi.useRealTimers());

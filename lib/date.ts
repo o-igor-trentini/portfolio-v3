@@ -10,9 +10,17 @@ export interface YearMonth {
   m: number; // 1-12
 }
 
-/** Parse a "YYYY-MM" string. */
+/**
+ * Parse a "YYYY-MM" string. Throws on malformed input so a bad date in the
+ * curated content fails the build loudly instead of silently yielding NaN and
+ * propagating garbage through the duration/period formatters.
+ */
 export function parseYM(s: string): YearMonth {
-  const [y, m] = s.split("-").map(Number);
+  const match = /^(\d{4})-(\d{2})$/.exec(s);
+  if (!match) throw new Error(`Invalid YearMonth "${s}" — expected "YYYY-MM"`);
+  const y = Number(match[1]);
+  const m = Number(match[2]);
+  if (m < 1 || m > 12) throw new Error(`Invalid month in YearMonth "${s}" — expected 01-12`);
   return { y, m };
 }
 
