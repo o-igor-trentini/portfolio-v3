@@ -10,7 +10,14 @@ export type ConsentValue = "granted" | "denied";
 
 const KEY = "pf_consent";
 
-// `Window.dataLayer` is declared globally by @next/third-parties/google.
+// `Window.dataLayer` is declared globally by @next/third-parties/google. `gtag`
+// is the shim installed by the inline consent-default script in RootShell
+// (`function gtag(){dataLayer.push(arguments)}`), so it exists whenever GA does.
+declare global {
+  interface Window {
+    gtag?: (...args: unknown[]) => void;
+  }
+}
 
 /** Read the stored decision, or `null` if the visitor hasn't chosen yet. */
 export function getConsent(): ConsentValue | null {
@@ -33,21 +40,18 @@ export function storeConsent(value: ConsentValue): void {
 }
 
 /**
- * Push a Consent Mode v2 `update` to the dataLayer. gtag.js reads the pushed
- * command by index, so an array is equivalent to the `arguments` object the
- * gtag() shim would push.
+ * Push a Consent Mode v2 `update` through the `gtag()` shim. This MUST go
+ * through gtag(), not `dataLayer.push([...])`: gtag.js only recognises consent
+ * commands pushed as the `arguments` object the shim produces, and silently
+ * ignores array-form pushes (verified in production — an array push left
+ * `gcs=G100`/denied, while gtag() flipped it to `gcs=G111`/granted).
  */
 export function applyConsent(value: ConsentValue): void {
-  if (typeof window === "undefined") return;
-  window.dataLayer = window.dataLayer ?? [];
-  window.dataLayer.push([
-    "consent",
-    "update",
-    {
-      analytics_storage: value,
-      ad_storage: value,
-      ad_user_data: value,
-      ad_personalization: value,
-    },
-  ]);
+  if (typeof window === "undefined" || typeof window.gtag !== "function") return;
+  window.gtag("consent", "update", {
+    analytics_storage: value,
+    ad_storage: value,
+    ad_user_data: value,
+    ad_personalization: value,
+  });
 }

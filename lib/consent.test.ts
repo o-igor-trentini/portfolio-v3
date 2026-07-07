@@ -1,9 +1,9 @@
-import { afterEach, describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { applyConsent, getConsent, storeConsent } from "./consent";
 
 afterEach(() => {
   localStorage.clear();
-  delete window.dataLayer;
+  delete window.gtag;
 });
 
 describe("getConsent", () => {
@@ -30,35 +30,31 @@ describe("storeConsent", () => {
 });
 
 describe("applyConsent", () => {
-  it("pushes a consent update to the dataLayer", () => {
+  it("calls gtag with a consent update in the arguments form gtag.js requires", () => {
+    const gtag = vi.fn();
+    window.gtag = gtag;
     applyConsent("granted");
-    expect(window.dataLayer).toEqual([
-      [
-        "consent",
-        "update",
-        {
-          analytics_storage: "granted",
-          ad_storage: "granted",
-          ad_user_data: "granted",
-          ad_personalization: "granted",
-        },
-      ],
-    ]);
+    expect(gtag).toHaveBeenCalledWith("consent", "update", {
+      analytics_storage: "granted",
+      ad_storage: "granted",
+      ad_user_data: "granted",
+      ad_personalization: "granted",
+    });
   });
 
-  it("preserves existing dataLayer entries", () => {
-    window.dataLayer = [["consent", "default", {}]];
+  it("propagates a denied update", () => {
+    const gtag = vi.fn();
+    window.gtag = gtag;
     applyConsent("denied");
-    expect(window.dataLayer).toHaveLength(2);
-    expect(window.dataLayer[1]).toEqual([
-      "consent",
-      "update",
-      {
-        analytics_storage: "denied",
-        ad_storage: "denied",
-        ad_user_data: "denied",
-        ad_personalization: "denied",
-      },
-    ]);
+    expect(gtag).toHaveBeenCalledWith("consent", "update", {
+      analytics_storage: "denied",
+      ad_storage: "denied",
+      ad_user_data: "denied",
+      ad_personalization: "denied",
+    });
+  });
+
+  it("no-ops when gtag is not present (no GA on the page)", () => {
+    expect(() => applyConsent("granted")).not.toThrow();
   });
 });
