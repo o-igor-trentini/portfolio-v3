@@ -1,0 +1,50 @@
+/* Standalone styles for the global 404 — this page bypasses the app layouts,
+   so it can't rely on any section/layout CSS. Kept minimal and on-brand. */
+.wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--gutter);
+}
+.card {
+  width: 100%;
+  max-width: 520px;
+  border: var(--hairline);
+  border-radius: var(--radius-md);
+  background: var(--card);
+  padding: 28px 32px;
+  font-size: var(--text-md);
+  line-height: 1.7;
+}
+.line {
+  color: var(--muted);
+}
+.prompt {
+  color: var(--accent);
+}
+.code {
+  /* No display-size token exists (the scale is terminal-small), so this literal
+     mirrors how the Hero sizes its heading. */
+  font-size: clamp(56px, 14vw, 88px);
+  font-weight: 700;
+  color: var(--fg);
+  margin: 18px 0 6px;
+  letter-spacing: -0.02em;
+}
+.msg {
+  color: var(--muted);
+  margin-bottom: 22px;
+}
+.home {
+  display: inline-block;
+  color: var(--fg);
+  text-decoration: none;
+  border: var(--hairline);
+  border-radius: var(--radius-sm);
+  padding: 8px 16px;
+  transition: border-color var(--transition);
+}
+.home:hover {
+  border-color: var(--accent);
+}
