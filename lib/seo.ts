@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { siteConfig } from "@/site.config";
 import { i18n, type Lang } from "@/lib/i18n";
-import { contacts, experiences } from "@/lib/content";
+import { contacts, experiences, languages } from "@/lib/content";
 
 /** Canonical path and hreflang code per locale. English lives at the root. */
 const localePath: Record<Lang, string> = { en: "/", pt: "/pt/" };
@@ -16,9 +16,11 @@ const languageAlternates = {
   "x-default": localePath.en,
 };
 
+// Name and role are pulled from siteConfig so they can't drift; the tech tail is
+// a curated SEO keyword set (deliberately a highlight reel, not the full stack).
 const keywords = [
-  "Igor Trentini",
-  "Backend Developer",
+  siteConfig.name,
+  siteConfig.roleShort,
   "Go",
   "Golang",
   "Gin",
@@ -92,7 +94,7 @@ export function buildJsonLd(lang: Lang): Record<string, unknown> {
     "@id": personId,
     name: siteConfig.name,
     url: siteConfig.url,
-    jobTitle: "Backend Developer",
+    jobTitle: siteConfig.roleShort,
     description: t.seo.description,
     knowsAbout: [
       "Go",
@@ -107,10 +109,8 @@ export function buildJsonLd(lang: Lang): Record<string, unknown> {
       "AWS",
       "Google Cloud",
     ],
-    knowsLanguage: [
-      { "@type": "Language", name: "Portuguese" },
-      { "@type": "Language", name: "English" },
-    ],
+    // Derived from the languages section so the two never disagree.
+    knowsLanguage: languages.map((l) => ({ "@type": "Language", name: l.name_en })),
     worksFor: experiences
       .filter((e) => e.end === null)
       .map((e) => ({ "@type": "Organization", name: e.company })),

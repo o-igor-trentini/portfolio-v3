@@ -4,7 +4,7 @@ import { usePortfolio } from "@/components/providers/PortfolioProvider";
 import { Section } from "../ui/Section";
 import { Card } from "../ui/Card";
 import { cx } from "@/lib/cx";
-import { languages, langLevel, langName } from "@/lib/content";
+import { languages, langLevel, langName, SCORE_MAX } from "@/lib/content";
 import styles from "./Languages.module.css";
 
 export function Languages() {
@@ -20,7 +20,7 @@ export function Languages() {
               <span className={styles.langcard__level}>{langLevel(l, lang)}</span>
             </div>
             <div className={styles.langcard__bar}>
-              {Array.from({ length: 5 }, (_, i) => (
+              {Array.from({ length: SCORE_MAX }, (_, i) => (
                 <span
                   key={i}
                   className={cx(styles.seg, i < l.score ? styles["seg--on"] : styles["seg--off"])}

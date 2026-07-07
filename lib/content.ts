@@ -48,12 +48,15 @@ export interface Cert {
   link: string;
 }
 
+/** Top of the language-proficiency scale — shared by the data and the score bar. */
+export const SCORE_MAX = 5;
+
 export interface Language {
   name_en: string;
   name_pt: string;
   level_en: string;
   level_pt: string;
-  score: number; // out of 5
+  score: number; // out of SCORE_MAX
 }
 
 export interface Contact {
@@ -89,7 +92,11 @@ export const stackGroups: StackGroup[] = [
     label_pt: "cloud & infra",
     items: ["Docker", "AWS", "Google Cloud", "Keycloak", "Nginx", "Jenkins", "CI/CD", "Git"],
   },
-  { label_en: "frontend", label_pt: "frontend", items: ["React", "TypeScript", "Ant Design", "Vite"] },
+  {
+    label_en: "frontend",
+    label_pt: "frontend",
+    items: ["React", "TypeScript", "Ant Design", "Vite"],
+  },
 ];
 
 // Real work projects, anonymized: internal system/client/vendor names are
@@ -209,21 +216,28 @@ export const contacts: Contact[] = [
     label: "linkedin",
     value: "linkedin.com/in/igor-trentini",
     href: "https://www.linkedin.com/in/igor-trentini",
-  }
+  },
 ];
 
 // ---- localization helpers -------------------------------------------------
 
-export const expRole = (e: Experience, lang: Lang) => (lang === "pt" ? e.role_pt : e.role_en);
-export const expMode = (e: Experience, lang: Lang) => (lang === "pt" ? e.mode_pt : e.mode_en);
-export const expIndustry = (e: Experience, lang: Lang) =>
-  lang === "pt" ? e.industry_pt : e.industry_en;
-export const expTags = (e: Experience, lang: Lang) => (lang === "pt" ? e.tags_pt : e.tags_en) ?? [];
+/**
+ * Choose the value for the active locale. The single place the `_en`/`_pt`
+ * branch lives — every bilingual accessor below delegates the decision here.
+ */
+const byLang = <V>(en: V, pt: V, lang: Lang): V => (lang === "pt" ? pt : en);
 
-export const stackLabel = (g: StackGroup, lang: Lang) => (lang === "pt" ? g.label_pt : g.label_en);
-export const projectDesc = (p: Project, lang: Lang) => (lang === "pt" ? p.desc_pt : p.desc_en);
-export const langName = (l: Language, lang: Lang) => (lang === "pt" ? l.name_pt : l.name_en);
-export const langLevel = (l: Language, lang: Lang) => (lang === "pt" ? l.level_pt : l.level_en);
+export const expRole = (e: Experience, lang: Lang) => byLang(e.role_en, e.role_pt, lang);
+export const expMode = (e: Experience, lang: Lang) => byLang(e.mode_en, e.mode_pt, lang);
+export const expIndustry = (e: Experience, lang: Lang) =>
+  byLang(e.industry_en, e.industry_pt, lang);
+// Tags are optional per experience, so this one keeps its empty-list default.
+export const expTags = (e: Experience, lang: Lang) => byLang(e.tags_en, e.tags_pt, lang) ?? [];
+
+export const stackLabel = (g: StackGroup, lang: Lang) => byLang(g.label_en, g.label_pt, lang);
+export const projectDesc = (p: Project, lang: Lang) => byLang(p.desc_en, p.desc_pt, lang);
+export const langName = (l: Language, lang: Lang) => byLang(l.name_en, l.name_pt, lang);
+export const langLevel = (l: Language, lang: Lang) => byLang(l.level_en, l.level_pt, lang);
 
 // ---- years of experience --------------------------------------------------
 

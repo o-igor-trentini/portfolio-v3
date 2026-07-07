@@ -23,13 +23,16 @@ export interface Dict {
     hint2: string;
   };
   about: { label: string; body: string };
-  stack: { label: string; note: string };
+  // `chipLess` is the compact chip word; `moreAria`/`lessAria` are the a11y
+  // labels for the per-group show-more toggle (`{n}` = hidden item count).
+  stack: { label: string; note: string; chipLess: string; moreAria: string; lessAria: string };
   projects: { label: string; note: string };
   certs: { label: string; note: string; verify: string };
   contact: { label: string; note: string };
   footer: { built: string; terminalBtn: string };
   common: { more: string; less: string; stackMore: string; stackLess: string; wip: string };
   consent: { message: string; accept: string; decline: string };
+  a11y: { skip: string };
 }
 
 export const i18n: Record<Lang, Dict> = {
@@ -63,7 +66,13 @@ export const i18n: Record<Lang, Dict> = {
       label: "about",
       body: "I'm a Go backend developer with {years} years building reliable, high-throughput systems. I care about clean architecture, well-tested code and services that stay observable and up under load. I've led projects from zero to production and spent 2+ years as the sole developer on mission-critical systems, so I'm comfortable owning a service end to end. I started full-stack with React and TypeScript and still move across the whole stack, but my focus is APIs, distributed systems and backend built to last.",
     },
-    stack: { label: "stack", note: "core focus on Go and distributed backend systems" },
+    stack: {
+      label: "stack",
+      note: "core focus on Go and distributed backend systems",
+      chipLess: "less",
+      moreAria: "show {n} more",
+      lessAria: "show less",
+    },
     projects: { label: "projects", note: "a few things I've built" },
     certs: {
       label: "certifications",
@@ -85,6 +94,7 @@ export const i18n: Record<Lang, Dict> = {
       accept: "accept",
       decline: "decline",
     },
+    a11y: { skip: "skip to content" },
   },
   pt: {
     nav: {
@@ -116,7 +126,13 @@ export const i18n: Record<Lang, Dict> = {
       label: "sobre",
       body: "Sou desenvolvedor backend Go com {years} anos construindo sistemas confiáveis e de alta vazão. Me importo com arquitetura limpa, código bem testado e serviços observáveis que se mantêm de pé sob carga. Já conduzi projetos do zero à produção e atuei 2+ anos como único desenvolvedor em sistemas de missão crítica, então me sinto à vontade sendo dono de um serviço de ponta a ponta. Comecei full-stack com React e TypeScript e ainda transito por toda a stack, mas meu foco são APIs, sistemas distribuídos e backend feito para durar.",
     },
-    stack: { label: "stack", note: "foco principal em Go e sistemas backend distribuídos" },
+    stack: {
+      label: "stack",
+      note: "foco principal em Go e sistemas backend distribuídos",
+      chipLess: "menos",
+      moreAria: "mostrar mais {n}",
+      lessAria: "mostrar menos",
+    },
     projects: { label: "projetos", note: "algumas coisas que construí" },
     certs: {
       label: "certificações",
@@ -138,6 +154,7 @@ export const i18n: Record<Lang, Dict> = {
       accept: "aceitar",
       decline: "recusar",
     },
+    a11y: { skip: "pular para o conteúdo" },
   },
 };
 
