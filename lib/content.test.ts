@@ -9,6 +9,7 @@ import {
   languages,
   projectDesc,
   projects,
+  SCORE_MAX,
   stackGroups,
   stackLabel,
   withYears,
@@ -139,11 +140,11 @@ describe("content integrity", () => {
     }
   });
 
-  it("scores every language on a 1–5 scale", () => {
+  it("scores every language on a 1–SCORE_MAX scale", () => {
     expect(languages.length).toBeGreaterThan(0);
     for (const l of languages) {
       expect(l.score).toBeGreaterThanOrEqual(1);
-      expect(l.score).toBeLessThanOrEqual(5);
+      expect(l.score).toBeLessThanOrEqual(SCORE_MAX);
     }
   });
 
