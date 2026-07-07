@@ -1,14 +1,12 @@
 import { useCallback } from "react";
 import type { Lang } from "@/lib/i18n";
+import { locales } from "@/lib/locale";
 import { trackLanguageSwitch } from "@/lib/analytics";
 
 export interface UseLang {
   lang: Lang;
   setLang: (lang: Lang) => void;
 }
-
-/** Canonical path per locale — English at the root, Portuguese under `/pt/`. */
-const localePath: Record<Lang, string> = { en: "/", pt: "/pt/" };
 
 /**
  * Locale is derived from the URL: each locale is its own statically-exported
@@ -22,7 +20,7 @@ export function useLang(initial: Lang): UseLang {
     (next: Lang) => {
       if (next === initial || typeof window === "undefined") return;
       trackLanguageSwitch(next);
-      window.location.assign(localePath[next] + window.location.hash);
+      window.location.assign(locales[next].path + window.location.hash);
     },
     [initial],
   );

@@ -17,6 +17,14 @@ export const accentMap: Record<Accent, { d: string; l: string }> = {
   mono: { d: "#e4e4e7", l: "#3f3f46" },
 };
 
+/**
+ * Page canvas (background) per theme — mirrors `--bg` in `app/globals.css`. The
+ * single source for the web-manifest colors, the viewport `theme-color` meta and
+ * the generated OG/icon backgrounds. (globals.css keeps its own literal because
+ * CSS can't import from TS — keep the two in sync.)
+ */
+export const canvas = { dark: "#0c0c0e", light: "#fafaf9" } as const;
+
 export const siteConfig = {
   name: "Igor Trentini",
   handle: "igor.trentini",
