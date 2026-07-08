@@ -235,6 +235,11 @@ export const contacts: Contact[] = [
     value: "linkedin.com/in/igor-trentini",
     href: "https://www.linkedin.com/in/igor-trentini",
   },
+  {
+    label: "email",
+    value: "igortrentini.2004@gmail.com",
+    href: "mailto:igortrentini.2004@gmail.com",
+  },
 ];
 
 // ---- localization helpers -------------------------------------------------
