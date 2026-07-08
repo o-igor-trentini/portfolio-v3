@@ -47,19 +47,24 @@ export function yearsOfExperience(start: string, now: YearMonth): number {
   return Math.round(monthsInclusive(start, now) / 12);
 }
 
+// Singular/plural unit words per locale (pt's "mês → meses" isn't a plain +s, so
+// the plural is spelled out rather than derived) plus the sub-month fallback.
+const DURATION_UNITS: Record<
+  Lang,
+  { yr: string; yrs: string; mo: string; mos: string; fallback: string }
+> = {
+  en: { yr: "yr", yrs: "yrs", mo: "mo", mos: "mos", fallback: "1 mo" },
+  pt: { yr: "ano", yrs: "anos", mo: "mês", mos: "meses", fallback: "1 mês" },
+};
+
 /** Human duration, e.g. "4 yrs 8 mos" / "4 anos 8 meses". */
 export function formatDuration(months: number, lang: Lang): string {
   const years = Math.floor(months / 12);
   const rem = months % 12;
+  const u = DURATION_UNITS[lang];
   const parts: string[] = [];
 
-  if (lang === "pt") {
-    if (years > 0) parts.push(`${years} ano${years > 1 ? "s" : ""}`);
-    if (rem > 0) parts.push(`${rem} ${rem > 1 ? "meses" : "mês"}`);
-    return parts.join(" ") || "1 mês";
-  }
-
-  if (years > 0) parts.push(`${years} yr${years > 1 ? "s" : ""}`);
-  if (rem > 0) parts.push(`${rem} mo${rem > 1 ? "s" : ""}`);
-  return parts.join(" ") || "1 mo";
+  if (years > 0) parts.push(`${years} ${years > 1 ? u.yrs : u.yr}`);
+  if (rem > 0) parts.push(`${rem} ${rem > 1 ? u.mos : u.mo}`);
+  return parts.join(" ") || u.fallback;
 }

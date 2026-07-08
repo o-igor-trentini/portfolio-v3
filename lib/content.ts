@@ -265,10 +265,12 @@ export const projectDesc = (p: Project, lang: Lang) => byLang(p.desc_en, p.desc_
 export const langName = (l: Language, lang: Lang) => byLang(l.name_en, l.name_pt, lang);
 export const langLevel = (l: Language, lang: Lang) => byLang(l.level_en, l.level_pt, lang);
 
-// Freshest content date as "YYYY-MM-DD", derived from the most recent experience
-// start (entries are most-recent-first). Feeds the sitemap <lastmod> and the
-// JSON-LD `dateModified`, so a new role automatically freshens both.
-export const lastUpdated = `${experiences[0].start}-01`;
+// Build date as "YYYY-MM-DD", evaluated when the static export is built — which
+// happens on every deploy, and a content change always ships a rebuild. Feeds
+// the sitemap <lastmod> and the JSON-LD `dateModified`, so the freshness signal
+// tracks the actual last publish instead of a single content field (a role start
+// could be years old even after edits elsewhere).
+export const lastUpdated = new Date().toISOString().slice(0, 10);
 
 // ---- years of experience --------------------------------------------------
 
@@ -303,8 +305,9 @@ export function formatExperience(
   now: YearMonth | null,
 ): FormattedExperience {
   const present = e.end === null;
-  const endYM = present ? now : parseYM(e.end as string);
-  const endLabel = present ? i18n[lang].experience.present : formatMonthYear(e.end as string, lang);
+  // Narrow on `e.end` directly (not the `present` alias) so it's `string` here.
+  const endYM = e.end === null ? now : parseYM(e.end);
+  const endLabel = e.end === null ? i18n[lang].experience.present : formatMonthYear(e.end, lang);
   const period = `${formatMonthYear(e.start, lang)} — ${endLabel}`;
   const duration = endYM ? formatDuration(monthsInclusive(e.start, endYM), lang) : null;
   return { present, period, duration, tags: expTags(e, lang) };

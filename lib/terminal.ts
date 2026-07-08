@@ -19,6 +19,7 @@ import {
   withYears,
 } from "./content";
 import { nowYM } from "./date";
+import type { ConsentValue } from "./consent";
 import { siteConfig } from "@/site.config";
 
 // Compact stack line for neofetch, derived from the canonical stack (lib/content).
@@ -79,6 +80,10 @@ export interface CommandCtx {
   name: string;
   setLang: (lang: Lang) => void;
   toggleTheme: () => void;
+  /** Current analytics-consent decision, or null when the visitor hasn't chosen. */
+  consent: ConsentValue | null;
+  /** Persist + apply a new consent decision (side effects live in the buffer). */
+  setConsent: (value: ConsentValue) => void;
 }
 
 type Handler = (ctx: CommandCtx) => Line[];
@@ -212,13 +217,47 @@ const ls: Handler = () => [
   mk("about.md   skills.txt   projects/   certs.txt   contact.vcf   .secrets", COLOR.muted),
 ];
 
-const cat: Handler = (ctx) => [
-  mk(
-    ctx.args[0] === ".secrets"
-      ? "nice try ;)"
-      : "cat: " + (ctx.args[0] || "") + ": permission denied",
-    COLOR.dim,
-  ),
+// The "files" `ls` advertises map to the real section handlers, so `cat` reads
+// them like a tiny filesystem instead of always denying. `.secrets` stays the
+// easter egg and anything else is denied.
+const CAT_FILES: Record<string, Handler> = {
+  "about.md": about,
+  "skills.txt": skills,
+  "certs.txt": certsCmd,
+  "contact.vcf": contact,
+};
+
+const cat: Handler = (ctx) => {
+  const file = ctx.args[0] || "";
+  if (file === ".secrets") return [mk("nice try ;)", COLOR.dim)];
+  if (file === "projects/") return [mk("cat: projects/: Is a directory", COLOR.dim)];
+  const reader = CAT_FILES[file];
+  if (reader) return reader(ctx);
+  return [mk("cat: " + file + ": permission denied", COLOR.dim)];
+};
+
+const consentCmd: Handler = (ctx) => {
+  const arg = (ctx.args[0] || "").toLowerCase();
+  if (arg === "grant" || arg === "accept" || arg === "granted") {
+    ctx.setConsent("granted");
+    return [mk("analytics consent → granted", COLOR.muted)];
+  }
+  if (arg === "deny" || arg === "revoke" || arg === "denied") {
+    ctx.setConsent("denied");
+    return [mk("analytics consent → denied", COLOR.muted)];
+  }
+  return [
+    mk("analytics consent: " + (ctx.consent ?? "not set"), COLOR.muted),
+    mk("  use 'consent grant' or 'consent deny' to change it", COLOR.dim),
+  ];
+};
+
+const keysCmd: Handler = () => [
+  mk("keyboard", COLOR.accent),
+  mk("  `      open / focus the terminal", COLOR.muted),
+  mk("  Esc    close the terminal", COLOR.muted),
+  mk("  Tab    complete a command", COLOR.muted),
+  mk("  ↑ ↓    walk command history", COLOR.muted),
 ];
 
 const sudo: Handler = () => [
@@ -264,6 +303,8 @@ const registry: CommandSpec[] = [
   { name: "lang", handler: lang, description: "switch language (lang en|pt)" },
   { name: "neofetch", handler: neofetchCmd, description: "system info" },
   { name: "ls", handler: ls, description: "list files" },
+  { name: "keys", handler: keysCmd, description: "keyboard shortcuts" },
+  { name: "consent", handler: consentCmd, description: "analytics consent (grant|deny)" },
   { name: "clear", description: "clear the screen" },
   { name: "exit", description: "close terminal" },
   { name: "cat", handler: cat },
@@ -282,15 +323,46 @@ export const completableCommands: string[] = registry
   .map((c) => c.name);
 
 /**
- * Tab-completion for a partial command name: returns the sole match to complete
- * to, or the candidate list to display when the prefix is ambiguous (bash-style).
- * An empty or already-complete-with-many prefix yields no `completed`.
+ * Completable argument sets for the commands that take a fixed vocabulary, so
+ * Tab completes past the command name too (e.g. `lang p` → `lang pt`). `cat`
+ * derives its files from the same map the reader uses, plus the `.secrets` gag.
  */
-export function completeCommand(prefix: string): { completed?: string; candidates: string[] } {
-  const p = prefix.trim().toLowerCase();
-  if (!p) return { candidates: [] };
-  const candidates = completableCommands.filter((n) => n.startsWith(p));
+const ARG_COMPLETIONS: Record<string, string[]> = {
+  lang: ["en", "pt"],
+  consent: ["grant", "deny"],
+  cat: [...Object.keys(CAT_FILES), ".secrets"],
+};
+
+/** From a list of candidates for a prefix, the sole match to complete to (if any). */
+function pick(candidates: string[]): { completed?: string; candidates: string[] } {
   return candidates.length === 1 ? { completed: candidates[0], candidates } : { candidates };
+}
+
+/**
+ * Tab-completion for the current input line. Before the first space it completes
+ * the command name (bash-style: sole match completes, ambiguity lists). After a
+ * space it completes the last argument against that command's known vocabulary,
+ * returning the full `command arg` line to replace the input with. An empty or
+ * unknown target yields no `completed`.
+ */
+export function completeCommand(input: string): { completed?: string; candidates: string[] } {
+  const line = input.replace(/^\s+/, "");
+  if (!line) return { candidates: [] };
+
+  const parts = line.split(/\s+/);
+  if (parts.length === 1) {
+    const p = parts[0].toLowerCase();
+    return pick(completableCommands.filter((n) => n.startsWith(p)));
+  }
+
+  const cmd = parts[0].toLowerCase();
+  const pool = ARG_COMPLETIONS[cmd];
+  if (!pool) return { candidates: [] };
+  const argPrefix = parts[parts.length - 1].toLowerCase();
+  const matches = pool.filter((a) => a.toLowerCase().startsWith(argPrefix));
+  const { completed, candidates } = pick(matches);
+  // Rebuild the whole line so the buffer can replace the input verbatim.
+  return { completed: completed ? `${cmd} ${completed}` : undefined, candidates };
 }
 
 /** Runs an output-producing command, or a "not found" line for an unknown one. */

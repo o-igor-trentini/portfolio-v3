@@ -3,10 +3,12 @@
 import { usePortfolio } from "@/components/providers/PortfolioProvider";
 import { Section } from "../ui/Section";
 import { ExternalLink } from "../ui/ExternalLink";
+import { MaybeExternalLink } from "../ui/MaybeExternalLink";
 import { IconButton } from "../ui/IconButton";
 import { CheckIcon, CopyIcon } from "../ui/Icons";
 import { contacts, resumeHref, type Contact as ContactEntry } from "@/lib/content";
 import { track } from "@/lib/analytics";
+import { isExternalHref } from "@/lib/url";
 import { format } from "@/lib/format";
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 import styles from "./Contact.module.css";
@@ -44,7 +46,7 @@ function ContactRow({ contact: c }: { contact: ContactEntry }) {
 
   // `mailto:` opens the mail client in place — not a new tab — so it's a plain
   // anchor without the external/new-tab affordances the http links carry.
-  const isExternal = c.href.startsWith("http");
+  const isExternal = isExternalHref(c.href);
 
   const handleCopy = () => {
     // Copy the full URL for web profiles, but the bare address for email
@@ -63,20 +65,14 @@ function ContactRow({ contact: c }: { contact: ContactEntry }) {
 
   return (
     <div className={styles["contact-row"]}>
-      {isExternal ? (
-        <ExternalLink
-          href={c.href}
-          className={styles["contact-row__link"]}
-          newTabLabel={t.a11y.newTab}
-          onClick={onClick}
-        >
-          {inner}
-        </ExternalLink>
-      ) : (
-        <a href={c.href} className={styles["contact-row__link"]} onClick={onClick}>
-          {inner}
-        </a>
-      )}
+      <MaybeExternalLink
+        href={c.href}
+        className={styles["contact-row__link"]}
+        newTabLabel={t.a11y.newTab}
+        onClick={onClick}
+      >
+        {inner}
+      </MaybeExternalLink>
       <IconButton
         className={styles["contact-row__copy"]}
         aria-label={format(copied ? t.a11y.copied : t.a11y.copy, { label: c.label })}

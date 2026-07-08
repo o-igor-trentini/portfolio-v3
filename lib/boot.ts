@@ -1,6 +1,15 @@
 import type { ThemePref } from "@/site.config";
 
 /**
+ * Pre-paint accent CSS (as a string): sets `--accent` for dark and light before
+ * any JS runs. Shared by both root shells (RootShell and the standalone 404),
+ * which must emit byte-identical CSS to avoid an accent flash between them.
+ */
+export function buildAccentCss(accent: { d: string; l: string }): string {
+  return `:root{--accent:${accent.d}}html[data-theme="light"]{--accent:${accent.l}}`;
+}
+
+/**
  * The concrete theme applied before JS runs and whenever theme detection throws
  * — `system` has no server-known value, so it degrades to dark.
  */

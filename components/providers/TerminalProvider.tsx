@@ -1,8 +1,9 @@
 "use client";
 
-import { createContext, useContext, useMemo, type ReactNode } from "react";
+import { useMemo, type ReactNode } from "react";
 import type { TerminalSource } from "@/lib/analytics";
 import { useTerminal } from "@/hooks/useTerminal";
+import { createSafeContext } from "./createSafeContext";
 
 interface TerminalContextValue {
   termOpen: boolean;
@@ -12,13 +13,11 @@ interface TerminalContextValue {
   bonusNonce: number;
 }
 
-const TerminalContext = createContext<TerminalContextValue | null>(null);
-
-export function useTerminalControls(): TerminalContextValue {
-  const ctx = useContext(TerminalContext);
-  if (!ctx) throw new Error("useTerminalControls must be used within <TerminalProvider>");
-  return ctx;
-}
+const [TerminalContext, useTerminalControls] = createSafeContext<TerminalContextValue>(
+  "useTerminalControls",
+  "TerminalProvider",
+);
+export { useTerminalControls };
 
 /**
  * Holds the terminal's open/close + Konami state, split out of PortfolioProvider

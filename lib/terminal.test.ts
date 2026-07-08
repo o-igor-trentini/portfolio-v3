@@ -12,6 +12,8 @@ function ctx(over: Partial<CommandCtx> = {}): CommandCtx {
     name: "Tester",
     setLang: vi.fn(),
     toggleTheme: vi.fn(),
+    consent: null,
+    setConsent: vi.fn(),
     ...over,
   };
 }
@@ -103,6 +105,39 @@ describe("runTerminalCommand", () => {
     const b = runTerminalCommand("cv", ctx({ lang: "pt" }));
     expect(b.map((l) => l.text)).toEqual(a.map((l) => l.text));
   });
+
+  it("cat reads a mapped file through its section handler", () => {
+    const about = runTerminalCommand("about", ctx({ name: "X" }));
+    const catted = runTerminalCommand("cat", ctx({ name: "X", args: ["about.md"] }));
+    expect(catted.map((l) => l.text)).toEqual(about.map((l) => l.text));
+  });
+
+  it("cat keeps the .secrets gag, the directory notice and denies unknown files", () => {
+    expect(runTerminalCommand("cat", ctx({ args: [".secrets"] }))[0].text).toBe("nice try ;)");
+    expect(runTerminalCommand("cat", ctx({ args: ["projects/"] }))[0].text).toContain(
+      "Is a directory",
+    );
+    expect(runTerminalCommand("cat", ctx({ args: ["passwd"] }))[0].text).toContain(
+      "permission denied",
+    );
+  });
+
+  it("consent reports the current decision and changes it via the callback", () => {
+    const setConsent = vi.fn();
+    expect(runTerminalCommand("consent", ctx({ consent: null }))[0].text).toContain("not set");
+    expect(runTerminalCommand("consent", ctx({ consent: "granted" }))[0].text).toContain("granted");
+
+    runTerminalCommand("consent", ctx({ args: ["grant"], setConsent }));
+    expect(setConsent).toHaveBeenCalledWith("granted");
+    runTerminalCommand("consent", ctx({ args: ["deny"], setConsent }));
+    expect(setConsent).toHaveBeenCalledWith("denied");
+  });
+
+  it("keys lists the global keyboard shortcuts", () => {
+    const out = runTerminalCommand("keys", ctx());
+    expect(out[0].text).toBe("keyboard");
+    expect(out.some((l) => l.text.includes("Esc"))).toBe(true);
+  });
 });
 
 describe("completeCommand", () => {
@@ -124,5 +159,21 @@ describe("completeCommand", () => {
 
   it("yields nothing for an empty prefix", () => {
     expect(completeCommand("   ").candidates).toEqual([]);
+  });
+
+  it("completes a command argument to the full line (lang p → lang pt)", () => {
+    expect(completeCommand("lang p").completed).toBe("lang pt");
+    expect(completeCommand("consent gr").completed).toBe("consent grant");
+    expect(completeCommand("cat about").completed).toBe("cat about.md");
+  });
+
+  it("lists ambiguous arguments without completing", () => {
+    const r = completeCommand("lang ");
+    expect(r.completed).toBeUndefined();
+    expect(r.candidates).toEqual(expect.arrayContaining(["en", "pt"]));
+  });
+
+  it("yields nothing for arguments of a command without a known vocabulary", () => {
+    expect(completeCommand("echo hel").candidates).toEqual([]);
   });
 });

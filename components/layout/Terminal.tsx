@@ -72,7 +72,10 @@ export function Terminal() {
               spellCheck={false}
               autoComplete="off"
               autoCapitalize="off"
-              data-handles-tab
+              // Only claim forward-Tab (for completion) while there's a prefix;
+              // an empty input leaves Tab to the focus trap so it can reach the
+              // close button. Must stay in sync with the guard in useTerminalBuffer.
+              data-handles-tab={input ? "" : undefined}
               aria-label={t.a11y.terminalInput}
             />
           </div>
