@@ -31,7 +31,7 @@ export default defineConfig({
       // lcov feeds optional Codecov / editor gutters; text/html stay for local use.
       reporter: ["text", "html", "lcov"],
       // Ratchet: fail CI if coverage regresses below the current floor.
-      thresholds: { statements: 80, branches: 65, functions: 75, lines: 80 },
+      thresholds: { statements: 84, branches: 72, functions: 80, lines: 86 },
     },
   },
 });
