@@ -36,7 +36,7 @@ export function ConsentBanner() {
   };
 
   return (
-    <div className={styles.consent} role="dialog" aria-label="Cookie consent" aria-live="polite">
+    <div className={styles.consent} role="dialog" aria-label={t.a11y.consent} aria-live="polite">
       <p className={styles.consent__message}>{t.consent.message}</p>
       <div className={styles.consent__actions}>
         <button

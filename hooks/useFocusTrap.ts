@@ -26,6 +26,12 @@ export function useFocusTrap(containerRef: RefObject<HTMLElement | null>, active
 
     function onKeyDown(e: KeyboardEvent) {
       if (e.key !== "Tab") return;
+      // A control inside the trap may handle forward-Tab itself (the terminal
+      // input uses it for command completion). Don't hijack focus in that case;
+      // Shift+Tab still cycles normally so focus can leave the input.
+      if (!e.shiftKey && e.target instanceof Element && e.target.closest("[data-handles-tab]")) {
+        return;
+      }
       const el = containerRef.current;
       if (!el) return;
       const focusable = Array.from(el.querySelectorAll<HTMLElement>(FOCUSABLE));

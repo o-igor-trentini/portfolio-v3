@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { usePortfolio } from "@/components/providers/PortfolioProvider";
 import { useTerminalControls } from "@/components/providers/TerminalProvider";
 import { useTerminalBuffer } from "@/hooks/useTerminalBuffer";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
@@ -9,6 +10,7 @@ import { PROMPT } from "@/site.config";
 import styles from "./Terminal.module.css";
 
 export function Terminal() {
+  const { t } = usePortfolio();
   const { termOpen, closeTerm } = useTerminalControls();
 
   const windowRef = useRef<HTMLDivElement>(null);
@@ -26,7 +28,7 @@ export function Terminal() {
         className={styles["term-window"]}
         role="dialog"
         aria-modal="true"
-        aria-label="Terminal"
+        aria-label={t.a11y.terminal}
         onClick={(e) => e.stopPropagation()}
       >
         <div className={styles["term-titlebar"]}>
@@ -37,7 +39,7 @@ export function Terminal() {
           <button
             type="button"
             className={styles["term-close"]}
-            aria-label="Close terminal"
+            aria-label={t.a11y.terminalClose}
             onClick={closeTerm}
           >
             ✕
@@ -48,7 +50,7 @@ export function Terminal() {
           ref={bodyRef}
           role="log"
           aria-live="polite"
-          aria-label="terminal output"
+          aria-label={t.a11y.terminalOutput}
           onClick={() => inputRef.current?.focus()}
         >
           {lines.map((l, i) => (
@@ -68,7 +70,8 @@ export function Terminal() {
               spellCheck={false}
               autoComplete="off"
               autoCapitalize="off"
-              aria-label="terminal input"
+              data-handles-tab
+              aria-label={t.a11y.terminalInput}
             />
           </div>
         </div>

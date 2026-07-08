@@ -5,14 +5,15 @@ import { Section } from "../ui/Section";
 import { ExternalLink } from "../ui/ExternalLink";
 import { IconButton } from "../ui/IconButton";
 import { CheckIcon, CopyIcon } from "../ui/Icons";
-import { contacts, type Contact as ContactEntry } from "@/lib/content";
+import { contacts, resumeHref, type Contact as ContactEntry } from "@/lib/content";
 import { track } from "@/lib/analytics";
 import { format } from "@/lib/format";
 import { useCopyToClipboard } from "@/hooks/useCopyToClipboard";
 import styles from "./Contact.module.css";
 
 export function Contact() {
-  const { t } = usePortfolio();
+  const { t, lang } = usePortfolio();
+  const resume = resumeHref(lang);
   return (
     <Section id="contact" label={t.contact.label} note={t.contact.note}>
       <div className={styles.contact__list}>
@@ -20,6 +21,19 @@ export function Contact() {
           <ContactRow key={c.label} contact={c} />
         ))}
       </div>
+      {resume && (
+        <ExternalLink
+          href={resume}
+          className={styles.contact__resume}
+          newTabLabel={t.a11y.newTab}
+          onClick={() => track({ name: "contact_click", params: { label: "resume" } })}
+        >
+          {t.contact.resume}
+          <span className={styles["contact-row__ext"]} aria-hidden="true">
+            ↗
+          </span>
+        </ExternalLink>
+      )}
     </Section>
   );
 }

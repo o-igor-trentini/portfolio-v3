@@ -30,6 +30,12 @@ function press(shiftKey: boolean) {
   return e;
 }
 
+function pressFrom(el: HTMLElement, shiftKey: boolean) {
+  const e = new KeyboardEvent("keydown", { key: "Tab", shiftKey, bubbles: true, cancelable: true });
+  el.dispatchEvent(e);
+  return e;
+}
+
 describe("useFocusTrap", () => {
   it("wraps Tab from the last focusable back to the first", () => {
     const ref = createRef<HTMLDivElement>();
@@ -50,6 +56,33 @@ describe("useFocusTrap", () => {
 
     first.focus();
     const e = press(true);
+
+    expect(e.defaultPrevented).toBe(true);
+    expect(document.activeElement).toBe(last);
+  });
+
+  it("lets an element with data-handles-tab keep forward Tab (e.g. terminal completion)", () => {
+    const ref = createRef<HTMLDivElement>();
+    ref.current = container;
+    last.setAttribute("data-handles-tab", ""); // input opts out of trap's Tab
+    renderHook(() => useFocusTrap(ref, true));
+
+    last.focus();
+    const e = pressFrom(last, false);
+
+    // Trap must not hijack focus, so the element can complete in place.
+    expect(e.defaultPrevented).toBe(false);
+    expect(document.activeElement).toBe(last);
+  });
+
+  it("still cycles Shift+Tab even from a data-handles-tab element", () => {
+    const ref = createRef<HTMLDivElement>();
+    ref.current = container;
+    first.setAttribute("data-handles-tab", ""); // opt-out only covers forward Tab
+    renderHook(() => useFocusTrap(ref, true));
+
+    first.focus();
+    const e = pressFrom(first, true);
 
     expect(e.defaultPrevented).toBe(true);
     expect(document.activeElement).toBe(last);

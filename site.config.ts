@@ -4,6 +4,8 @@
  * build-time constants that are easy to edit.
  */
 
+import type { Lang } from "@/lib/i18n";
+
 export type Accent = "green" | "blue" | "amber" | "violet" | "mono";
 export type ThemePref = "dark" | "light" | "system";
 
@@ -34,6 +36,18 @@ export const siteConfig = {
   // Feature flags / theming
   accent: "blue" as Accent,
   defaultTheme: "dark" as ThemePref,
+
+  /**
+   * Per-locale résumé/CV path served from `public/`. Optional per language: a
+   * missing entry hides the Contact download link and makes the terminal
+   * `resume` command print the shared WIP line. Drop the matching PDFs in
+   * `public/` (e.g. `public/resume.pdf`, `public/curriculo.pdf`) or edit the
+   * paths below to your filenames.
+   */
+  resume: {
+    en: "/resume.pdf",
+    pt: "/curriculo.pdf",
+  } as Partial<Record<Lang, string>>,
 
   /**
    * Canonical site URL — used for metadata, Open Graph, sitemap and canonical

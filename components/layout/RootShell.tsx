@@ -4,6 +4,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import "@/app/globals.css";
 import { accentMap, siteConfig } from "@/site.config";
 import { buildJsonLd } from "@/lib/seo";
+import { buildThemeScript, consentDefaultScript, themeFallback } from "@/lib/boot";
 import { locales } from "@/lib/locale";
 import type { Lang } from "@/lib/i18n";
 
@@ -21,19 +22,11 @@ const accentCss = `:root{--accent:${accent.d}}html[data-theme="light"]{--accent:
 
 // Set data-theme before first paint to avoid a flash of the wrong theme.
 const pref = siteConfig.defaultTheme;
-const fallback = pref === "light" ? "light" : "dark";
-const themeScript = `!function(){try{var d=document.documentElement,s=localStorage.getItem('pf_theme'),t;if(s==='light'||s==='dark'){t=s}else{var p='${pref}';if(p==='light'||p==='dark'){t=p}else if(window.matchMedia&&matchMedia('(prefers-color-scheme: light)').matches){t='light'}else{t='dark'}}d.dataset.theme=t}catch(e){document.documentElement.dataset.theme='${fallback}'}}();`;
+const fallback = themeFallback(pref);
+const themeScript = buildThemeScript(pref);
 
 // GA is only wired up when a measurement ID is present (prod builds).
 const gaId = siteConfig.gaId;
-
-// Consent Mode v2: default every storage to `denied` *before* the gtag config
-// command runs (config is injected afterInteractive by <GoogleAnalytics>). GA
-// therefore sends cookieless pings until the visitor accepts in ConsentBanner,
-// which flips the relevant grants to `granted`.
-const consentDefaultScript =
-  `window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}` +
-  `gtag('consent','default',{ad_storage:'denied',analytics_storage:'denied',ad_user_data:'denied',ad_personalization:'denied',wait_for_update:500});`;
 
 /**
  * The single HTML shell shared by both per-locale root layouts. Each route group

@@ -8,7 +8,7 @@ import {
   yearsOfExperience,
   type YearMonth,
 } from "./date";
-import { CAREER_START } from "@/site.config";
+import { CAREER_START, siteConfig } from "@/site.config";
 import { format } from "./format";
 
 export interface StackGroup {
@@ -256,6 +256,9 @@ export const expIndustry = (e: Experience, lang: Lang) =>
   byLang(e.industry_en, e.industry_pt, lang);
 // Tags are optional per experience, so this one keeps its empty-list default.
 export const expTags = (e: Experience, lang: Lang) => byLang(e.tags_en, e.tags_pt, lang) ?? [];
+
+/** Résumé/CV path for the active locale, or undefined when none is configured. */
+export const resumeHref = (lang: Lang): string | undefined => siteConfig.resume?.[lang];
 
 export const stackLabel = (g: StackGroup, lang: Lang) => byLang(g.label_en, g.label_pt, lang);
 export const projectDesc = (p: Project, lang: Lang) => byLang(p.desc_en, p.desc_pt, lang);

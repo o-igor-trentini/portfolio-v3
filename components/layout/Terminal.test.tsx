@@ -29,7 +29,7 @@ describe("Terminal", () => {
     renderTerminal();
     open();
 
-    const dialog = screen.getByRole("dialog", { name: "Terminal" });
+    const dialog = screen.getByRole("dialog", { name: i18n.en.a11y.terminal });
     expect(dialog).toHaveAttribute("aria-modal", "true");
 
     const log = screen.getByRole("log");

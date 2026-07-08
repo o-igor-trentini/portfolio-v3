@@ -1,5 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { runTerminalCommand, type CommandCtx } from "./terminal";
+import { completeCommand, runTerminalCommand, type CommandCtx } from "./terminal";
+import { resumeHref } from "./content";
+import { i18n } from "./i18n";
+import { siteConfig } from "@/site.config";
 
 function ctx(over: Partial<CommandCtx> = {}): CommandCtx {
   return {
@@ -83,5 +86,43 @@ describe("runTerminalCommand", () => {
     const out = runTerminalCommand("experience", ctx({ lang: "en" }));
     expect(out[0].text).toBe("# work history");
     expect(out.some((l) => l.text.includes("Sep 2021 — May 2026 · 4 yrs 9 mos"))).toBe(true);
+  });
+
+  it("resume prints the configured URL for the locale (or WIP when unset)", () => {
+    const href = resumeHref("en");
+    const out = runTerminalCommand("resume", ctx({ lang: "en" }));
+    if (href) {
+      expect(out[0].text).toBe("→ " + siteConfig.url + href);
+    } else {
+      expect(out[0].text).toContain(i18n.en.common.wip);
+    }
+  });
+
+  it("aliases cv to the same handler as resume", () => {
+    const a = runTerminalCommand("resume", ctx({ lang: "pt" }));
+    const b = runTerminalCommand("cv", ctx({ lang: "pt" }));
+    expect(b.map((l) => l.text)).toEqual(a.map((l) => l.text));
+  });
+});
+
+describe("completeCommand", () => {
+  it("completes a unique prefix to its full command name", () => {
+    expect(completeCommand("neo").completed).toBe("neofetch");
+  });
+
+  it("returns candidates without completing when the prefix is ambiguous", () => {
+    const r = completeCommand("c");
+    expect(r.completed).toBeUndefined();
+    expect(r.candidates).toEqual(expect.arrayContaining(["contact", "certs"]));
+  });
+
+  it("never completes to aliases or hidden easter eggs", () => {
+    expect(completeCommand("sudo").candidates).toEqual([]); // hidden
+    expect(completeCommand("idioma").candidates).toEqual([]); // alias of languages
+    expect(completeCommand("cv").candidates).toEqual([]); // alias of resume
+  });
+
+  it("yields nothing for an empty prefix", () => {
+    expect(completeCommand("   ").candidates).toEqual([]);
   });
 });

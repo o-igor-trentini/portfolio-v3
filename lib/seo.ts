@@ -77,6 +77,10 @@ export function buildJsonLd(lang: Lang): Record<string, unknown> {
   const siteId = `${siteConfig.url}/#website`;
   const inLanguage = locales[lang].htmlLang;
 
+  // Surface the contact email (bare address, not the `mailto:` href) as
+  // structured data — a cheap signal for an "open to roles" profile page.
+  const email = contacts.find((c) => c.href.startsWith("mailto:"))?.href.replace(/^mailto:/, "");
+
   const person = {
     "@type": "Person",
     "@id": personId,
@@ -85,6 +89,7 @@ export function buildJsonLd(lang: Lang): Record<string, unknown> {
     image: new URL("/apple-icon", siteConfig.url).toString(),
     jobTitle: siteConfig.roleShort,
     description: t.seo.description,
+    ...(email ? { email } : {}),
     // Derived from the visible stack (lib/content) so the two never disagree,
     // plus a few concepts that aren't listed as concrete technologies.
     knowsAbout: ["Distributed systems", ...stackItems],

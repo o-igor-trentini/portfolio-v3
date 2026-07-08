@@ -16,7 +16,7 @@ export function Languages() {
         {languages.map((l) => (
           <Card key={l.name_en} className={styles.langcard}>
             <div className={styles.langcard__head}>
-              <span className={styles.langcard__name}>{langName(l, lang)}</span>
+              <h3 className={styles.langcard__name}>{langName(l, lang)}</h3>
               <span className={styles.langcard__level}>{langLevel(l, lang)}</span>
             </div>
             <div className={styles.langcard__bar}>

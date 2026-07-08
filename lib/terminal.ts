@@ -12,12 +12,14 @@ import {
   languages,
   projectDesc,
   projects,
+  resumeHref,
   stackGroups,
   stackHighlight,
   stackLabel,
   withYears,
 } from "./content";
 import { nowYM } from "./date";
+import { siteConfig } from "@/site.config";
 
 // Compact stack line for neofetch, derived from the canonical stack (lib/content).
 const neofetchStack = stackHighlight.join(" · ");
@@ -49,6 +51,18 @@ export const mk = (text: string, color: Color = COLOR.muted, prompt?: string): L
   color,
   prompt,
 });
+
+/**
+ * A list command's output: an accent `# header` followed by its rows. When the
+ * rows are empty and `emptyLang` is given, the header is followed by the shared
+ * "working on it…" line instead — the single place that empty-state lives.
+ */
+function listSection(header: string, rows: Line[], emptyLang?: Lang): Line[] {
+  if (rows.length === 0 && emptyLang !== undefined) {
+    return [mk(header, COLOR.accent), mk("  " + i18n[emptyLang].common.wip, COLOR.dim)];
+  }
+  return [mk(header, COLOR.accent), ...rows];
+}
 
 export function introLines(): Line[] {
   return [
@@ -105,77 +119,74 @@ const about: Handler = (ctx) => {
 
 const experience: Handler = (ctx) => {
   const now = nowYM();
-  const out: Line[] = [mk("# work history", COLOR.accent)];
-  experiences.forEach((e) => {
-    const { period, duration, tags } = formatExperience(e, ctx.lang, now);
-    out.push(
-      mk("  ▸ " + e.company + "  —  " + expRole(e, ctx.lang), COLOR.fg),
-      // `now` is always set here, so duration is never null.
-      mk(`    ${period} · ${duration}`, COLOR.muted),
-      mk(
-        "    " +
-          expMode(e, ctx.lang) +
-          " · " +
-          expIndustry(e, ctx.lang) +
-          (tags.length ? "  [" + tags.join(", ") + "]" : ""),
-        COLOR.dim,
-      ),
-    );
-  });
-  return out;
+  return listSection(
+    "# work history",
+    experiences.flatMap((e) => {
+      const { period, duration, tags } = formatExperience(e, ctx.lang, now);
+      return [
+        mk("  ▸ " + e.company + "  —  " + expRole(e, ctx.lang), COLOR.fg),
+        // `now` is always set here, so duration is never null.
+        mk(`    ${period} · ${duration}`, COLOR.muted),
+        mk(
+          "    " +
+            expMode(e, ctx.lang) +
+            " · " +
+            expIndustry(e, ctx.lang) +
+            (tags.length ? "  [" + tags.join(", ") + "]" : ""),
+          COLOR.dim,
+        ),
+      ];
+    }),
+  );
 };
 
-const skills: Handler = (ctx) => {
-  const out: Line[] = [mk("# stack", COLOR.accent)];
-  stackGroups.forEach((g) => {
-    const lbl = stackLabel(g, ctx.lang).padEnd(11, " ");
-    out.push(mk("  " + lbl + g.items.join("  ·  "), COLOR.muted));
-  });
-  return out;
-};
+const skills: Handler = (ctx) =>
+  listSection(
+    "# stack",
+    stackGroups.map((g) =>
+      mk("  " + stackLabel(g, ctx.lang).padEnd(11) + g.items.join("  ·  "), COLOR.muted),
+    ),
+  );
 
-const projectsCmd: Handler = (ctx) => {
-  const out: Line[] = [mk("# selected work", COLOR.accent)];
-  if (projects.length === 0) {
-    out.push(mk("  " + i18n[ctx.lang].common.wip, COLOR.dim));
-    return out;
-  }
-  projects.forEach((p) => {
-    out.push(
+const projectsCmd: Handler = (ctx) =>
+  listSection(
+    "# selected work",
+    projects.flatMap((p) => [
       mk("  ▸ " + p.name, COLOR.fg),
       mk("    " + projectDesc(p, ctx.lang), COLOR.muted),
       mk("    [" + p.tags.join(", ") + "]", COLOR.dim),
-    );
-  });
-  return out;
-};
-
-const languagesCmd: Handler = (ctx) => {
-  const out: Line[] = [mk("# languages", COLOR.accent)];
-  languages.forEach((l) => {
-    const nm = langName(l, ctx.lang);
-    const lv = langLevel(l, ctx.lang);
-    out.push(mk("  " + nm.padEnd(12, " ") + lv, COLOR.muted));
-  });
-  return out;
-};
-
-const certsCmd: Handler = (ctx) => {
-  const out: Line[] = [mk("# certifications", COLOR.accent)];
-  if (certs.length === 0) {
-    out.push(mk("  " + i18n[ctx.lang].common.wip, COLOR.dim));
-    return out;
-  }
-  certs.forEach((c) =>
-    out.push(mk("  ✓ " + c.name, COLOR.fg), mk("    " + c.issuer + " · " + c.year, COLOR.muted)),
+    ]),
+    ctx.lang,
   );
-  return out;
-};
 
-const contact: Handler = () => {
-  const out: Line[] = [mk("# reach me", COLOR.accent)];
-  contacts.forEach((c) => out.push(mk("  " + c.label.padEnd(10, " ") + c.value, COLOR.muted)));
-  return out;
+const languagesCmd: Handler = (ctx) =>
+  listSection(
+    "# languages",
+    languages.map((l) =>
+      mk("  " + langName(l, ctx.lang).padEnd(12) + langLevel(l, ctx.lang), COLOR.muted),
+    ),
+  );
+
+const certsCmd: Handler = (ctx) =>
+  listSection(
+    "# certifications",
+    certs.flatMap((c) => [
+      mk("  ✓ " + c.name, COLOR.fg),
+      mk("    " + c.issuer + " · " + c.year, COLOR.muted),
+    ]),
+    ctx.lang,
+  );
+
+const contact: Handler = () =>
+  listSection(
+    "# reach me",
+    contacts.map((c) => mk("  " + c.label.padEnd(10) + c.value, COLOR.muted)),
+  );
+
+const resumeCmd: Handler = (ctx) => {
+  const href = resumeHref(ctx.lang);
+  if (!href) return [mk("  " + i18n[ctx.lang].common.wip, COLOR.dim)];
+  return [mk("→ " + siteConfig.url + href, COLOR.accent)];
 };
 
 const theme: Handler = (ctx) => {
@@ -247,6 +258,8 @@ const registry: CommandSpec[] = [
   { name: "certs", handler: certsCmd, description: "certifications" },
   { name: "certifications", handler: certsCmd },
   { name: "contact", handler: contact, description: "how to reach me" },
+  { name: "resume", handler: resumeCmd, description: "download my résumé" },
+  { name: "cv", handler: resumeCmd },
   { name: "theme", handler: theme, description: "toggle light / dark" },
   { name: "lang", handler: lang, description: "switch language (lang en|pt)" },
   { name: "neofetch", handler: neofetchCmd, description: "system info" },
@@ -262,6 +275,23 @@ const registry: CommandSpec[] = [
 const commands: Record<string, Handler> = Object.fromEntries(
   registry.filter((c) => c.handler).map((c) => [c.name, c.handler as Handler]),
 );
+
+/** Public command names (those listed in `help`) — the pool for Tab-completion. */
+export const completableCommands: string[] = registry
+  .filter((c) => c.description)
+  .map((c) => c.name);
+
+/**
+ * Tab-completion for a partial command name: returns the sole match to complete
+ * to, or the candidate list to display when the prefix is ambiguous (bash-style).
+ * An empty or already-complete-with-many prefix yields no `completed`.
+ */
+export function completeCommand(prefix: string): { completed?: string; candidates: string[] } {
+  const p = prefix.trim().toLowerCase();
+  if (!p) return { candidates: [] };
+  const candidates = completableCommands.filter((n) => n.startsWith(p));
+  return candidates.length === 1 ? { completed: candidates[0], candidates } : { candidates };
+}
 
 /** Runs an output-producing command, or a "not found" line for an unknown one. */
 export function runTerminalCommand(cname: string, ctx: CommandCtx): Line[] {

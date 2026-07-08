@@ -41,33 +41,25 @@ export function Header() {
         <nav className={styles.nav}>
           <div className={styles["nav-links"]}>{links}</div>
 
-          <div className={styles.langtoggle} role="group" aria-label="Language">
-            <Link
-              href={locales.en.path}
-              className={cx(
-                styles.langtoggle__btn,
-                lang === "en" && styles["langtoggle__btn--active"],
-              )}
-              aria-current={lang === "en" ? "true" : undefined}
-              onClick={() => switchLang("en")}
-            >
-              en
-            </Link>
-            <Link
-              href={locales.pt.path}
-              className={cx(
-                styles.langtoggle__btn,
-                lang === "pt" && styles["langtoggle__btn--active"],
-              )}
-              aria-current={lang === "pt" ? "true" : undefined}
-              onClick={() => switchLang("pt")}
-            >
-              pt
-            </Link>
+          <div className={styles.langtoggle} role="group" aria-label={t.a11y.language}>
+            {(["en", "pt"] as const).map((code) => (
+              <Link
+                key={code}
+                href={locales[code].path}
+                className={cx(
+                  styles.langtoggle__btn,
+                  lang === code && styles["langtoggle__btn--active"],
+                )}
+                aria-current={lang === code ? "true" : undefined}
+                onClick={() => switchLang(code)}
+              >
+                {code}
+              </Link>
+            ))}
           </div>
 
           <IconButton
-            aria-label={isDark ? "Switch to light theme" : "Switch to dark theme"}
+            aria-label={isDark ? t.a11y.themeToLight : t.a11y.themeToDark}
             onClick={toggleTheme}
           >
             {isDark ? <MoonIcon /> : <SunIcon />}
@@ -75,8 +67,9 @@ export function Header() {
 
           <IconButton
             className={styles["nav-burger"]}
-            aria-label="Menu"
+            aria-label={t.a11y.menu}
             aria-expanded={menuOpen}
+            aria-controls="mobile-menu"
             onClick={() => setMenuOpen((o) => !o)}
           >
             {menuOpen ? <CloseIcon /> : <BurgerIcon />}
@@ -84,7 +77,11 @@ export function Header() {
         </nav>
       </div>
 
-      {menuOpen && <div className={styles["mobile-menu"]}>{links}</div>}
+      {menuOpen && (
+        <nav id="mobile-menu" className={styles["mobile-menu"]} aria-label={t.a11y.menu}>
+          {links}
+        </nav>
+      )}
     </header>
   );
 }

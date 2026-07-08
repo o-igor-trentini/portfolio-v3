@@ -1,5 +1,12 @@
 import { useEffect, useRef, useState, type KeyboardEvent, type RefObject } from "react";
-import { COLOR, introLines, mk, runTerminalCommand, type Line } from "@/lib/terminal";
+import {
+  COLOR,
+  completeCommand,
+  introLines,
+  mk,
+  runTerminalCommand,
+  type Line,
+} from "@/lib/terminal";
 import { track } from "@/lib/analytics";
 import { PROMPT } from "@/site.config";
 import { usePortfolio } from "@/components/providers/PortfolioProvider";
@@ -103,6 +110,17 @@ export function useTerminalBuffer(): TerminalBuffer {
     setLines((prev) => [...prev, echo, ...out, mk("")]);
   }
 
+  function complete() {
+    // Only complete a bare command name — once there's a space, args are typed.
+    if (/\s/.test(input)) return;
+    const { completed, candidates } = completeCommand(input);
+    if (completed) {
+      setInput(completed);
+    } else if (candidates.length > 1) {
+      setLines((prev) => [...prev, mk(candidates.join("   "), COLOR.muted)]);
+    }
+  }
+
   function onInputKey(e: KeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") {
       e.preventDefault();
@@ -113,6 +131,9 @@ export function useTerminalBuffer(): TerminalBuffer {
     } else if (e.key === "ArrowDown") {
       e.preventDefault();
       recall(1);
+    } else if (e.key === "Tab" && !e.shiftKey) {
+      e.preventDefault();
+      complete();
     }
   }
 

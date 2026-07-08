@@ -30,13 +30,30 @@ export interface Dict {
   stack: { label: string; note: string; chipLess: string; moreAria: string; lessAria: string };
   projects: { label: string; note: string };
   certs: { label: string; note: string; verify: string };
-  contact: { label: string; note: string };
+  contact: { label: string; note: string; resume: string };
   footer: { built: string; terminalBtn: string };
   common: { more: string; less: string; stackMore: string; stackLess: string; wip: string };
   consent: { message: string; accept: string; decline: string };
   // `copy`/`copied` are the copy-to-clipboard button label and its post-copy
   // confirmation; both take a `{label}` token for the contact being copied.
-  a11y: { skip: string; newTab: string; copy: string; copied: string };
+  // The remaining keys localize the interactive chrome's `aria-label`s (theme
+  // toggle, menu, language group and the terminal dialog) so screen readers on
+  // `/pt/` are announced in Portuguese too.
+  a11y: {
+    skip: string;
+    newTab: string;
+    copy: string;
+    copied: string;
+    themeToLight: string;
+    themeToDark: string;
+    menu: string;
+    language: string;
+    terminal: string;
+    terminalClose: string;
+    terminalOutput: string;
+    terminalInput: string;
+    consent: string;
+  };
 }
 
 export const i18n: Record<Lang, Dict> = {
@@ -89,7 +106,11 @@ export const i18n: Record<Lang, Dict> = {
       note: "credentials & continued learning",
       verify: "view credential",
     },
-    contact: { label: "contact", note: "open to backend & platform engineering roles" },
+    contact: {
+      label: "contact",
+      note: "open to backend & platform engineering roles",
+      resume: "download résumé",
+    },
     footer: { built: "built with care · no frameworks were harmed", terminalBtn: "terminal" },
     common: {
       more: "show more",
@@ -109,6 +130,15 @@ export const i18n: Record<Lang, Dict> = {
       newTab: "opens in a new tab",
       copy: "copy {label}",
       copied: "{label} copied",
+      themeToLight: "switch to light theme",
+      themeToDark: "switch to dark theme",
+      menu: "menu",
+      language: "language",
+      terminal: "terminal",
+      terminalClose: "close terminal",
+      terminalOutput: "terminal output",
+      terminalInput: "terminal input",
+      consent: "cookie consent",
     },
   },
   pt: {
@@ -160,7 +190,11 @@ export const i18n: Record<Lang, Dict> = {
       note: "credenciais & aprendizado contínuo",
       verify: "ver credencial",
     },
-    contact: { label: "contato", note: "aberto a vagas de backend & plataforma" },
+    contact: {
+      label: "contato",
+      note: "aberto a vagas de backend & plataforma",
+      resume: "baixar currículo",
+    },
     footer: { built: "feito com cuidado · nenhum framework foi ferido", terminalBtn: "terminal" },
     common: {
       more: "mostrar mais",
@@ -180,6 +214,15 @@ export const i18n: Record<Lang, Dict> = {
       newTab: "abre em nova aba",
       copy: "copiar {label}",
       copied: "{label} copiado",
+      themeToLight: "mudar para tema claro",
+      themeToDark: "mudar para tema escuro",
+      menu: "menu",
+      language: "idioma",
+      terminal: "terminal",
+      terminalClose: "fechar terminal",
+      terminalOutput: "saída do terminal",
+      terminalInput: "entrada do terminal",
+      consent: "consentimento de cookies",
     },
   },
 };

@@ -1,6 +1,7 @@
 import { ImageResponse } from "next/og";
 import { accentMap, canvas, siteConfig, PROMPT } from "@/site.config";
 import { i18n, type Lang } from "@/lib/i18n";
+import { COLOR } from "@/lib/terminal";
 
 // Shared 1200×630 Open Graph / Twitter card, rendered at build time (no
 // request-time API), so it is statically emitted under `output: export`.
@@ -10,9 +11,12 @@ import { i18n, type Lang } from "@/lib/i18n";
 export const ogSize = { width: 1200, height: 630 };
 export const ogContentType = "image/png";
 
+// The OG card shares the always-dark terminal palette, so fg/muted come straight
+// from the terminal's `COLOR` (both plain hex, safe for Satori). Only the window
+// chrome hexes below are card-specific.
 const BG = canvas.dark;
-const FG = "#e4e4e7";
-const MUTED = "#a1a1aa";
+const FG = COLOR.fg;
+const MUTED = COLOR.muted;
 const BORDER = "#26262b";
 
 export function ogAlt(lang: Lang): string {
