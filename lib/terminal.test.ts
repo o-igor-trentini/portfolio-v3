@@ -22,10 +22,16 @@ describe("runTerminalCommand", () => {
     expect(out[0].text).toContain("command not found: bogus");
   });
 
-  it("help lists the available commands", () => {
+  it("help lists the available commands (generated from the registry)", () => {
     const out = runTerminalCommand("help", ctx());
     expect(out[0].text).toBe("available commands");
     expect(out.some((l) => l.text.includes("neofetch"))).toBe(true);
+    // Control commands (handled by the buffer) are still documented.
+    expect(out.some((l) => l.text.includes("clear"))).toBe(true);
+    expect(out.some((l) => l.text.includes("exit"))).toBe(true);
+    // Aliases and hidden easter eggs are NOT listed.
+    expect(out.some((l) => l.text.includes("idiomas"))).toBe(false);
+    expect(out.some((l) => l.text.includes("sudo"))).toBe(false);
   });
 
   it("resolves aliases to the same handler (whoami → about)", () => {
@@ -61,8 +67,12 @@ describe("runTerminalCommand", () => {
     expect(out[0].text).toBe("theme → dark");
   });
 
-  it("neofetch includes role, theme and lang", () => {
-    const text = runTerminalCommand("neofetch", ctx({ theme: "dark", lang: "en" }))[0].text;
+  it("neofetch renders one line per row, including role, theme and lang", () => {
+    const out = runTerminalCommand("neofetch", ctx({ theme: "dark", lang: "en" }));
+    // Now a Line per visual row (not one \n-joined blob), like every other command.
+    expect(out.length).toBeGreaterThan(1);
+    expect(out.every((l) => !l.text.includes("\n"))).toBe(true);
+    const text = out.map((l) => l.text).join("\n");
     expect(text).toContain("theme    dark");
     expect(text).toContain("lang     en");
   });

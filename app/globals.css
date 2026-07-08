@@ -167,3 +167,37 @@ kbd {
   white-space: nowrap;
   border: 0;
 }
+
+/* ---------- print: a clean one-page résumé for "Save as PDF" ---------- */
+@media print {
+  /* Ink on white whatever the active theme; `html[data-theme]` matches the
+     specificity of the light-theme overrides above and wins by source order. */
+  html[data-theme] {
+    --bg: #fff;
+    --fg: #111;
+    --muted: #444;
+    --border: #bbb;
+    --card: #fff;
+  }
+  body {
+    background: #fff;
+  }
+  /* Drop interactive chrome that means nothing on paper: the header (nav +
+     theme/lang toggles), the footer, every button (terminal triggers, stack
+     expanders), the blinking caret and any dialog (terminal / consent). */
+  header,
+  footer,
+  button,
+  [role="dialog"],
+  .caret {
+    display: none !important;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+  /* Don't split a section across pages. */
+  section {
+    break-inside: avoid;
+  }
+}

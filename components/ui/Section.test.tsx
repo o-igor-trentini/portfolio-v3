@@ -27,9 +27,10 @@ describe("Section", () => {
     expect(screen.getByText("body")).toBeInTheDocument();
   });
 
-  it("uses the solo label modifier and omits the note (About-style)", () => {
+  it("applies the solo label modifier when there is no note (About-style)", () => {
+    // `solo` is derived from the absence of a note, not passed as a prop.
     const { container } = render(
-      <Section id="about" label="about" solo>
+      <Section id="about" label="about">
         <p>body</p>
       </Section>,
     );

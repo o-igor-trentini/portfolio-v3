@@ -39,8 +39,8 @@ dependa de request**. Tudo é resolvido em **build time**.
 - ⚠️ **`RootShell` é o root layout de verdade.** Ele renderiza `<html>`/`<body>` e é
   o único lugar com `next/font`, o script de tema pré-paint, o CSS de accent e o
   JSON-LD. Os dois `layout.tsx` são cascas finas: `export const metadata =
-  buildMetadata(lang)` + `export { viewport } from "@/lib/seo"` + `<RootShell
-  lang=…>`. O lint `no-head-element` dispara um falso-positivo no `<head>` do
+buildMetadata(lang)` + `export { viewport } from "@/lib/seo"` + `<RootShell
+lang=…>`. O lint `no-head-element` dispara um falso-positivo no `<head>` do
   `RootShell` (por ser componente, não arquivo de layout) — há um
   `eslint-disable-next-line` explicando.
 - **`trailingSlash: true`** (em `next.config.ts`) faz o export emitir
@@ -62,6 +62,11 @@ dependa de request**. Tudo é resolvido em **build time**.
 
 ## 2. Metadata por idioma — `lib/seo.ts`
 
+- **Mapa de locale único em `lib/locale.ts`.** `locales: Record<Lang, { path, htmlLang, ogLocale }>`
+  é a **fonte única** desses três valores; `buildMetadata`, `buildJsonLd`, o `sitemap`,
+  o `<html lang>` do `RootShell`, o toggle do `Header` e `useLang` **derivam** dele
+  (nada de re-declarar o mapa por arquivo). `languageAlternates` (o cluster hreflang)
+  também sai daí.
 - **`buildMetadata(lang)`** é a fonte única de metadata das duas rotas. Produz:
   `metadataBase`, `title`/`description` (de `Dict.seo`), `alternates.canonical`
   (`/` ou `/pt/`), **`alternates.languages`** (o cluster hreflang) e `openGraph`
@@ -120,10 +125,12 @@ dependa de request**. Tudo é resolvido em **build time**.
 - **Mudar título/descrição de SEO:** edite `Dict.seo` em `lib/i18n.ts` (os dois
   idiomas). Nada mais — `buildMetadata`, JSON-LD e OG leem de lá.
 - **Adicionar um idioma novo (ex.: `es`):** (1) `Lang` + entrada em `i18n` e nos
-  campos `_es` de `lib/content.ts`; (2) mapas de `lib/seo.ts` (`localePath`,
-  `ogLocale`, `htmlLang`, `languageAlternates`); (3) novo route group
-  `app/(es)/es/{layout,page,opengraph-image}.tsx`; (4) `app/sitemap.ts`; (5) um
-  `<Link>` novo no `Header`. Mantenha o cluster hreflang recíproco.
+  campos `_es` de `lib/content.ts`; (2) uma entrada em `locales` (`lib/locale.ts`)
+  com `path`/`htmlLang`/`ogLocale` — `languageAlternates`, `buildMetadata`, o
+  `sitemap` e `useLang` passam a incluí-la; (3) novo route group
+  `app/(es)/es/{layout,page,opengraph-image}.tsx`; (4) uma entrada de URL no
+  `app/sitemap.ts`; (5) um `<Link>` novo no toggle do `Header`. Mantenha o cluster
+  hreflang recíproco.
 - **Adicionar uma página/rota nova:** ela precisa existir **em cada idioma** (um
   arquivo por route group) e entrar no `sitemap.ts` com os alternates. Lembre que
   não há redirect no export — todo URL servido precisa de um `index.html`.

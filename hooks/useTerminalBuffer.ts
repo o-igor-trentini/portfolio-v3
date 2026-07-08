@@ -1,20 +1,9 @@
 import { useEffect, useRef, useState, type KeyboardEvent, type RefObject } from "react";
-import type { Lang } from "@/lib/i18n";
 import { COLOR, introLines, mk, runTerminalCommand, type Line } from "@/lib/terminal";
 import { track } from "@/lib/analytics";
 import { PROMPT } from "@/site.config";
-
-/** Everything the buffer needs from the portfolio context to run commands. */
-export interface TerminalBufferDeps {
-  termOpen: boolean;
-  bonusNonce: number;
-  lang: Lang;
-  theme: "light" | "dark";
-  name: string;
-  setLang: (lang: Lang) => void;
-  toggleTheme: () => void;
-  closeTerm: () => void;
-}
+import { usePortfolio } from "@/components/providers/PortfolioProvider";
+import { useTerminalControls } from "@/components/providers/TerminalProvider";
 
 export interface TerminalBuffer {
   lines: Line[];
@@ -27,19 +16,12 @@ export interface TerminalBuffer {
 
 /**
  * Owns the terminal's output buffer, input value and command history, plus the
- * autoscroll/focus/intro/konami effects. Keeps `Terminal.tsx` purely presentational,
- * mirroring how `useTerminal` already extracts the open/close concern.
+ * autoscroll/focus/intro/konami effects. Reads what it needs directly from the
+ * portfolio + terminal contexts, keeping `Terminal.tsx` purely presentational.
  */
-export function useTerminalBuffer({
-  termOpen,
-  bonusNonce,
-  lang,
-  theme,
-  name,
-  setLang,
-  toggleTheme,
-  closeTerm,
-}: TerminalBufferDeps): TerminalBuffer {
+export function useTerminalBuffer(): TerminalBuffer {
+  const { lang, theme, name, setLang, toggleTheme } = usePortfolio();
+  const { termOpen, bonusNonce, closeTerm } = useTerminalControls();
   const [lines, setLines] = useState<Line[]>([]);
   const [input, setInput] = useState("");
   const [cmds, setCmds] = useState<string[]>([]);
@@ -85,8 +67,7 @@ export function useTerminalBuffer({
     setInput(idx >= cmds.length ? "" : cmds[idx]);
   }
 
-  function runCommand(raw: string) {
-    const line = String(raw);
+  function runCommand(line: string) {
     const cmd = line.trim();
     const echo = mk(line, COLOR.fg, PROMPT);
     const nextCmds = cmd ? [...cmds, cmd] : cmds;

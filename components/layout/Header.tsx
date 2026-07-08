@@ -7,6 +7,8 @@ import { BurgerIcon, CloseIcon, MoonIcon, SunIcon } from "@/components/ui/Icons"
 import { IconButton } from "@/components/ui/IconButton";
 import { trackLanguageSwitch } from "@/lib/analytics";
 import { cx } from "@/lib/cx";
+import { locales } from "@/lib/locale";
+import { NAV_ITEMS } from "@/lib/nav";
 import styles from "./Header.module.css";
 
 export function Header() {
@@ -20,27 +22,11 @@ export function Header() {
 
   const links = (
     <>
-      <a href="#about" className={styles.navlink} onClick={closeMenu}>
-        {t.nav.about}
-      </a>
-      <a href="#experience" className={styles.navlink} onClick={closeMenu}>
-        {t.nav.experience}
-      </a>
-      <a href="#langs" className={styles.navlink} onClick={closeMenu}>
-        {t.nav.langs}
-      </a>
-      <a href="#stack" className={styles.navlink} onClick={closeMenu}>
-        {t.nav.stack}
-      </a>
-      <a href="#projects" className={styles.navlink} onClick={closeMenu}>
-        {t.nav.projects}
-      </a>
-      <a href="#certs" className={styles.navlink} onClick={closeMenu}>
-        {t.nav.certs}
-      </a>
-      <a href="#contact" className={styles.navlink} onClick={closeMenu}>
-        {t.nav.contact}
-      </a>
+      {NAV_ITEMS.map((item) => (
+        <a key={item.id} href={`#${item.id}`} className={styles.navlink} onClick={closeMenu}>
+          {t.nav[item.label]}
+        </a>
+      ))}
     </>
   );
 
@@ -57,7 +43,7 @@ export function Header() {
 
           <div className={styles.langtoggle} role="group" aria-label="Language">
             <Link
-              href="/"
+              href={locales.en.path}
               className={cx(
                 styles.langtoggle__btn,
                 lang === "en" && styles["langtoggle__btn--active"],
@@ -68,7 +54,7 @@ export function Header() {
               en
             </Link>
             <Link
-              href="/pt/"
+              href={locales.pt.path}
               className={cx(
                 styles.langtoggle__btn,
                 lang === "pt" && styles["langtoggle__btn--active"],

@@ -9,6 +9,7 @@ import {
   type YearMonth,
 } from "./date";
 import { CAREER_START } from "@/site.config";
+import { format } from "./format";
 
 export interface StackGroup {
   label_en: string;
@@ -98,6 +99,23 @@ export const stackGroups: StackGroup[] = [
     items: ["React", "TypeScript", "Ant Design", "Vite"],
   },
 ];
+
+/**
+ * Every stack technology, flattened and de-duplicated (TypeScript spans two
+ * groups). The single source of truth for the tech list — the JSON-LD
+ * `knowsAbout` (lib/seo.ts) and the terminal's neofetch highlight derive from
+ * here so they can't drift from what the Stack section actually shows.
+ */
+export const stackItems: string[] = [...new Set(stackGroups.flatMap((g) => g.items))];
+
+/**
+ * A short highlight for compact surfaces (the terminal's neofetch box). Sourced
+ * from the canonical stack — the `.filter` drops any name that no longer exists
+ * in `stackItems`, so a rename in `stackGroups` can never leave stale text here.
+ */
+export const stackHighlight: string[] = ["Go", "Gin", "PostgreSQL", "AWS"].filter((s) =>
+  stackItems.includes(s),
+);
 
 // Real work projects, anonymized: internal system/client/vendor names are
 // intentionally omitted (private repos, so no `link`). Order is display order.
@@ -252,8 +270,7 @@ export const lastUpdated = `${experiences[0].start}-01`;
 export const yearsExperience = yearsOfExperience(CAREER_START, nowYM());
 
 /** Replace the `{years}` token in a string with a given years-of-experience value. */
-export const interpolateYears = (text: string, years: number) =>
-  text.replaceAll("{years}", String(years));
+export const interpolateYears = (text: string, years: number) => format(text, { years });
 
 /** Resolve `{years}` in bio copy using the build-time `yearsExperience`. */
 export const withYears = (text: string) => interpolateYears(text, yearsExperience);

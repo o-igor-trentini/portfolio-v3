@@ -51,6 +51,11 @@ export function useTerminal(): UseTerminal {
         return;
       }
 
+      // Don't feed keystrokes typed into a field (e.g. the terminal's own
+      // ArrowUp/ArrowDown history recall) into the Konami buffer, or paging
+      // through history could accidentally trigger the easter egg + analytics.
+      if (typing) return;
+
       konami.current.push(e.key);
       if (konami.current.length > KONAMI.length) konami.current.shift();
       if (

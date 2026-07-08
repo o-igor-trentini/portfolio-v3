@@ -1,20 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { siteConfig } from "@/site.config";
+import { canvas, siteConfig } from "@/site.config";
 import { i18n, type Lang } from "@/lib/i18n";
-import { contacts, experiences, languages, lastUpdated } from "@/lib/content";
-
-/** Canonical path and hreflang code per locale. English lives at the root. */
-const localePath: Record<Lang, string> = { en: "/", pt: "/pt/" };
-const ogLocale: Record<Lang, string> = { en: "en_US", pt: "pt_BR" };
-const htmlLang: Record<Lang, string> = { en: "en", pt: "pt-BR" };
-
-// Same hreflang cluster on every page: en at `/`, pt-BR at `/pt/`, English as
-// x-default. Google requires the alternates to be reciprocal across the set.
-const languageAlternates = {
-  en: localePath.en,
-  "pt-BR": localePath.pt,
-  "x-default": localePath.en,
-};
+import { contacts, experiences, languages, lastUpdated, stackItems } from "@/lib/content";
+import { languageAlternates, locales } from "@/lib/locale";
 
 // Name and role are pulled from siteConfig so they can't drift; the tech tail is
 // a curated SEO keyword set (deliberately a highlight reel, not the full stack).
@@ -39,7 +27,7 @@ const keywords = [
 /** Per-locale metadata for each route group's root layout. */
 export function buildMetadata(lang: Lang): Metadata {
   const t = i18n[lang];
-  const path = localePath[lang];
+  const path = locales[lang].path;
   const url = new URL(path, siteConfig.url).toString();
   return {
     metadataBase: new URL(siteConfig.url),
@@ -56,8 +44,8 @@ export function buildMetadata(lang: Lang): Metadata {
       siteName: `${siteConfig.name} · Portfolio`,
       title: t.seo.title,
       description: t.seo.description,
-      locale: ogLocale[lang],
-      alternateLocale: [ogLocale[lang === "en" ? "pt" : "en"]],
+      locale: locales[lang].ogLocale,
+      alternateLocale: [locales[lang === "en" ? "pt" : "en"].ogLocale],
     },
     twitter: {
       card: "summary_large_image",
@@ -74,8 +62,8 @@ export function buildMetadata(lang: Lang): Metadata {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: dark)", color: "#0c0c0e" },
-    { media: "(prefers-color-scheme: light)", color: "#fafaf9" },
+    { media: "(prefers-color-scheme: dark)", color: canvas.dark },
+    { media: "(prefers-color-scheme: light)", color: canvas.light },
   ],
 };
 
@@ -87,7 +75,7 @@ export function buildJsonLd(lang: Lang): Record<string, unknown> {
   const t = i18n[lang];
   const personId = `${siteConfig.url}/#person`;
   const siteId = `${siteConfig.url}/#website`;
-  const inLanguage = htmlLang[lang];
+  const inLanguage = locales[lang].htmlLang;
 
   const person = {
     "@type": "Person",
@@ -97,19 +85,9 @@ export function buildJsonLd(lang: Lang): Record<string, unknown> {
     image: new URL("/apple-icon", siteConfig.url).toString(),
     jobTitle: siteConfig.roleShort,
     description: t.seo.description,
-    knowsAbout: [
-      "Go",
-      "REST APIs",
-      "Distributed systems",
-      "Microservices",
-      "Clean Architecture",
-      "PostgreSQL",
-      "RabbitMQ",
-      "Keycloak",
-      "Docker",
-      "AWS",
-      "Google Cloud",
-    ],
+    // Derived from the visible stack (lib/content) so the two never disagree,
+    // plus a few concepts that aren't listed as concrete technologies.
+    knowsAbout: ["Distributed systems", ...stackItems],
     // Derived from the languages section so the two never disagree.
     knowsLanguage: languages.map((l) => ({ "@type": "Language", name: l.name_en })),
     worksFor: experiences
@@ -132,7 +110,7 @@ export function buildJsonLd(lang: Lang): Record<string, unknown> {
 
   const profilePage = {
     "@type": "ProfilePage",
-    url: new URL(localePath[lang], siteConfig.url).toString(),
+    url: new URL(locales[lang].path, siteConfig.url).toString(),
     name: t.seo.title,
     inLanguage,
     dateModified: lastUpdated,

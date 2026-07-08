@@ -1,0 +1,5 @@
+# https://securitytxt.org (RFC 9116) — how to report a security issue.
+Contact: https://github.com/o-igor-trentini
+Expires: 2027-07-01T00:00:00.000Z
+Preferred-Languages: en, pt
+Canonical: https://igortrentini.dev/.well-known/security.txt

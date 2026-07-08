@@ -4,6 +4,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import "@/app/globals.css";
 import { accentMap, siteConfig } from "@/site.config";
 import { buildJsonLd } from "@/lib/seo";
+import { locales } from "@/lib/locale";
 import type { Lang } from "@/lib/i18n";
 
 const jetbrainsMono = JetBrains_Mono({
@@ -43,7 +44,7 @@ export function RootShell({ lang, children }: { lang: Lang; children: ReactNode 
   const jsonLd = buildJsonLd(lang);
   return (
     <html
-      lang={lang === "pt" ? "pt-BR" : "en"}
+      lang={locales[lang].htmlLang}
       data-theme={fallback}
       suppressHydrationWarning
       className={jetbrainsMono.variable}

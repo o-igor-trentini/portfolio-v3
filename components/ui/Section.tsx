@@ -8,17 +8,18 @@ interface SectionProps {
   /** Label text; rendered after the `// ` prefix. Omit for the hero. */
   label?: string;
   note?: string;
-  /** About-style label: extra bottom spacing, used when there is no note. */
-  solo?: boolean;
   variant?: "hero";
   children: ReactNode;
 }
 
 /** Page section shell: shared `// label` + note header plus the section wrapper. */
-export function Section({ id, label, note, solo, variant, children }: SectionProps) {
+export function Section({ id, label, note, variant, children }: SectionProps) {
   // The label doubles as the section's accessible name (aria-labelledby), so it
   // needs a stable id. The `// ` prefix is decorative and hidden from a11y tree.
   const headingId = id && label ? `${id}-heading` : undefined;
+  // A label without a note gets extra bottom spacing (the old `solo` prop) —
+  // the two are perfectly correlated, so derive it instead of passing it in.
+  const solo = !note;
   return (
     <section
       id={id}
