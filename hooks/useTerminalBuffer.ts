@@ -131,7 +131,10 @@ export function useTerminalBuffer(): TerminalBuffer {
     } else if (e.key === "ArrowDown") {
       e.preventDefault();
       recall(1);
-    } else if (e.key === "Tab" && !e.shiftKey) {
+    } else if (e.key === "Tab" && !e.shiftKey && input.trim() !== "") {
+      // Only hijack forward-Tab for completion when there's a prefix to complete.
+      // On an empty input, let Tab fall through to the focus trap so keyboard
+      // users can still move focus onto the close button (see Terminal.tsx).
       e.preventDefault();
       complete();
     }
