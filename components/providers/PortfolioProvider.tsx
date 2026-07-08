@@ -1,10 +1,11 @@
 "use client";
 
-import { createContext, useContext, useMemo, type ReactNode } from "react";
+import { useMemo, type ReactNode } from "react";
 import { i18n, type Dict, type Lang } from "@/lib/i18n";
 import { siteConfig } from "@/site.config";
 import { useTheme, type Theme } from "@/hooks/useTheme";
 import { useLang } from "@/hooks/useLang";
+import { createSafeContext } from "./createSafeContext";
 
 interface PortfolioContextValue {
   name: string;
@@ -17,13 +18,11 @@ interface PortfolioContextValue {
   toggleTheme: () => void;
 }
 
-const PortfolioContext = createContext<PortfolioContextValue | null>(null);
-
-export function usePortfolio(): PortfolioContextValue {
-  const ctx = useContext(PortfolioContext);
-  if (!ctx) throw new Error("usePortfolio must be used within <PortfolioProvider>");
-  return ctx;
-}
+const [PortfolioContext, usePortfolio] = createSafeContext<PortfolioContextValue>(
+  "usePortfolio",
+  "PortfolioProvider",
+);
+export { usePortfolio };
 
 export function PortfolioProvider({
   initialLang,
