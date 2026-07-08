@@ -13,12 +13,12 @@ dedicada em [`seo-i18n.md`](./seo-i18n.md).
 - ⚠️ Este Next é modificado — leia o guia relevante em `node_modules/next/dist/docs/` **antes** de escrever código (ver `AGENTS.md`).
 - Onde cada coisa vive:
   - `app/` — rotas, `layout`, metadata, `globals.css` (global layer), `tokens.css`.
-  - `components/ui/` — primitivos de apresentação reutilizáveis, **sem lógica de domínio** (`Button`, `IconButton`, `Card`, `Section`, `RevealControls`, `ExternalLink`, `TagList`, `EmptyState`, `Icons`).
+  - `components/ui/` — primitivos de apresentação reutilizáveis, **sem lógica de domínio** (`Button`, `IconButton`, `Card`, `Section`, `RevealControls`, `ExternalLink`, `TagList`, `EmptyState`, `Icons`, `OpenTerminalButton`).
   - `components/layout/` — chrome de página / shell: `Header`, `Footer`, `Portfolio` (composição) e o overlay `Terminal`.
-  - `components/providers/` — provedores de contexto/estado: `PortfolioProvider`.
+  - `components/providers/` — provedores de contexto/estado: `PortfolioProvider` (i18n + tema) e `TerminalProvider` (estado do terminal) — ver §4.
   - `components/sections/` — seções da página; consomem `ui/`, `hooks/`, `lib/`. Sub-componentes com lógica de domínio (ex.: `StackGroupCard`) ficam aqui, **não** em `ui/`.
   - `hooks/` — hooks de client reutilizáveis (estado + efeitos).
-  - `lib/` — dados e **lógica pura, sem React** (`content`, `date`, `i18n`, `terminal`, `cx`).
+  - `lib/` — dados e **lógica pura, sem React** (`content`, `date`, `i18n`, `terminal`, `cx`, `locale`, `nav`, `format`).
 - Regra de decisão: lógica pura → `lib/`; estado/efeito reutilizável → `hooks/`; apresentação reutilizável sem domínio → `components/ui/`; chrome/shell → `components/layout/`; provedor de estado → `components/providers/`.
 - Imports cross-layer usam o alias `@/…`; relativos (`./`, `../`) só entre irmãos da mesma pasta.
 
@@ -39,14 +39,19 @@ dedicada em [`seo-i18n.md`](./seo-i18n.md).
 
 - A janela do terminal **não segue o tema** — `--termbg` não é sobrescrito no tema claro.
 - Por isso as cores de saída em `lib/terminal.ts` (`COLOR`) **e** as cores de superfície/borda/texto em `components/layout/Terminal.module.css` (`#16161a`, `#2a2a30`, `#8a8a93`, `#e4e4e7`) são **hex literais**, não tokens theme-reativos. Trocar `#e4e4e7`/`#71717a` por `var(--fg)`/`var(--muted)` deixaria texto escuro sobre fundo escuro no tema claro. Só `accent` usa token (funciona bem no escuro).
-- Comandos ficam num **registry** `Record<cmd, Handler>` em `lib/terminal.ts`. `clear`/`exit` são exceções que ficam no componente (controlam buffer/visibilidade).
+- Comandos ficam num **registry** (array de `{ name, handler?, description? }`) em `lib/terminal.ts`. A lista do `help` é **gerada** do registry (entradas com `description`), então não pode divergir dos handlers; aliases e easter eggs (sem `description`) não aparecem. `clear`/`exit` ficam no componente (controlam buffer/visibilidade), mas carregam `description` para constar no `help`.
 
-## 4. Estado global: um único contexto
+## 4. Estado global: dois contextos
 
-- `PortfolioProvider` **compõe** `useTheme` + `useLang` + `useTerminal` e expõe tudo por `usePortfolio()`. Mantenha a **API pública de `usePortfolio` estável** — há muitos consumidores.
-- Um **único listener de keydown** em `useTerminal` cuida de backtick/Esc/konami. Não separe o konami: backtick/Esc passariam a ser gravados no buffer, mudando o comportamento.
+- **Dois provedores**, compostos em `Portfolio.tsx` (`<PortfolioProvider><TerminalProvider>…`):
+  - `PortfolioProvider` compõe `useTheme` + `useLang` e expõe i18n + tema por `usePortfolio()`.
+  - `TerminalProvider` isola o estado do terminal (abrir/fechar + konami) em `useTerminalControls()`.
+  - **Por quê a divisão:** abrir/fechar o terminal é um toggle frequente; num contexto único ele re-renderizava toda seção que só lê `t`/`lang`. Separado, só os três consumidores do terminal (Hero, Footer, `Terminal`) reagem. `useTerminalBuffer` lê os dois contextos direto (sem prop bag).
+  - Mantenha as **APIs de `usePortfolio` e `useTerminalControls` estáveis** — há muitos consumidores.
+- Um **único listener de keydown** em `useTerminal` cuida de backtick/Esc/konami. Não separe o konami: backtick/Esc passariam a ser gravados no buffer, mudando o comportamento. O konami **ignora keystrokes digitados num campo** (`typing`), senão as setas de histórico do próprio terminal poderiam disparar o easter egg.
+- **Fontes únicas de verdade (derive, não duplique):** metadados de locale (`path`/`htmlLang`/`ogLocale` + cluster hreflang) em `lib/locale.ts`; lista de tecnologias em `lib/content.ts` (`stackItems`/`stackHighlight` → `knowsAbout` e neofetch derivam daí); cores de canvas do tema em `site.config.ts` (`canvas`); itens de navegação em `lib/nav.ts` (`NAV_ITEMS`). Interpolação de `{token}` em copy via `format()` de `lib/format.ts`.
 - i18n: dicionários em `lib/i18n.ts` (inclui `seo.title`/`seo.description`); seleção de campo via helpers em `lib/content.ts` (`stackLabel`, `projectDesc`, `langName`, `langLevel`, `formatExperience`). **Use os helpers** em vez de ternários `lang === "pt" ? … : …` inline.
-- **O `lang` vem da URL, não de estado.** Cada idioma é uma rota estática própria (`/` en, `/pt/` pt) via route groups + múltiplos root layouts; `useLang(initial)` recebe o locale da rota e ele é **fixo pela vida da página**. Trocar idioma é **navegação** (full reload entre root layouts), não toggle de `useState`. `PortfolioProvider` segue compondo `useTheme` + `useLang` + `useTerminal` — **mantenha a API de `usePortfolio` estável**. As seções continuam Client Components porque vivem sob esse provider (theme/terminal reativos); a reatividade do `lang` deixou de ser o bloqueio, mas converter em Server Components segue fora de escopo. **Detalhes completos de roteamento/metadata/hreflang/OG em [`seo-i18n.md`](./seo-i18n.md).**
+- **O `lang` vem da URL, não de estado.** Cada idioma é uma rota estática própria (`/` en, `/pt/` pt) via route groups + múltiplos root layouts; `useLang(initial)` recebe o locale da rota e ele é **fixo pela vida da página**. Trocar idioma é **navegação** (full reload entre root layouts), não toggle de `useState`. As seções continuam Client Components porque vivem sob os provedores (theme/terminal reativos); a reatividade do `lang` deixou de ser o bloqueio, mas converter em Server Components segue fora de escopo. **Detalhes completos de roteamento/metadata/hreflang/OG em [`seo-i18n.md`](./seo-i18n.md).**
 
 ## 5. Disciplina de mudança & testes
 
