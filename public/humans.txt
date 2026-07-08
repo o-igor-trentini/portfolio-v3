@@ -1,0 +1,10 @@
+/* TEAM */
+Developer: Igor Trentini
+Role: Backend Developer (Go)
+Site: https://igortrentini.dev
+GitHub: https://github.com/o-igor-trentini
+LinkedIn: https://www.linkedin.com/in/igor-trentini
+
+/* SITE */
+Built with: Next.js (static export), React, TypeScript, CSS Modules
+Standards: HTML5, CSS3, WCAG AA
