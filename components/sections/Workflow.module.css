@@ -1,0 +1,8 @@
+.workflow__body {
+  max-width: 62ch;
+  font-size: clamp(15px, 2.4vw, 17px);
+  line-height: var(--leading-loose);
+  margin: 0;
+  color: var(--fg);
+  opacity: 0.9;
+}

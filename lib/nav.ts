@@ -7,6 +7,7 @@ import type { Dict } from "./i18n";
  */
 export const NAV_ITEMS: { id: string; label: keyof Dict["nav"] }[] = [
   { id: "about", label: "about" },
+  { id: "workflow", label: "workflow" },
   { id: "experience", label: "experience" },
   { id: "langs", label: "langs" },
   { id: "stack", label: "stack" },

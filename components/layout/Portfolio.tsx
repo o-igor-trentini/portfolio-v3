@@ -13,6 +13,7 @@ import { ConsentBanner } from "./ConsentBanner";
 const Terminal = dynamic(() => import("./Terminal").then((m) => m.Terminal));
 import { Hero } from "@/components/sections/Hero";
 import { About } from "@/components/sections/About";
+import { Workflow } from "@/components/sections/Workflow";
 import { Experience } from "@/components/sections/Experience";
 import { Languages } from "@/components/sections/Languages";
 import { Stack } from "@/components/sections/Stack";
@@ -33,6 +34,7 @@ export function Portfolio({ initialLang }: { initialLang: Lang }) {
           <main id="top" tabIndex={-1} className={styles.main}>
             <Hero />
             <About />
+            <Workflow />
             <Experience />
             <Languages />
             <Stack />

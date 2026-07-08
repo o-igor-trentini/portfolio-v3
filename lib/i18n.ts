@@ -3,6 +3,7 @@ export type Lang = "en" | "pt";
 export interface Dict {
   nav: {
     about: string;
+    workflow: string;
     experience: string;
     langs: string;
     stack: string;
@@ -23,6 +24,7 @@ export interface Dict {
     hint2: string;
   };
   about: { label: string; body: string };
+  workflow: { label: string; note: string; body: string };
   // `chipLess` is the compact chip word; `moreAria`/`lessAria` are the a11y
   // labels for the per-group show-more toggle (`{n}` = hidden item count).
   stack: { label: string; note: string; chipLess: string; moreAria: string; lessAria: string };
@@ -39,6 +41,7 @@ export const i18n: Record<Lang, Dict> = {
   en: {
     nav: {
       about: "about",
+      workflow: "workflow",
       experience: "experience",
       langs: "languages",
       stack: "stack",
@@ -65,6 +68,11 @@ export const i18n: Record<Lang, Dict> = {
     about: {
       label: "about",
       body: "I'm a Go backend developer with {years} years building reliable, high-throughput systems. I care about clean architecture, well-tested code and services that stay observable and up under load. I've led projects from zero to production and spent 2+ years as the sole developer on mission-critical systems, so I'm comfortable owning a service end to end. I started full-stack with React and TypeScript and still move across the whole stack, but my focus is APIs, distributed systems and backend built to last.",
+    },
+    workflow: {
+      label: "workflow",
+      note: "how I turn ambiguity into shipped software",
+      body: "I treat AI as leverage on judgment, not a replacement for it — it moved my time toward the decisions that actually matter. My cycle is deliberate and spec-driven: I refine the problem into a clear spec before touching code, analyze trade-offs and edge cases, then implement in small, verifiable steps. And it doesn't stop at the code: I bring it into the whole delivery chain — clear pull requests, validation guides QA can actually follow, technical documentation — to speed up and raise the quality of the team's work, not just my own. The result isn't just faster code; it's more time on architecture and less on boilerplate, with handoffs the whole team can trust.",
     },
     stack: {
       label: "stack",
@@ -99,6 +107,7 @@ export const i18n: Record<Lang, Dict> = {
   pt: {
     nav: {
       about: "sobre",
+      workflow: "workflow",
       experience: "experiência",
       langs: "idiomas",
       stack: "stack",
@@ -125,6 +134,11 @@ export const i18n: Record<Lang, Dict> = {
     about: {
       label: "sobre",
       body: "Sou desenvolvedor backend Go com {years} anos construindo sistemas confiáveis e de alta vazão. Me importo com arquitetura limpa, código bem testado e serviços observáveis que se mantêm de pé sob carga. Já conduzi projetos do zero à produção e atuei 2+ anos como único desenvolvedor em sistemas de missão crítica, então me sinto à vontade sendo dono de um serviço de ponta a ponta. Comecei full-stack com React e TypeScript e ainda transito por toda a stack, mas meu foco são APIs, sistemas distribuídos e backend feito para durar.",
+    },
+    workflow: {
+      label: "workflow",
+      note: "como transformo ambiguidade em software entregue",
+      body: "Trato IA como alavanca de julgamento, não como substituto dele — ela moveu meu tempo para as decisões que realmente importam. Meu ciclo é deliberado e guiado por especificação (spec-driven development): refino o problema numa spec clara antes de tocar no código, analiso trade-offs e casos de borda, e então implemento em passos pequenos e verificáveis. E não para no código: levo a IA para toda a cadeia de entrega — pull requests claros, guias de validação que o QA consegue de fato seguir, documentação técnica — para dar agilidade e elevar a qualidade do trabalho do time, não só do meu. O resultado não é só código mais rápido; é mais tempo em arquitetura e menos em boilerplate, com handoffs em que o time inteiro pode confiar.",
     },
     stack: {
       label: "stack",
