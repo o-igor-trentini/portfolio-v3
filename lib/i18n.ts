@@ -34,7 +34,9 @@ export interface Dict {
   footer: { built: string; terminalBtn: string };
   common: { more: string; less: string; stackMore: string; stackLess: string; wip: string };
   consent: { message: string; accept: string; decline: string };
-  a11y: { skip: string; newTab: string };
+  // `copy`/`copied` are the copy-to-clipboard button label and its post-copy
+  // confirmation; both take a `{label}` token for the contact being copied.
+  a11y: { skip: string; newTab: string; copy: string; copied: string };
 }
 
 export const i18n: Record<Lang, Dict> = {
@@ -102,7 +104,12 @@ export const i18n: Record<Lang, Dict> = {
       accept: "accept",
       decline: "decline",
     },
-    a11y: { skip: "skip to content", newTab: "opens in a new tab" },
+    a11y: {
+      skip: "skip to content",
+      newTab: "opens in a new tab",
+      copy: "copy {label}",
+      copied: "{label} copied",
+    },
   },
   pt: {
     nav: {
@@ -168,6 +175,11 @@ export const i18n: Record<Lang, Dict> = {
       accept: "aceitar",
       decline: "recusar",
     },
-    a11y: { skip: "pular para o conteúdo", newTab: "abre em nova aba" },
+    a11y: {
+      skip: "pular para o conteúdo",
+      newTab: "abre em nova aba",
+      copy: "copiar {label}",
+      copied: "{label} copiado",
+    },
   },
 };

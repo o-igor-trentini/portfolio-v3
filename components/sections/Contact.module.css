@@ -6,19 +6,25 @@
   overflow: hidden;
 }
 .contact-row {
+  display: flex;
+  align-items: center;
+  border-bottom: var(--hairline);
+}
+.contact-row:last-child {
+  border-bottom: none;
+}
+.contact-row__link {
   text-decoration: none;
   color: inherit;
   display: flex;
   align-items: center;
   gap: var(--space-md);
+  flex: 1;
+  min-width: 0;
   padding: var(--space-md);
-  border-bottom: var(--hairline);
   transition: background var(--transition);
 }
-.contact-row:last-child {
-  border-bottom: none;
-}
-.contact-row:hover {
+.contact-row__link:hover {
   background: var(--card);
 }
 .contact-row__label {
@@ -38,4 +44,8 @@
 .contact-row__ext {
   color: var(--accent);
   font-size: var(--text-sm);
+}
+.contact-row__copy {
+  flex-shrink: 0;
+  margin-right: var(--space-md);
 }

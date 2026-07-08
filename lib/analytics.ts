@@ -17,6 +17,7 @@ export type AnalyticsEvent =
   | { name: "theme_toggle"; params: { to: "light" | "dark" } }
   | { name: "language_switch"; params: { to: Lang } }
   | { name: "contact_click"; params: { label: string } }
+  | { name: "contact_copy"; params: { label: string } }
   | { name: "project_click"; params: { name: string } }
   | { name: "show_more"; params: { section: string } };
 
