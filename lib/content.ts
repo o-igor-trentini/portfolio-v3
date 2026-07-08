@@ -303,8 +303,9 @@ export function formatExperience(
   now: YearMonth | null,
 ): FormattedExperience {
   const present = e.end === null;
-  const endYM = present ? now : parseYM(e.end as string);
-  const endLabel = present ? i18n[lang].experience.present : formatMonthYear(e.end as string, lang);
+  // Narrow on `e.end` directly (not the `present` alias) so it's `string` here.
+  const endYM = e.end === null ? now : parseYM(e.end);
+  const endLabel = e.end === null ? i18n[lang].experience.present : formatMonthYear(e.end, lang);
   const period = `${formatMonthYear(e.start, lang)} — ${endLabel}`;
   const duration = endYM ? formatDuration(monthsInclusive(e.start, endYM), lang) : null;
   return { present, period, duration, tags: expTags(e, lang) };
