@@ -138,10 +138,10 @@ lang=…>`. O lint `no-head-element` dispara um falso-positivo no `<head>` do
   de imagem/metadata; barra final consistente; hreflang recíproco; **nada** de
   middleware/redirect/`generateMetadata` dependente de request.
 
-### Verificação (portão a cada mudança)
+### Verificação específica de SEO
 
-`npm run lint` + `npx tsc --noEmit` + `npm run build` + `npm test`, e inspecione o
-`out/`: `index.html` (lang `en`) e `pt/index.html` (lang `pt-BR`) com conteúdo no
+Além do portão de verificação padrão (`npm run check` — ver [`../CONTRIBUTING.md`](../CONTRIBUTING.md)),
+inspecione o `out/`: `index.html` (lang `en`) e `pt/index.html` (lang `pt-BR`) com conteúdo no
 idioma certo; canonical + `hrefLang` (en/pt-BR/x-default) recíprocos; `og:image`
 por locale; PNGs `opengraph-image*` (1200×630) e `icon`/`apple-icon` emitidos;
 `sitemap.xml` com as duas URLs + alternates; JSON-LD `Person`+`WebSite`+`ProfilePage`.

@@ -59,10 +59,9 @@ dedicada em [`seo-i18n.md`](./seo-i18n.md).
 - i18n: dicionários em `lib/i18n.ts` (inclui `seo.title`/`seo.description`); seleção de campo via helpers em `lib/content.ts` (`stackLabel`, `projectDesc`, `langName`, `langLevel`, `formatExperience`). **Use os helpers** em vez de ternários `lang === "pt" ? … : …` inline.
 - **O `lang` vem da URL, não de estado.** Cada idioma é uma rota estática própria (`/` en, `/pt/` pt) via route groups + múltiplos root layouts; `useLang(initial)` recebe o locale da rota e ele é **fixo pela vida da página**. Trocar idioma é **navegação** (full reload entre root layouts), não toggle de `useState`. As seções continuam Client Components porque vivem sob os provedores (theme/terminal reativos); a reatividade do `lang` deixou de ser o bloqueio, mas converter em Server Components segue fora de escopo. **Detalhes completos de roteamento/metadata/hreflang/OG em [`seo-i18n.md`](./seo-i18n.md).**
 
-## 5. Disciplina de mudança & testes
+## 5. Testes & disciplina de mudança
 
-- **Refactor = sem mudança de comportamento observável** (UI, rotas, dados). Etapas pequenas e independentes, um commit por unidade.
-- Portão a cada mudança: `npm run lint` + `npx tsc --noEmit` (**zero `any`**) + `npm run build` + `npm test` + verificação no browser.
+- Workflow e o **portão de verificação** (`npm run check`) + disciplina de refactor (sem mudança de comportamento observável, etapas pequenas) ficam em [`../CONTRIBUTING.md`](../CONTRIBUTING.md).
 - Testes (Vitest + Testing Library, jsdom): teste **lógica pura** (`lib/`) e **hooks** (`hooks/`), e o **contrato** de componentes `ui/`. Não teste CSS puro nem markup trivial.
 - Datas dinâmicas: `nowYM()` em `lib/date.ts`; nos testes use `vi.setSystemTime` para determinismo.
 
