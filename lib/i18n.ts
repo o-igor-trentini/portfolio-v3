@@ -74,7 +74,7 @@ export const i18n: Record<Lang, Dict> = {
     workflow: {
       label: "workflow",
       note: "how I turn ambiguity into shipped software",
-      body: "I treat AI as leverage on judgment, not a replacement for it — it moved my time toward the decisions that actually matter. My cycle is deliberate and spec-driven: I refine the problem into a clear spec before touching code, analyze trade-offs and edge cases, then implement in small, verifiable steps. And it doesn't stop at the code: I bring it into the whole delivery chain — clear pull requests, validation guides QA can actually follow, technical documentation — to speed up and raise the quality of the team's work, not just my own. The result isn't just faster code; it's more time on architecture and less on boilerplate, with handoffs the whole team can trust.",
+      body: "I treat AI as leverage on judgment, not a replacement for it. It moved my time toward the decisions that actually matter. My cycle is deliberate and spec-driven: I refine the problem into a clear spec before touching code, analyze trade-offs and edge cases, then implement in small, verifiable steps. And it doesn't stop at the code. I bring it into the whole delivery chain: clear pull requests, validation guides QA can actually follow, and technical documentation. That speeds up the team's work and raises its quality, not just my own. The result isn't just faster code; it's more time on architecture and less on boilerplate, with handoffs the whole team can trust.",
     },
     stack: {
       label: "stack",
@@ -145,7 +145,7 @@ export const i18n: Record<Lang, Dict> = {
     workflow: {
       label: "workflow",
       note: "como transformo ambiguidade em software entregue",
-      body: "Trato IA como alavanca de julgamento, não como substituto dele — ela moveu meu tempo para as decisões que realmente importam. Meu ciclo é deliberado e guiado por especificação (spec-driven development): refino o problema numa spec clara antes de tocar no código, analiso trade-offs e casos de borda, e então implemento em passos pequenos e verificáveis. E não para no código: levo a IA para toda a cadeia de entrega — pull requests claros, guias de validação que o QA consegue de fato seguir, documentação técnica — para dar agilidade e elevar a qualidade do trabalho do time, não só do meu. O resultado não é só código mais rápido; é mais tempo em arquitetura e menos em boilerplate, com handoffs em que o time inteiro pode confiar.",
+      body: "Trato IA como alavanca de julgamento, não como substituto dele. Ela moveu meu tempo para as decisões que realmente importam. Meu ciclo é deliberado e guiado por especificação (spec-driven development): refino o problema numa spec clara antes de tocar no código, analiso trade-offs e casos de borda, e então implemento em passos pequenos e verificáveis. E não para no código. Levo a IA para toda a cadeia de entrega: pull requests claros, guias de validação que o QA consegue de fato seguir e documentação técnica. Isso dá agilidade e eleva a qualidade do trabalho do time, não só do meu. O resultado não é só código mais rápido: é mais tempo em arquitetura e menos em boilerplate, com handoffs em que o time inteiro pode confiar.",
     },
     stack: {
       label: "stack",

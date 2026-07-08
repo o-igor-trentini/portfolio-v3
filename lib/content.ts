@@ -124,9 +124,9 @@ export const projects: Project[] = [
     name: "document-validation",
     tags: ["Go", "Gin", "PostgreSQL", "React", "RabbitMQ"],
     desc_en:
-      "Enterprise full-stack platform (Go + React monorepo, 5 integrated apps) validating people, companies and vehicles across dozens of internal and external integrations — OCR, computer-vision facial checks, real-time chat and async record sync over message queues. A large codebase serving thousands of companies at high, business-critical query volume.",
+      "Enterprise full-stack platform (Go + React monorepo, 5 integrated apps) validating people, companies and vehicles across dozens of internal and external integrations: OCR, computer-vision facial checks, real-time chat, and async record sync over message queues. A large codebase serving thousands of companies at high, business-critical query volume.",
     desc_pt:
-      "Plataforma full-stack enterprise (monorepo Go + React, 5 apps integradas) que valida pessoas, empresas e veículos por meio de dezenas de integrações internas e externas — OCR, validação facial por visão computacional, chat em tempo real e sync assíncrono de cadastros via mensageria. Base de código extensa, atendendo milhares de empresas em alto volume de consultas, crítico ao negócio.",
+      "Plataforma full-stack enterprise (monorepo Go + React, 5 apps integradas) que valida pessoas, empresas e veículos por meio de dezenas de integrações internas e externas: OCR, validação facial por visão computacional, chat em tempo real e sync assíncrono de cadastros via mensageria. Base de código extensa, atendendo milhares de empresas em alto volume de consultas, crítico ao negócio.",
   },
   {
     name: "live-verification",
@@ -140,9 +140,9 @@ export const projects: Project[] = [
     name: "integration-gateway",
     tags: ["Go", "Gin", "PostgreSQL", "Docker", "Cache"],
     desc_en:
-      "Go REST API acting as a smart broker for government and AI integrations to validate documents and personal data — intelligent caching, automatic fallback between providers and full audit trail. Handles high request volume, with caching that cut external-API cost by 70–80%.",
+      "Go REST API acting as a smart broker for government and AI integrations to validate documents and personal data, with intelligent caching, automatic fallback between providers, and a full audit trail. Handles high request volume, with caching that cut external-API cost by 70–80%.",
     desc_pt:
-      "API REST em Go que atua como broker inteligente de integrações governamentais e de IA para validar documentos e dados pessoais — cache inteligente, fallback automático entre provedores e auditoria completa. Sustenta alto volume de requisições, com cache que reduziu o custo de APIs externas em 70–80%.",
+      "API REST em Go que atua como broker inteligente de integrações governamentais e de IA para validar documentos e dados pessoais, com cache inteligente, fallback automático entre provedores e auditoria completa. Sustenta alto volume de requisições, com cache que reduziu o custo de APIs externas em 70–80%.",
   },
   {
     name: "risk-registry",
@@ -164,9 +164,9 @@ export const projects: Project[] = [
     name: "go-sdk-monorepo",
     tags: ["Go", "OAuth2", "SDK", "OpenTelemetry"],
     desc_en:
-      "Monorepo of independent Go libraries/SDKs for external-API integration — centralized auth, document processing, vehicle/person lookups, webhooks and reusable utilities. Adopted across other teams, with a strong focus on modularity and maintainability.",
+      "Monorepo of independent Go libraries/SDKs for external-API integration: centralized auth, document processing, vehicle/person lookups, webhooks, and reusable utilities. Adopted across other teams, with a strong focus on modularity and maintainability.",
     desc_pt:
-      "Monorepo com bibliotecas/SDKs Go independentes para integração com APIs externas — auth centralizada, processamento de documentos, consulta de veículos/pessoas, webhooks e utilitários reutilizáveis. Adotado por outros times, com forte foco em modularidade e manutenibilidade.",
+      "Monorepo com bibliotecas/SDKs Go independentes para integração com APIs externas: auth centralizada, processamento de documentos, consulta de veículos/pessoas, webhooks e utilitários reutilizáveis. Adotado por outros times, com forte foco em modularidade e manutenibilidade.",
   },
 ];
 
