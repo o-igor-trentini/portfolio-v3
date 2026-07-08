@@ -2,7 +2,7 @@
 
 import { usePortfolio } from "@/components/providers/PortfolioProvider";
 import { PaginatedSection } from "@/components/ui/PaginatedSection";
-import { ExternalLink } from "../ui/ExternalLink";
+import { MaybeExternalLink } from "../ui/MaybeExternalLink";
 import { TagList } from "../ui/TagList";
 import { projects, projectDesc, type Project } from "@/lib/content";
 import { track } from "@/lib/analytics";
@@ -27,17 +27,16 @@ export function Projects() {
     );
     // Private-repo projects have no link, so they render as a static article
     // rather than an external anchor.
-    return p.link ? (
-      <ExternalLink
+    return (
+      <MaybeExternalLink
         href={p.link}
         className={styles.project}
         newTabLabel={t.a11y.newTab}
         onClick={() => track({ name: "project_click", params: { name: p.name } })}
+        fallbackAs="article"
       >
         {body}
-      </ExternalLink>
-    ) : (
-      <article className={styles.project}>{body}</article>
+      </MaybeExternalLink>
     );
   };
 

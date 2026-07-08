@@ -3,6 +3,7 @@ import { canvas, siteConfig } from "@/site.config";
 import { i18n, type Lang } from "@/lib/i18n";
 import { contacts, experiences, languages, lastUpdated, stackItems } from "@/lib/content";
 import { languageAlternates, locales } from "@/lib/locale";
+import { isExternalHref } from "@/lib/url";
 
 // Name and role are pulled from siteConfig so they can't drift; the tech tail is
 // a curated SEO keyword set (deliberately a highlight reel, not the full stack).
@@ -101,7 +102,7 @@ export function buildJsonLd(lang: Lang): Record<string, unknown> {
     alumniOf: experiences
       .filter((e) => e.end !== null)
       .map((e) => ({ "@type": "Organization", name: e.company })),
-    sameAs: contacts.filter((c) => c.href.startsWith("http")).map((c) => c.href),
+    sameAs: contacts.filter((c) => isExternalHref(c.href)).map((c) => c.href),
   };
 
   const website = {
