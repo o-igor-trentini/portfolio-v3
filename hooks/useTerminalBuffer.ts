@@ -8,9 +8,16 @@ import {
   type Line,
 } from "@/lib/terminal";
 import { track } from "@/lib/analytics";
+import { applyConsent, getConsent, storeConsent, type ConsentValue } from "@/lib/consent";
 import { PROMPT } from "@/site.config";
 import { usePortfolio } from "@/components/providers/PortfolioProvider";
 import { useTerminalControls } from "@/components/providers/TerminalProvider";
+
+// Focus the input just after the open transition paints (a tick, not instant,
+// so the modal is mounted first). Exit echoes the command, then closes after a
+// short beat so the visitor sees the `exit` line before the overlay disappears.
+const FOCUS_DELAY_MS = 30;
+const EXIT_DELAY_MS = 120;
 
 export interface TerminalBuffer {
   lines: Line[];
@@ -62,7 +69,7 @@ export function useTerminalBuffer(): TerminalBuffer {
   // Focus the input shortly after opening.
   useEffect(() => {
     if (!termOpen) return;
-    const id = setTimeout(() => inputRef.current?.focus(), 30);
+    const id = setTimeout(() => inputRef.current?.focus(), FOCUS_DELAY_MS);
     return () => clearTimeout(id);
   }, [termOpen]);
 
@@ -102,17 +109,30 @@ export function useTerminalBuffer(): TerminalBuffer {
     }
     if (cname === "exit") {
       setLines((prev) => [...prev, echo]);
-      setTimeout(() => closeTerm(), 120);
+      setTimeout(() => closeTerm(), EXIT_DELAY_MS);
       return;
     }
 
-    const out = runTerminalCommand(cname, { args, lang, theme, name, setLang, toggleTheme });
+    const setConsent = (value: ConsentValue) => {
+      storeConsent(value);
+      applyConsent(value);
+    };
+    const out = runTerminalCommand(cname, {
+      args,
+      lang,
+      theme,
+      name,
+      setLang,
+      toggleTheme,
+      consent: getConsent(),
+      setConsent,
+    });
     setLines((prev) => [...prev, echo, ...out, mk("")]);
   }
 
   function complete() {
-    // Only complete a bare command name — once there's a space, args are typed.
-    if (/\s/.test(input)) return;
+    // Completes the command name, or the last argument for commands with a known
+    // vocabulary (e.g. `lang`, `cat`, `consent`) — see completeCommand.
     const { completed, candidates } = completeCommand(input);
     if (completed) {
       setInput(completed);
