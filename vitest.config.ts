@@ -16,9 +16,22 @@ export default defineConfig({
       provider: "v8",
       // Report on the source we actually author; skip generated/config/type files
       // and the build-time image routes (JSX ImageResponse isn't unit-tested).
-      include: ["lib/**", "hooks/**", "components/**"],
-      exclude: ["**/*.test.{ts,tsx}", "**/*.d.ts", "lib/og.tsx"],
-      reporter: ["text", "html"],
+      include: ["lib/**", "hooks/**", "components/**", "app/**"],
+      exclude: [
+        "**/*.test.{ts,tsx}",
+        "**/*.d.ts",
+        "lib/og.tsx",
+        // Build-time image routes render ImageResponse — not unit-tested.
+        "app/**/{icon,apple-icon,opengraph-image}.tsx",
+        "app/**/layout.tsx",
+        "app/**/page.tsx",
+        "app/global-error.tsx",
+        "app/global-not-found.tsx",
+      ],
+      // lcov feeds optional Codecov / editor gutters; text/html stay for local use.
+      reporter: ["text", "html", "lcov"],
+      // Ratchet: fail CI if coverage regresses below the current floor.
+      thresholds: { statements: 80, branches: 65, functions: 75, lines: 80 },
     },
   },
 });

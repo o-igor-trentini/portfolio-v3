@@ -38,8 +38,12 @@ jobs:
       - name: Type check
         run: npm run typecheck
 
-      - name: Test
-        run: npm test
+      - name: Audit dependencies (non-blocking)
+        # Surfaces new advisories without failing the run — a heads-up, not a gate.
+        run: npm audit --audit-level=high || true
+
+      - name: Test (with coverage)
+        run: npm run test:coverage
 
       - name: Build (static export)
         run: npm run build
