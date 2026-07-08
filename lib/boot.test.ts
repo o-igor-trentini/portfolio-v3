@@ -1,5 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { buildThemeScript, consentDefaultScript, themeFallback } from "./boot";
+import { buildAccentCss, buildThemeScript, consentDefaultScript, themeFallback } from "./boot";
 import type { ThemePref } from "@/site.config";
 
 // Execute the inline anti-flash IIFE in the jsdom global scope (indirect eval),
@@ -75,6 +75,14 @@ describe("buildThemeScript", () => {
     expect(runThemeScript("light")).toBe("light"); // themeFallback('light')
     delete document.documentElement.dataset.theme;
     expect(runThemeScript("system")).toBe("dark"); // themeFallback('system')
+  });
+});
+
+describe("buildAccentCss", () => {
+  it("sets --accent for dark at :root and light under the light theme", () => {
+    expect(buildAccentCss({ d: "#111", l: "#eee" })).toBe(
+      `:root{--accent:#111}html[data-theme="light"]{--accent:#eee}`,
+    );
   });
 });
 

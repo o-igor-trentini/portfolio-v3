@@ -4,7 +4,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import "@/app/globals.css";
 import { accentMap, siteConfig } from "@/site.config";
 import { buildJsonLd } from "@/lib/seo";
-import { buildThemeScript, consentDefaultScript, themeFallback } from "@/lib/boot";
+import { buildAccentCss, buildThemeScript, consentDefaultScript, themeFallback } from "@/lib/boot";
 import { locales } from "@/lib/locale";
 import type { Lang } from "@/lib/i18n";
 
@@ -17,8 +17,7 @@ const jetbrainsMono = JetBrains_Mono({
 
 // Accent color is a build-time constant; emit it for both themes so the CSS
 // custom property is available before any JS runs.
-const accent = accentMap[siteConfig.accent];
-const accentCss = `:root{--accent:${accent.d}}html[data-theme="light"]{--accent:${accent.l}}`;
+const accentCss = buildAccentCss(accentMap[siteConfig.accent]);
 
 // Set data-theme before first paint to avoid a flash of the wrong theme.
 const pref = siteConfig.defaultTheme;
