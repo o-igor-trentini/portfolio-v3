@@ -50,6 +50,9 @@
   /* layout */
   --gutter: clamp(20px, 5vw, 40px);
   --container: 860px;
+  /* Header lives on a wider column than the 860px content so its 8-item nav
+     fits inline on one row; the offset from --container is intentional. */
+  --container-header: 1000px;
 
   /* 1px neutral rule reused on cards, inputs, dividers and borders.
      var(--border) is resolved at the use site, so the rule still
