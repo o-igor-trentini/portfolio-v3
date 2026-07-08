@@ -32,18 +32,20 @@ export function Terminal() {
         onClick={(e) => e.stopPropagation()}
       >
         <div className={styles["term-titlebar"]}>
-          <span className={cx(styles["term-dot"], styles["term-dot--red"])} />
-          <span className={cx(styles["term-dot"], styles["term-dot--amber"])} />
-          <span className={cx(styles["term-dot"], styles["term-dot--green"])} />
-          <span className={styles["term-title"]}>visitor@portfolio: ~/zsh</span>
           <button
             type="button"
-            className={styles["term-close"]}
+            className={cx(styles["term-dot"], styles["term-dot--red"], styles["term-dot--close"])}
             aria-label={t.a11y.terminalClose}
             onClick={closeTerm}
           >
-            ✕
+            <span className={styles["term-dot__glyph"]} aria-hidden="true">
+              ✕
+            </span>
           </button>
+          <span className={cx(styles["term-dot"], styles["term-dot--amber"])} />
+          <span className={cx(styles["term-dot"], styles["term-dot--green"])} />
+          <span className={styles["term-title"]}>visitor@portfolio: ~/zsh</span>
+          <span className={styles["term-titlebar__spacer"]} aria-hidden="true" />
         </div>
         <div
           className={styles["term-body"]}

@@ -51,21 +51,39 @@
 .term-dot--green {
   background: #28c840;
 }
+/* The red light doubles as the close button (like macOS); reset the <button> and
+   center the glyph that shows on hover. */
+.term-dot--close {
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.term-dot__glyph {
+  font-size: 8px;
+  line-height: 1;
+  color: #4d0000;
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+/* Reveal the ✕ when the traffic-light cluster is hovered or the button is focused. */
+.term-titlebar:hover .term-dot__glyph,
+.term-dot--close:focus-visible .term-dot__glyph {
+  opacity: 1;
+}
 .term-title {
   flex: 1;
   text-align: center;
   font-size: var(--text-xs);
   color: #8a8a93;
 }
-.term-close {
-  background: transparent;
-  border: none;
-  color: #8a8a93;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: 15px;
-  line-height: 1;
-  padding: 0 2px;
+/* Mirrors the three traffic lights (3×11px + 2×8px gaps) so the centered title
+   stays centered now that the close button no longer sits on the right. */
+.term-titlebar__spacer {
+  width: 49px;
+  flex-shrink: 0;
 }
 .term-body {
   flex: 1;
