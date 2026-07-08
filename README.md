@@ -92,27 +92,15 @@ export. None are secrets.
 
 ## Analytics & privacy
 
-Traffic is measured with **Google Analytics 4**, loaded through the official
-[`@next/third-parties`](https://nextjs.org/docs/app/guides/third-party-libraries)
-`<GoogleAnalytics>` component (`gtag.js`, `afterInteractive` — non-blocking, so it
-doesn't affect LCP). It's wired up in `components/layout/RootShell.tsx`, the single
-shell shared by both locales.
+Traffic is measured with **Google Analytics 4**, gated behind a consent banner
+(Consent Mode v2, LGPD/GDPR) and only enabled when `NEXT_PUBLIC_GA_ID` is set at
+build time — so local and preview builds stay data-free. Full details in
+[`docs/analytics.md`](./docs/analytics.md).
 
-**Enabling it.** Analytics only renders when `NEXT_PUBLIC_GA_ID` is set at build
-time. Locally, add it to `.env.local`. In CI it comes from a **repository variable**
-(Settings → Secrets and variables → Actions → Variables → `NEXT_PUBLIC_GA_ID`),
-injected in the build step of `.github/workflows/deploy.yml`. With no ID, nothing is
-injected — local and preview builds stay data-free.
+## Documentation
 
-**Consent (LGPD / GDPR).** Analytics ships with **Consent Mode v2** defaulted to
-`denied` via an inline script that runs before the `gtag` config. Until the visitor
-accepts, GA sends only cookieless pings and sets **no** `_ga` cookies. A lightweight
-bilingual (en / pt-BR) banner (`components/layout/ConsentBanner.tsx`) lets them
-accept or decline; the choice persists in `localStorage` (`pf_consent`) and, on
-accept, flips consent to `granted`. IP anonymization is on by default in GA4.
-
-**Custom events.** A small typed helper (`lib/analytics.ts`, `track()`) sends a
-curated set of events via `sendGAEvent` — no `any` payloads. Currently tracked:
-`terminal_open`, `konami_unlocked`, `terminal_command`, `theme_toggle`,
-`language_switch`, `contact_click`, `project_click`, `show_more`. Traffic is
-segmented by locale automatically through the page path (`/` = en, `/pt/` = pt-BR).
+- [`docs/`](./docs/README.md) — documentation index (where to find what)
+- [`CONTRIBUTING.md`](./CONTRIBUTING.md) — dev setup, the verification gate, commit conventions
+- [`docs/architecture.md`](./docs/architecture.md) — durable conventions (structure, CSS, state, tests)
+- [`docs/seo-i18n.md`](./docs/seo-i18n.md) — SEO, i18n, routing, metadata, structured data
+- [`docs/analytics.md`](./docs/analytics.md) — analytics, consent, custom events

@@ -7,13 +7,19 @@ This version has breaking changes — APIs, conventions, and file structure may 
 
 # Projeto: portfolio-v3
 
-Convenções completas em **`docs/architecture.md`** (fonte da verdade — leia antes de mudanças estruturais). **SEO, i18n, roteamento por idioma, metadata, hreflang, JSON-LD e social preview** têm doc dedicada em **`docs/seo-i18n.md`** (leia antes de mexer nesses temas). Guardrails essenciais:
+Fontes da verdade (leia **antes** de mexer no tema correspondente):
 
-- **Verificação a cada mudança**: `npm run lint` + `npx tsc --noEmit` (zero `any`) + `npm run build` + `npm test`. Refactor **não** pode alterar comportamento observável (UI, rotas, dados); trabalhe em etapas pequenas.
-- **Onde colocar código**: lógica pura sem React → `lib/`; estado/efeito reutilizável → `hooks/`; apresentação reutilizável → `components/ui/`; seções da página → `components/sections/`.
-- **CSS**: **CSS Modules co-locados** (`Component.module.css`) — sem Tailwind nem CSS-in-JS. Cores theme-reativas em `app/globals.css`; sizing/spacing/motion em `app/tokens.css`. BEM kebab-case.
-- ⚠️ **O terminal é sempre escuro**: as cores em `lib/terminal.ts` (`COLOR`) são hex literais de propósito — **não** troque por tokens theme-reativos (`var(--fg)`, `var(--muted)`…) ou o tema claro quebra (texto escuro sobre fundo escuro).
-- **i18n**: o idioma vem da **URL** (inglês em `/`, português em `/pt/` via route groups + múltiplos root layouts) — trocar idioma é navegação, não estado. Use os helpers de `lib/content.ts` (`stackLabel`, `projectDesc`, `langName`, `langLevel`, `formatExperience`) em vez de ternários `lang === "pt" ? … : …` inline. Detalhes em `docs/seo-i18n.md`.
-- **SEO / export estático**: `output: "export"` → sem middleware/redirect e `generateMetadata` não pode depender de request. Metadata/hreflang em `lib/seo.ts` (`buildMetadata`), JSON-LD em `buildJsonLd`, OG em `lib/og.tsx`. ⚠️ Rotas de imagem (`opengraph-image`, `icon`, `apple-icon`) precisam de `export const dynamic = "force-static"`; hreflang deve ser recíproco; ícones gerados são servidos **sem** extensão (`/icon`, `/apple-icon`).
-- **Testes** (Vitest + Testing Library, jsdom): teste lógica pura (`lib/`), hooks (`hooks/`) e o contrato de `components/ui/`; não teste CSS puro nem markup trivial. Datas: `nowYM()` + `vi.setSystemTime`.
-- **Planos de trabalho** ficam em `docs/plans/AAAA-MM-<slug>.md`; regras que valem além de um plano migram para `docs/architecture.md`.
+- **`docs/architecture.md`** — estrutura de pastas, CSS/tokens, terminal, estado, testes.
+- **`docs/seo-i18n.md`** — SEO, i18n, roteamento por idioma, metadata, hreflang, JSON-LD, OG, ícones.
+- **`docs/analytics.md`** — analytics, consentimento, eventos.
+- **`CONTRIBUTING.md`** — setup e o portão de verificação (workflow).
+- **`docs/README.md`** — índice de toda a documentação.
+
+Guardrails de alto risco (o detalhe está nos docs acima):
+
+- **Portão de verificação a cada mudança**: `npm run check` (lint + typecheck **zero `any`** + test + build). Refactor **não** altera comportamento observável; etapas pequenas. — _ver `CONTRIBUTING.md`._
+- **Onde colocar código**: lógica pura sem React → `lib/`; estado/efeito reutilizável → `hooks/`; apresentação reutilizável → `components/ui/`; seções da página → `components/sections/`. — _ver `architecture.md` §1._
+- ⚠️ **O terminal é sempre escuro**: as cores em `lib/terminal.ts` (`COLOR`) e em `Terminal.module.css` são hex literais de propósito — **não** troque por tokens theme-reativos (`var(--fg)`…) ou o tema claro quebra. — _ver `architecture.md` §3._
+- **i18n vem da URL** (en em `/`, pt em `/pt/`) — trocar idioma é navegação, não estado. Use os helpers de `lib/content.ts` em vez de ternários `lang === "pt" ? …` inline. — _ver `seo-i18n.md`._
+- **SEO / export estático** (`output: "export"`): sem middleware/redirect/`generateMetadata` dependente de request; rotas de imagem precisam de `dynamic = "force-static"`; hreflang recíproco. — _ver `seo-i18n.md`._
+- **Planos** ficam em `docs/plans/AAAA-MM-<slug>.md`; regra que sobrevive ao plano migra para `docs/architecture.md`.
