@@ -2,12 +2,12 @@
 .stack__grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-  gap: 28px 32px;
+  gap: var(--space-lg) var(--space-xl);
 }
 .stackgroup__label {
   font-size: var(--text-xs);
   color: var(--muted);
-  margin-bottom: 12px;
+  margin-bottom: var(--space-sm);
 }
 .stackgroup__items {
   display: flex;
@@ -17,7 +17,7 @@
 .chip {
   border: var(--hairline);
   border-radius: var(--radius-sm);
-  padding: 5px 10px;
+  padding: var(--space-2xs) var(--space-sm);
   font-size: var(--text-sm);
   color: var(--fg);
   background: var(--card);
@@ -34,7 +34,7 @@
 .chip-btn {
   border: 1px solid var(--accent);
   border-radius: var(--radius-sm);
-  padding: 5px 10px;
+  padding: var(--space-2xs) var(--space-sm);
   font-size: var(--text-sm);
   color: var(--accent);
   transition:

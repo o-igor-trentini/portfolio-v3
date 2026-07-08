@@ -13,9 +13,9 @@
   border: var(--hairline);
   border-radius: var(--radius-md);
   background: var(--card);
-  padding: 28px 32px;
-  font-size: var(--text-md);
-  line-height: 1.7;
+  padding: var(--space-lg) var(--space-xl);
+  font-size: var(--text-sm);
+  line-height: var(--leading-loose);
 }
 .line {
   color: var(--muted);
@@ -29,12 +29,12 @@
   font-size: clamp(56px, 14vw, 88px);
   font-weight: 700;
   color: var(--fg);
-  margin: 18px 0 6px;
+  margin: var(--space-md) 0 var(--space-xs);
   letter-spacing: -0.02em;
 }
 .msg {
   color: var(--muted);
-  margin-bottom: 22px;
+  margin-bottom: var(--space-lg);
 }
 .home {
   display: inline-block;
@@ -42,7 +42,7 @@
   text-decoration: none;
   border: var(--hairline);
   border-radius: var(--radius-sm);
-  padding: 8px 16px;
+  padding: var(--space-xs) var(--space-md);
   transition: border-color var(--transition);
 }
 .home:hover {

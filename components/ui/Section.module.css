@@ -12,13 +12,13 @@
   font-weight: 400;
   color: var(--accent);
   letter-spacing: 0.04em;
-  margin: 0 0 6px;
+  margin: 0 0 var(--space-xs);
 }
 .section__label--solo {
   margin-bottom: var(--space-md);
 }
 .section__note {
   color: var(--muted);
-  font-size: var(--text-md);
-  margin: 0 0 28px;
+  font-size: var(--text-sm);
+  margin: 0 0 var(--space-lg);
 }

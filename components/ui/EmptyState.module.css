@@ -2,13 +2,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 9px;
-  padding: 44px 24px;
+  gap: var(--space-xs);
+  padding: 44px var(--space-lg);
   border: 1px dashed var(--border);
   border-radius: var(--radius-md);
   background: var(--card);
   color: var(--muted);
-  font-size: var(--text-lg);
+  font-size: var(--text-md);
 }
 .empty__prompt {
   color: var(--accent);

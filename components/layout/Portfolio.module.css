@@ -5,10 +5,10 @@
    top-left so a keyboard/SR user can jump past the header. */
 .skip-link {
   position: absolute;
-  left: 8px;
+  left: var(--space-xs);
   top: -60px;
   z-index: 1000;
-  padding: 8px 14px;
+  padding: var(--space-xs) var(--space-md);
   border-radius: var(--radius-sm);
   background: var(--card);
   color: var(--fg);
@@ -17,7 +17,7 @@
   transition: top var(--transition);
 }
 .skip-link:focus {
-  top: 8px;
+  top: var(--space-xs);
 }
 .main {
   max-width: var(--container);

@@ -1,7 +1,7 @@
 .certs__grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(258px, 1fr));
-  gap: 14px;
+  gap: var(--space-md);
 }
 /* Reuses the shared card surface on an anchor, without rendering <Card>. */
 .cert {
@@ -10,7 +10,7 @@
   color: inherit;
   display: flex;
   flex-direction: column;
-  gap: 11px;
+  gap: var(--space-sm);
   transition: border-color var(--transition);
 }
 .cert:hover {
@@ -19,7 +19,7 @@
 .cert__head {
   display: flex;
   align-items: flex-start;
-  gap: 11px;
+  gap: var(--space-sm);
 }
 .cert__check {
   flex-shrink: 0;
@@ -31,16 +31,17 @@
   border: 1px solid var(--accent);
   border-radius: var(--radius-sm);
   color: var(--accent);
-  font-size: 11px;
+  font-size: var(--text-xs);
 }
 .cert__name {
   margin: 0;
   font-weight: 700;
-  font-size: 14px;
-  line-height: 1.4;
+  font-size: var(--text-md);
+  line-height: var(--leading-snug);
 }
 .cert__meta {
-  margin-left: 33px;
+  /* alinha sob o ícone .cert__check (22px) + gap do head (--space-sm) */
+  margin-left: 34px;
   color: var(--muted);
   font-size: var(--text-sm);
   display: flex;
@@ -52,7 +53,7 @@
   opacity: 0.45;
 }
 .cert__verify {
-  margin-left: 33px;
-  font-size: 11.5px;
+  margin-left: 34px;
+  font-size: var(--text-xs);
   color: var(--accent);
 }

@@ -1,6 +1,6 @@
 /* .caret and the base `kbd` element style stay global (shared / element-level). */
 .hero__cmd {
-  font-size: var(--text-md);
+  font-size: var(--text-sm);
   color: var(--muted);
 }
 .hero__cmd b {
@@ -11,8 +11,8 @@
   font-size: clamp(34px, 8vw, 60px);
   font-weight: 700;
   letter-spacing: -0.03em;
-  line-height: 1.02;
-  margin: 18px 0 6px;
+  line-height: var(--leading-tight);
+  margin: var(--space-md) 0 var(--space-xs);
 }
 .hero__role {
   color: var(--accent);
@@ -24,18 +24,18 @@
   color: var(--fg);
   opacity: 0.78;
   font-size: clamp(14px, 2.2vw, 16px);
-  line-height: 1.7;
-  margin: 22px 0 0;
+  line-height: var(--leading-loose);
+  margin: var(--space-lg) 0 0;
 }
 .hero__actions {
-  margin-top: 30px;
+  margin-top: var(--space-xl);
   display: flex;
-  gap: 14px;
+  gap: var(--space-md);
   flex-wrap: wrap;
   align-items: center;
 }
 .hero__glyph {
-  font-size: 14px;
+  font-size: var(--text-md);
 }
 .hero__hint {
   font-size: var(--text-xs);

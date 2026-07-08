@@ -1,30 +1,51 @@
 /* ============================================================
-   Design tokens — single source of truth for the recurring
-   sizing / spacing / motion values used across globals.css.
-   Colors stay in globals.css (:root + [data-theme]) because they
-   are theme-dependent; the tokens below are theme-agnostic.
-   Every value here is identical to the literal it replaced —
-   this file only names values, it must not change any pixel.
+   Design tokens — a única fonte de verdade para as medidas
+   theme-agnósticas (sizing / spacing / motion) usadas em todos
+   os CSS Modules e no global layer.
+   As cores ficam em globals.css (:root + [data-theme]) porque
+   dependem do tema; os tokens abaixo são theme-agnósticos.
+
+   Escala canônica (não introduza literais avulsos — faça snap
+   para o step mais próximo):
+   - spacing: grade de 4px (micro-ajustes < 4px podem ficar literais)
+   - type: "terminal-small" 12/13/14/16 (headings em clamp() ficam
+     literais nos módulos)
+   - radius: 3 steps 4/6/10 + full
+   Exceções literais: clamps responsivos e a janela do terminal
+   (sempre escura — ver docs/architecture.md §3).
    ============================================================ */
 
 :root {
-  /* border radius */
+  /* spacing — grade de 4px */
+  --space-2xs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+
+  /* type scale — terminal-small regularizado */
+  --text-xs: 12px;
+  --text-sm: 13px;
+  --text-md: 14px;
+  --text-lg: 16px;
+
+  /* border radius — 3 steps canônicos + full (círculos) */
   --radius-xs: 4px;
   --radius-sm: 6px;
   --radius-md: 10px;
+  --radius-full: 50%;
 
-  /* type scale — the four small font sizes that recur across the UI */
-  --text-xs: 12px;
-  --text-sm: 12.5px;
-  --text-md: 13px;
-  --text-lg: 13.5px;
+  /* line-height */
+  --leading-tight: 1.1;
+  --leading-snug: 1.4;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.6;
+  --leading-loose: 1.75;
 
-  /* spacing — the two recurring values (8px gap, 18px card inset) */
-  --space-xs: 8px;
-  --space-md: 18px;
-
-  /* motion — shared hover/state transition duration */
+  /* motion — durações de hover/estado (--transition-slow p/ troca de tema) */
   --transition: 0.2s;
+  --transition-slow: 0.25s;
 
   /* layout */
   --gutter: clamp(20px, 5vw, 40px);

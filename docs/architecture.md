@@ -26,8 +26,14 @@ dedicada em [`seo-i18n.md`](./seo-i18n.md).
 
 - **Estilo de componente vive num `Component.module.css` co-locado**, importado como `styles` e referenciado por `styles.bloco__el` (acesso por ponto funciona com `__`; modificadores com hífen usam bracket: `styles["bloco--mod"]`). Classes condicionais/dinâmicas via `cx()` de `lib/cx.ts` — não concatene template strings.
 - **`app/globals.css` é só o _global layer_** — o que não pode ser escopado: tokens de cor theme-reativos (`:root` + `html[data-theme="light"]`), resets de elemento, `@keyframes`, e utilitários usados como spans/elementos avulsos em vários componentes (`.accent`, `.muted`, `.caret`, `kbd`, `.sr-only`). O tema é aplicado pré-hidratação por um script inline no `components/layout/RootShell.tsx` (evita flash).
-- **Sizing/spacing/motion são theme-agnósticos** em `app/tokens.css` (`--radius-*`, `--text-*`, `--space-*`, `--transition`, `--gutter`, `--container`, `--hairline`). Todos os módulos consomem via `var(--…)` (custom properties são globais por natureza).
-- Onde adicionar: **estilo de um componente → o `.module.css` dele**; cor nova theme-reativa → `globals.css` (nos dois temas); medida repetida → `tokens.css`; utilitário realmente transversal → `globals.css`.
+- **Sizing/spacing/motion são theme-agnósticos** em `app/tokens.css`, numa **escala canônica** que todos os módulos consomem via `var(--…)` (custom properties são globais por natureza):
+  - `--space-*` (grade de 4px): `2xs 4` · `xs 8` · `sm 12` · `md 16` · `lg 24` · `xl 32`.
+  - `--text-*` (terminal-small): `xs 12` · `sm 13` · `md 14` · `lg 16`. Headings/leads maiores usam `clamp()` literal nos módulos (Hero, About, 404).
+  - `--radius-*`: `xs 4` · `sm 6` · `md 10` · `full 50%`.
+  - `--leading-*`: `tight 1.1` · `snug 1.4` · `normal 1.5` · `relaxed 1.6` · `loose 1.75`.
+  - `--transition` (0.2s) e `--transition-slow` (0.25s, troca de tema); `--gutter`, `--container`, `--hairline`.
+- **Não introduza literais avulsos**: uma medida nova faz _snap_ para o step mais próximo da escala. Exceções que ficam literais: **clamps responsivos**, **micro-ajustes < 4px** (ex.: `padding: 2px`), **tamanhos de componente** (ícones 22/32px, dots, alturas de barra), posicionamento, sombras, `flex-basis`, grid `minmax()` e breakpoints.
+- Onde adicionar: **estilo de um componente → o `.module.css` dele**; cor nova theme-reativa → `globals.css` (nos dois temas); medida nova → step da escala em `tokens.css` (ou snap para um existente); utilitário realmente transversal → `globals.css`.
 - `--hairline` guarda o shorthand `1px solid var(--border)`; o `var(--border)` resolve no ponto de uso, então **segue o tema** mesmo definido uma vez.
 - Superfícies compartilhadas usam **`composes`**: ex.: `.cert` em `Certs.module.css` faz `composes: card from "@/components/ui/Card.module.css"` (a superfície da `Card` num `<a>`, sem renderizar `<Card>`).
 - **`@keyframes` ficam globais** em `globals.css`. CSS Modules só escopam keyframes definidos _dentro_ de um módulo; referenciar um keyframe por nome a partir de um módulo resolve no global. Assim não há duplicação nem risco de rename.

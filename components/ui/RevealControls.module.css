@@ -1,7 +1,7 @@
 .controls {
-  margin-top: 22px;
+  margin-top: var(--space-lg);
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-sm);
   flex-wrap: wrap;
 }

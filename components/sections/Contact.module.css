@@ -10,10 +10,10 @@
   color: inherit;
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 15px var(--space-md);
+  gap: var(--space-md);
+  padding: var(--space-md);
   border-bottom: var(--hairline);
-  transition: background 0.18s;
+  transition: background var(--transition);
 }
 .contact-row:last-child {
   border-bottom: none;
@@ -28,7 +28,7 @@
   font-size: var(--text-sm);
 }
 .contact-row__value {
-  font-size: var(--text-lg);
+  font-size: var(--text-md);
   flex: 1;
   min-width: 0;
   overflow: hidden;
@@ -37,5 +37,5 @@
 }
 .contact-row__ext {
   color: var(--accent);
-  font-size: var(--text-md);
+  font-size: var(--text-sm);
 }
