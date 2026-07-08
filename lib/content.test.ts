@@ -4,6 +4,7 @@ import {
   experiences,
   formatExperience,
   interpolateYears,
+  lastUpdated,
   langLevel,
   langName,
   languages,
@@ -181,5 +182,11 @@ describe("years-of-experience interpolation", () => {
         expect(resolved).toMatch(/\d+ (years|anos)/);
       }
     }
+  });
+});
+
+describe("lastUpdated", () => {
+  it("is a YYYY-MM-DD date string (the shape the sitemap and JSON-LD expect)", () => {
+    expect(lastUpdated).toMatch(/^\d{4}-\d{2}-\d{2}$/);
   });
 });
